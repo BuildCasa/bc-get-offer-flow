@@ -665,25 +665,7 @@ async function fetchAddressMatches(query) {
     throw new Error("Network response was not OK")
   }
   const responseData = await response.json()
-  return filterAddressMatches(responseData)
-}
-
-/**
- * ----------------------------------------------------------------
- * filterAddressMatches
- * ----------------------------------------------------------------
- * Filters typeahead results by address `format` and return `limit` number of results
- * Note to future devs: the `format` filter is needed because Regrid's typeahead API currently returns duplicate matches...
- */
-function filterAddressMatches(results, format = "short", limit = 10) {
-  const formatMapping = {
-    // regrid returns addresses in 2 formats which we call short and full
-    short: /^[0-9].*[^0-9]$/,
-    full: /^[0-9].*[0-9]$/,
-  }
-  return results
-    .filter((result) => result.address.match(formatMapping[format]))
-    .slice(0, limit)
+  return responseData.slice(0, 10)
 }
 
 /**
