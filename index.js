@@ -222,33 +222,13 @@ function createAddressViewModel() {
 
       // Process the submitted address, and transition the state accordingly
       try {
-        // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
-        if (!this.hasParcelDetails) {
-          this.parcelDetails = await fetchParcelDetails(
-            this.selectedMatch.ll_uuid
-          )
-        }
-
-        // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
-        if (!$store.estimateViewModel.hasResults) {
-          const fetchEstimatePayload = {
-            parcel: {
-              apn: this.parcelDetails.apn,
-              jurisdiction: this.parcelDetails.jurisdiction,
-            },
-          }
-
-          const estimateResults = await fetchEstimateResults(
-            fetchEstimatePayload
-          )
-
-          $store.estimateViewModel.jurisdiction = estimateResults.jurisdiction
-          $store.estimateViewModel.estimate = estimateResults.estimate
-        }
-
         // If the contact has already been submitted, skip the contact form and transition directly to the estimate results
         // Otherwise, transition to the contact form
-        if ($store.contactViewModel.isSubmitted) {
+        if (
+          this.hasParcelDetails &&
+          $store.estimateViewModel.hasResults &&
+          $store.contactViewModel.isSubmitted
+        ) {
           $store.flowState.value = $store.flowStateMachine.transition(
             $store.flowState.value,
             "SKIP_CONTACT"
@@ -354,19 +334,43 @@ function createContactViewModel() {
         "SUBMIT_CONTACT"
       )
 
-      // Process the submitted contact info, and transition the state accordingly
-      const payload = {
-        contact: {
-          firstName: this.firstName.trim(),
-          lastName: this.lastName.trim(),
-          email: this.email.trim(),
-          phone: this.phone.trim(),
-          ...$store.addressViewModel.parcelDetails,
-        },
-      }
-
       try {
-        await createLead(payload)
+        // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
+        if (!$store.addressViewModel.hasParcelDetails) {
+          $store.addressViewModel.parcelDetails = await fetchParcelDetails(
+            $store.addressViewModel.selectedMatch.ll_uuid
+          )
+        }
+
+        // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
+        if (!$store.estimateViewModel.hasResults) {
+          const fetchEstimatePayload = {
+            parcel: {
+              apn: $store.addressViewModel.parcelDetails.apn,
+              jurisdiction: $store.addressViewModel.parcelDetails.jurisdiction,
+            },
+          }
+
+          const estimateResults = await fetchEstimateResults(
+            fetchEstimatePayload
+          )
+
+          $store.estimateViewModel.jurisdiction = estimateResults.jurisdiction
+          $store.estimateViewModel.estimate = estimateResults.estimate
+        }
+
+        // Process the submitted contact info, and transition the state accordingly
+        const createLeadPayload = {
+          contact: {
+            firstName: this.firstName.trim(),
+            lastName: this.lastName.trim(),
+            email: this.email.trim(),
+            phone: this.phone.trim(),
+            ...$store.addressViewModel.parcelDetails,
+          },
+        }
+
+        await createLead(createLeadPayload)
 
         this.isSubmitted = true
 
@@ -670,7 +674,7 @@ async function fetchAddressMatches(query) {
 
 /**
  * ----------------------------------------------------------------
- * fetchAddressMatches
+ * fetchParcelDetails
  * ----------------------------------------------------------------
  * Given id (`ll_uuid` provided for every match via Redrid typeahead API), returns parcel details needed for estimate generation
  * Fetches full details from Regrid Parcel API, filters and formays results to only fields we need, and returns the object
