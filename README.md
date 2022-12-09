@@ -37,6 +37,7 @@ It provides a simple set of directives, globals, and methods to integrate JavaSc
 This code is designed specifically for a tight integration with the BuildCasa.com site currently built and hosted in Webflow. So many of the design choices were made with the capabilities and constraints of that platform in mind.
 
 That said, it should be possible / easy to integrate into any future version of the site, in Webflow or any other platform. As long as you can import the JacaScript file, and have access to edit the attributes of the HTML elements, you should be able to wire up a working flow with this custom code.
+<img width="1680" alt="image" src="https://user-images.githubusercontent.com/6130917/206641246-8390820c-e114-4a9f-bc81-a1276f620fe9.png">
 
 _Note: Remember that — as long as it is kept up-to-date by future developers — you can always use the `dev-prototype.html` file as an implementation reference before making changes!_
 
@@ -87,7 +88,11 @@ With Webflow, getting the address typeahead to work is the trickiest part.
 
 The form element must be bound to the submit handler with the directive: `x-on:submit = $store.addressViewModel.handleSubmit($event)`
 
-Within the addres field form, ensure that the main `input` element is nested inside an div with a `position: relative` style applied.
+Within the addres field form, ensure that the main `input` element is nested inside an div with a `position: relative` style applied. This `input` element should have the following directives to enable the interactive functionality:
+- `x-model = $store.addressViewModel.inputValue`
+- `x-bind:disabled = $store.flowState.value == 'addressFormProcessing'`
+- `x-ref = addressInput`
+- `x-bind = {['x-on:input.debounce.300ms']() {$store.addressViewModel.handleInput()}}`
 
 Inside of this same div, add an HTML Embed element with the following custom code (this is what displays the matching addresses when using the typeahead):
 
