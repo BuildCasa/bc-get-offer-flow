@@ -21,7 +21,7 @@ To 'deploy' new versions of the code, commit changes to `index.js` on the `main`
 That new version can then be imported directly into the BuildCasa.com site (in Webflow, or otherwise) by adding the following `script` tag (replacing the `1.0.1` with the desired version number) to any page that will have this flow:
 
 ```
-<script src="https://cdn.jsdelivr.net/gh/Friends-Ship-Studio/bc-get-offer-flow@1.0.1/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/BuildCasa/bc-get-offer-flow@1.0.1/index.min.js"></script>
 ```
 
 ## AlpineJS
