@@ -234,6 +234,31 @@ function createAddressViewModel() {
             "SKIP_CONTACT"
           )
         } else {
+          // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
+          if (!$store.addressViewModel.hasParcelDetails) {
+            $store.addressViewModel.parcelDetails = await fetchParcelDetails(
+              $store.addressViewModel.selectedMatch.ll_uuid
+            )
+          }
+
+          // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
+          if (!$store.estimateViewModel.hasResults) {
+            const fetchEstimatePayload = {
+              parcel: {
+                apn: $store.addressViewModel.parcelDetails.apn,
+                jurisdiction:
+                  $store.addressViewModel.parcelDetails.jurisdiction,
+              },
+            }
+
+            const estimateResults = await fetchEstimateResults(
+              fetchEstimatePayload
+            )
+
+            $store.estimateViewModel.jurisdiction = estimateResults.jurisdiction
+            $store.estimateViewModel.estimate = estimateResults.estimate
+          }
+
           $store.flowState.value = $store.flowStateMachine.transition(
             $store.flowState.value,
             "SUCCESS"
@@ -339,30 +364,6 @@ function createContactViewModel() {
       const startTime = Date.now()
 
       try {
-        // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
-        if (!$store.addressViewModel.hasParcelDetails) {
-          $store.addressViewModel.parcelDetails = await fetchParcelDetails(
-            $store.addressViewModel.selectedMatch.ll_uuid
-          )
-        }
-
-        // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
-        if (!$store.estimateViewModel.hasResults) {
-          const fetchEstimatePayload = {
-            parcel: {
-              apn: $store.addressViewModel.parcelDetails.apn,
-              jurisdiction: $store.addressViewModel.parcelDetails.jurisdiction,
-            },
-          }
-
-          const estimateResults = await fetchEstimateResults(
-            fetchEstimatePayload
-          )
-
-          $store.estimateViewModel.jurisdiction = estimateResults.jurisdiction
-          $store.estimateViewModel.estimate = estimateResults.estimate
-        }
-
         // Process the submitted contact info, and transition the state accordingly
         const createLeadPayload = {
           contact: {
