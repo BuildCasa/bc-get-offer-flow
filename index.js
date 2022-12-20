@@ -334,6 +334,10 @@ function createContactViewModel() {
         "SUBMIT_CONTACT"
       )
 
+      // Save the time at which the contact form was submitted
+      // Used to later ensure a minimum time has elapsed before transitioning to the estimate results
+      const startTime = Date.now()
+
       try {
         // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
         if (!$store.addressViewModel.hasParcelDetails) {
@@ -373,6 +377,11 @@ function createContactViewModel() {
         await createLead(createLeadPayload)
 
         this.isSubmitted = true
+
+        // Wait for a minimum amount of time to have elapsed since the contact form was submitted
+        const elapsedTime = Date.now() - startTime
+        const delay = Math.max(0, 4000 - elapsedTime)
+        await new Promise((resolve) => setTimeout(resolve, delay))
 
         $store.flowState.value = $store.flowStateMachine.transition(
           $store.flowState.value,

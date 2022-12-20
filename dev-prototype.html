@@ -40,7 +40,7 @@
   <!-- Get Offer Modal -->
   <div class="flex flex-col items-stretch justify-start fixed top-0 left-0 right-0 bottom-0 z-10 h-screen overflow-y-scroll bg-black bg-opacity-80" x-data="" x-show="$store.modalHelpers.isOpen" x-transition x-cloak @click="$store.modalHelpers.handleModalClose()">
     <!-- Contact Form -->
-    <div class="flex flex-row flex-wrap items-center justify-center gap-8 min-h-screen p-8" x-show="$store.flowState.value == 'contactForm' || $store.flowState.value == 'contactFormProcessing' || $store.flowState.value == 'contactFormError'" x-transition>
+    <div class="flex flex-row flex-wrap items-center justify-center gap-8 min-h-screen p-8" x-show="$store.flowState.value == 'contactForm' || $store.flowState.value == 'contactFormError'" x-transition>
       <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" @click.stop>
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Contact Form</h2>
@@ -54,6 +54,14 @@
           </div>
           <div class="mt-4 text-red-500 font-semibold" x-show="$store.contactViewModel.errorMessage" x-transition x-text="$store.contactViewModel.errorMessage"></div>
         </form>
+      </div>
+    </div>
+    <!-- Generating Estimate -->
+    <div class="flex flex-row flex-wrap items-center justify-center gap-8 min-h-screen p-8" x-show="$store.flowState.value == 'contactFormProcessing'" x-transition>
+      <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" @click.stop>
+        <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
+        <h2 class="font-semibold text-xl">Generating Estimate</h2>
+        <p class="mt-6">Spinning...</p>
       </div>
     </div>
     <!-- Estimate Results -->
