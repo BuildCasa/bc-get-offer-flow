@@ -480,6 +480,17 @@ function createEstimateViewModel() {
         "SCHEDULE"
       )
     },
+    handleRequestCommunityClick(event) {
+      // Block default click handling behavior / event propagation
+      event.preventDefault()
+      event.stopPropagation()
+
+      // Transition to Schedule Consultation state
+      $store.flowState.value = $store.flowStateMachine.transition(
+        $store.flowState.value,
+        "REQUEST_COMMUNITY"
+      )
+    },
   })
 
   // Return reference to the new estimateViewModel store
@@ -607,10 +618,18 @@ function createFlowStateMachine() {
           SCHEDULE: {
             target: "scheduleConsultation",
           },
+          REQUEST_COMMUNITY: {
+            target: "requestedCommunity",
+          },
           ...exitTransition,
         },
       },
       scheduleConsultation: {
+        transitions: {
+          ...exitTransition,
+        },
+      },
+      requestedCommunity: {
         transitions: {
           ...exitTransition,
         },
@@ -684,7 +703,8 @@ function createModalHelpers() {
         $store.flowState.value == "contactFormProcessing" ||
         $store.flowState.value == "contactFormError" ||
         $store.flowState.value == "estimateResults" ||
-        $store.flowState.value == "scheduleConsultation"
+        $store.flowState.value == "scheduleConsultation" ||
+        $store.flowState.value == "requestedCommunity"
       )
     },
     handleModalFlowStart() {

@@ -92,7 +92,7 @@
       </div>
     </div>
     <!-- Estimate Results -->
-    <div class="flex flex-row flex-wrap items-center justify-center gap-8 min-h-screen p-8" x-show="$store.flowState.value == 'estimateResults'" x-transition>
+    <div class="flex flex-row flex-wrap items-center justify-center gap-8 min-h-screen p-8" x-show="$store.flowState.value == 'estimateResults' || $store.flowState.value == 'requestedCommunity'" x-transition>
       <!-- Eligible -->
       <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" x-show="$store.estimateViewModel.jurisdiction.status == 'active' && $store.estimateViewModel.estimate.low && $store.estimateViewModel.estimate.high" @click.stop>
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
@@ -116,6 +116,8 @@
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Estimate Results</h2>
         <p class="mt-6">Out-of-target</p>
+        <button class="mt-6 px-4 py-2 rounded bg-emerald-500 text-white" x-show="$store.flowState.value == 'estimateResults'" @click="$store.estimateViewModel.handleRequestCommunityClick($event)">Request BuildCasa!</button>
+        <p class="mt-6 text-emerald-500 font-semibold" x-show="$store.flowState.value == 'requestedCommunity'">Request received!</p>
       </div>
     </div>
     <!-- Schedule Consultation -->
