@@ -190,9 +190,6 @@ function createAddressViewModel() {
       // Re-initialize matches / keyboard nav
       this.matches = []
       this.keyboardNavIndex = -1
-
-      // Submit address
-      this.submitAddress()
     },
     handleSubmit(event) {
       // Block default form submission behavior

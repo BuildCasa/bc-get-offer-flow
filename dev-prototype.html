@@ -21,7 +21,7 @@
       <form action="" x-data="" @submit="$store.addressViewModel.handleSubmit($event)">
         <div class="flex gap-4">
           <div class="flex-grow relative overflow-visible" @keydown="$store.addressViewModel.handleKeydown($event)">
-            <input type="text" name="address" id="addressInput" placeholder="Enter address" required autocomplete="off" class="w-full px-4 py-2 rounded border border-slate-300" x-ref="addressInput" x-model="$store.addressViewModel.inputValue" x-bind="{['x-on:input.debounce.300ms']() {$store.addressViewModel.handleInput()}}">
+            <input type="text" name="address" id="addressInput" placeholder="Enter address" required autocomplete="off" class="w-full px-4 py-2 rounded border border-slate-300" x-ref="addressInput" x-model="$store.addressViewModel.inputValue" x-bind="{['x-on:input.debounce.300ms']() {$store.addressViewModel.handleInput()}}" x-bind:disabled="$store.flowState.value == 'addressFormProcessing'">
             <ul class="absolute top-full left-0 right-0 mt-2 max-h-80 overflow-y-scroll bg-slate-100 border rounded border-slate-300" x-show="!$store.addressViewModel.isSelected && $store.addressViewModel.matches.length" x-cloak>
               <template x-for="(match, index) in $store.addressViewModel.matches">
                 <li class="w-full px-4 py-2 text-left hover:bg-slate-300 hover:cursor-pointer" :class="($store.addressViewModel.keyboardNavIndex === index) ? 'bg-slate-300' : ''" @click="$store.addressViewModel.handleMatchSelection(match)">
@@ -31,7 +31,7 @@
               </template>
             </ul>
           </div>
-          <input id="address-form-submit-button" type="submit" value="Get offer" data-wait="Getting offer..." class="px-4 py-2 rounded bg-emerald-500 text-white font-semibold disabled:opacity-50" x-bind:disabled="!$store.addressViewModel.isSelected || $store.flowState.value == 'addressFormProcessing'" x-bind:value="($store.flowState.value == 'addressFormProcessing') ? $store.addressViewModel.submitButtonText.processing : $store.addressViewModel.submitButtonText.normal">
+          <input id="address-form-submit-button" type="submit" value="Get offer" data-wait="Getting offer..." class="px-4 py-2 rounded bg-emerald-500 text-white font-semibold disabled:opacity-50" x-bind:disabled="$store.flowState.value == 'addressFormProcessing'" x-bind:value="($store.flowState.value == 'addressFormProcessing') ? $store.addressViewModel.submitButtonText.processing : $store.addressViewModel.submitButtonText.normal">
         </div>
         <div class="mt-4 text-red-500 font-semibold" x-show="$store.addressViewModel.errorMessage" x-transition x-cloak x-text="$store.addressViewModel.errorMessage"></div>
       </form>
