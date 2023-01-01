@@ -201,7 +201,10 @@ function createAddressViewModel() {
     },
     async submitAddress() {
       // Debounce submission if form is already processing
-      if ($store.flowState.value == "addressFormProcessing") {
+      if (
+        $store.flowState.value == "addressFormProcessing" ||
+        $store.flowState.value == "modalAddressFormProcessing"
+      ) {
         return
       }
 
@@ -245,6 +248,12 @@ function createAddressViewModel() {
                 apn: $store.addressViewModel.parcelDetails.apn,
                 jurisdiction:
                   $store.addressViewModel.parcelDetails.jurisdiction,
+              },
+              address: {
+                address: $store.addressViewModel.parcelDetails.address,
+                city: $store.addressViewModel.parcelDetails.city,
+                state: $store.addressViewModel.parcelDetails.state,
+                zip: $store.addressViewModel.parcelDetails.zip,
               },
             }
 
@@ -498,6 +507,11 @@ function createFlowStateMachine() {
       target: "addressFormProcessing",
     },
   }
+  const modalSubmitAddressTransition = {
+    SUBMIT_ADDRESS: {
+      target: "modalAddressFormProcessing",
+    },
+  }
   const submitContactTransition = {
     SUBMIT_CONTACT: {
       target: "contactFormProcessing",
@@ -516,6 +530,9 @@ function createFlowStateMachine() {
       default: {
         transitions: {
           ...submitAddressTransition,
+          START_MODAL_FLOW: {
+            target: "modalAddressForm",
+          },
         },
       },
       addressFormProcessing: {
@@ -534,6 +551,32 @@ function createFlowStateMachine() {
       addressFormError: {
         transitions: {
           ...submitAddressTransition,
+        },
+      },
+      modalAddressForm: {
+        transitions: {
+          ...modalSubmitAddressTransition,
+          ...exitTransition,
+        },
+      },
+      modalAddressFormProcessing: {
+        transitions: {
+          SUCCESS: {
+            target: "contactForm",
+          },
+          SKIP_CONTACT: {
+            target: "estimateResults",
+          },
+          ERROR: {
+            target: "modalAddressFormError",
+          },
+          ...exitTransition,
+        },
+      },
+      modalAddressFormError: {
+        transitions: {
+          ...modalSubmitAddressTransition,
+          ...exitTransition,
         },
       },
       contactForm: {
@@ -634,11 +677,20 @@ function createModalHelpers() {
   Alpine.store("modalHelpers", {
     get isOpen() {
       return (
+        $store.flowState.value == "modalAddressForm" ||
+        $store.flowState.value == "modalAddressFormProcessing" ||
+        $store.flowState.value == "modalAddressFormError" ||
         $store.flowState.value == "contactForm" ||
         $store.flowState.value == "contactFormProcessing" ||
         $store.flowState.value == "contactFormError" ||
         $store.flowState.value == "estimateResults" ||
         $store.flowState.value == "scheduleConsultation"
+      )
+    },
+    handleModalFlowStart() {
+      $store.flowState.value = $store.flowStateMachine.transition(
+        $store.flowState.value,
+        "START_MODAL_FLOW"
       )
     },
     handleModalClose() {

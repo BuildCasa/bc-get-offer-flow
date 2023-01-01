@@ -16,13 +16,16 @@
 
 <body class="bg-slate-700">
   <!-- Default View -->
+  <div class="w-full fixed top-0 flex p-4 justify-end" x-data="">
+    <button class="px-4 py-2 rounded bg-emerald-500 text-white font-semibold" @click="$store.modalHelpers.handleModalFlowStart()">Get Offer</button>
+  </div>
   <div class="flex items-center justify-center h-screen">
     <div class="w-1/4">
       <form action="" x-data="" @submit="$store.addressViewModel.handleSubmit($event)">
         <div class="flex gap-4">
           <div class="flex-grow relative overflow-visible" @keydown="$store.addressViewModel.handleKeydown($event)">
             <input type="text" name="address" id="addressInput" placeholder="Enter address" required autocomplete="off" class="w-full px-4 py-2 rounded border border-slate-300" x-ref="addressInput" x-model="$store.addressViewModel.inputValue" x-bind="{['x-on:input.debounce.300ms']() {$store.addressViewModel.handleInput()}}" x-bind:disabled="$store.flowState.value == 'addressFormProcessing'">
-            <ul class="absolute top-full left-0 right-0 mt-2 max-h-80 overflow-y-scroll bg-slate-100 border rounded border-slate-300" x-show="!$store.addressViewModel.isSelected && $store.addressViewModel.matches.length" x-cloak>
+            <ul class="absolute top-full left-0 right-0 mt-2 max-h-80 overflow-y-scroll bg-slate-100 border rounded border-slate-300" x-show="$store.flowState.value == 'default' && !$store.addressViewModel.isSelected && $store.addressViewModel.matches.length" x-cloak>
               <template x-for="(match, index) in $store.addressViewModel.matches">
                 <li class="w-full px-4 py-2 text-left hover:bg-slate-300 hover:cursor-pointer" :class="($store.addressViewModel.keyboardNavIndex === index) ? 'bg-slate-300' : ''" @click="$store.addressViewModel.handleMatchSelection(match)">
                   <div x-text="match.address"></div>
@@ -39,6 +42,30 @@
   </div>
   <!-- Get Offer Modal -->
   <div class="flex flex-col items-stretch justify-start fixed top-0 left-0 right-0 bottom-0 z-10 h-screen overflow-y-scroll bg-black bg-opacity-80" x-data="" x-show="$store.modalHelpers.isOpen" x-transition x-cloak @click="$store.modalHelpers.handleModalClose()">
+    <!-- Modal Address Form -->
+    <div class="flex flex-row flex-wrap items-center justify-center gap-8 min-h-screen p-8" x-show="$store.flowState.value == 'modalAddressForm' || $store.flowState.value == 'modalAddressFormProcessing' || $store.flowState.value == 'modalAddressFormError'" x-transition>
+      <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" @click.stop>
+        <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
+        <h2 class="font-semibold text-xl">Get Offer</h2>
+        <form action="" class="mt-6" @submit="$store.addressViewModel.handleSubmit($event)" >
+          <div class="flex flex-col gap-4">
+            <div class="flex-grow relative overflow-visible" @keydown="$store.addressViewModel.handleKeydown($event)">
+              <input type="text" name="address" id="modalAddressInput" placeholder="Enter address" required autocomplete="off" class="w-full px-4 py-2 rounded border border-slate-300" x-ref="modalAddressInput" x-model="$store.addressViewModel.inputValue" x-bind="{['x-on:input.debounce.300ms']() {$store.addressViewModel.handleInput()}}" x-bind:disabled="$store.flowState.value == 'modalAddressFormProcessing'">
+              <ul class="absolute top-full left-0 right-0 mt-2 max-h-80 overflow-y-scroll bg-slate-100 border rounded border-slate-300" x-show="$store.flowState.value == 'modalAddressForm' && !$store.addressViewModel.isSelected && $store.addressViewModel.matches.length" x-cloak>
+                <template x-for="(match, index) in $store.addressViewModel.matches">
+                  <li class="w-full px-4 py-2 text-left hover:bg-slate-300 hover:cursor-pointer" :class="($store.addressViewModel.keyboardNavIndex === index) ? 'bg-slate-300' : ''" @click="$store.addressViewModel.handleMatchSelection(match)">
+                    <div x-text="match.address"></div>
+                    <div class="text-sm text-slate-500" x-text="match.context"></div>
+                  </li>
+                </template>
+              </ul>
+            </div>
+            <input id="address-form-submit-button" type="submit" value="Get offer" data-wait="Getting offer..." class="px-4 py-2 rounded bg-emerald-500 text-white font-semibold disabled:opacity-50" x-bind:disabled="$store.flowState.value == 'modalAddressFormProcessing'" x-bind:value="($store.flowState.value == 'modalAddressFormProcessing') ? $store.addressViewModel.submitButtonText.processing : $store.addressViewModel.submitButtonText.normal">
+          </div>
+          <div class="mt-4 text-red-500 font-semibold" x-show="$store.addressViewModel.errorMessage" x-transition x-text="$store.addressViewModel.errorMessage"></div>
+        </form>
+      </div>
+    </div>
     <!-- Contact Form -->
     <div class="flex flex-row flex-wrap items-center justify-center gap-8 min-h-screen p-8" x-show="$store.flowState.value == 'contactForm' || $store.flowState.value == 'contactFormError'" x-transition>
       <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" @click.stop>
