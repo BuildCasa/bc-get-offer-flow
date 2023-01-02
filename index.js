@@ -190,6 +190,13 @@ function createAddressViewModel() {
       // Re-initialize matches / keyboard nav
       this.matches = []
       this.keyboardNavIndex = -1
+
+      // Track address selection event
+      trackEvent("Address Selected", {
+        address_str: match.address,
+        context_str: match.context,
+        regrid_ll_uuid_str: match.ll_uuid,
+      })
     },
     handleSubmit(event) {
       // Block default form submission behavior
@@ -516,21 +523,60 @@ function createFlowStateMachine() {
   const submitAddressTransition = {
     SUBMIT_ADDRESS: {
       target: "addressFormProcessing",
+      trackingEvent: {
+        name: "Address Submitted",
+        properties: {
+          selectedAddress: $store.addressViewModel.selectedMatch,
+        },
+      },
     },
   }
   const modalSubmitAddressTransition = {
     SUBMIT_ADDRESS: {
       target: "modalAddressFormProcessing",
+      trackingEvent: {
+        name: "Address Submitted",
+        properties: {
+          address_str: $store.addressViewModel.selectedMatch.address,
+          regrid_ll_uuid_str: $store.addressViewModel.selectedMatch.ll_uuid,
+        },
+      },
+    },
+  }
+  const addressProcessingTransition = {
+    SUCCESS: {
+      target: "contactForm",
+      trackingEvent: {
+        name: "Address Submission Succeeded",
+      },
+    },
+    SKIP_CONTACT: {
+      target: "estimateResults",
+    },
+    ERROR: {
+      target: "modalAddressFormError",
+      trackingEvent: {
+        name: "Address Submission Failed",
+        properties: {
+          error_str: $store.addressViewModel.error,
+        },
+      },
     },
   }
   const submitContactTransition = {
     SUBMIT_CONTACT: {
       target: "contactFormProcessing",
+      trackingEvent: {
+        name: "Contact Submitted",
+      },
     },
   }
   const exitTransition = {
     EXIT: {
       target: "default",
+      trackingEvent: {
+        name: "Get Offer Modal Closed",
+      },
     },
   }
 
@@ -543,20 +589,15 @@ function createFlowStateMachine() {
           ...submitAddressTransition,
           START_MODAL_FLOW: {
             target: "modalAddressForm",
+            trackingEvent: {
+              name: "Modal Get Offer Flow Opened",
+            },
           },
         },
       },
       addressFormProcessing: {
         transitions: {
-          SUCCESS: {
-            target: "contactForm",
-          },
-          SKIP_CONTACT: {
-            target: "estimateResults",
-          },
-          ERROR: {
-            target: "addressFormError",
-          },
+          ...addressProcessingTransition,
         },
       },
       addressFormError: {
@@ -572,15 +613,7 @@ function createFlowStateMachine() {
       },
       modalAddressFormProcessing: {
         transitions: {
-          SUCCESS: {
-            target: "contactForm",
-          },
-          SKIP_CONTACT: {
-            target: "estimateResults",
-          },
-          ERROR: {
-            target: "modalAddressFormError",
-          },
+          ...addressProcessingTransition,
           ...exitTransition,
         },
       },
@@ -600,9 +633,18 @@ function createFlowStateMachine() {
         transitions: {
           SUCCESS: {
             target: "estimateResults",
+            trackingEvent: {
+              name: "Contact Submission Succeeded",
+            },
           },
           ERROR: {
             target: "contactFormError",
+            trackingEvent: {
+              name: "Contact Submission Failed",
+              properties: {
+                error_str: $store.contactViewModel.error,
+              },
+            },
           },
           ...exitTransition,
         },
@@ -617,9 +659,19 @@ function createFlowStateMachine() {
         transitions: {
           SCHEDULE: {
             target: "scheduleConsultation",
+            trackingEvent: {
+              name: "Schedule Consultation Clicked",
+            },
           },
           REQUEST_COMMUNITY: {
             target: "requestedCommunity",
+            trackingEvent: {
+              name: "Community Requested",
+              properties: {
+                jurisdiction_str:
+                  $store.addressViewModel.parcelDetails.jurisdiction,
+              },
+            },
           },
           ...exitTransition,
         },
@@ -644,6 +696,12 @@ function createFlowStateMachine() {
       if (!destinationTransition) {
         // FUTURE DEV: Update w/ error tracking / reporting through integrated system
         return
+      }
+
+      const { trackingEvent } = destinationTransition
+      if (trackingEvent) {
+        const { name, properties } = trackingEvent
+        trackEvent(name, properties)
       }
 
       const destinationState = destinationTransition.target
@@ -844,5 +902,19 @@ async function createLead(payload) {
   const response = await fetch(request)
   if (!response.ok) {
     throw new Error("Network response was not OK")
+  }
+}
+
+/**
+ * ----------------------------------------------------------------
+ * trackEvent
+ * ----------------------------------------------------------------
+ * Given an event name and properties, submits an event to any of our event tracking services
+ * Currently only supports FullStory
+ */
+function trackEvent(eventName, eventProperties = {}) {
+  // If FS is available (FullStory tracking is active), send event to FullStory
+  if (FS) {
+    FS.event(eventName, eventProperties)
   }
 }
