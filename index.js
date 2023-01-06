@@ -729,7 +729,7 @@ function createFlowStateMachine() {
 
       if (!destinationTransition) {
         // FUTURE DEV: Update w/ error tracking / reporting through integrated system
-        return
+        return currentState
       }
 
       const { trackingEvent } = destinationTransition
@@ -948,7 +948,11 @@ async function createLead(payload) {
  */
 function trackEvent(eventName, eventProperties = {}) {
   // If FS is available (FullStory tracking is active), send event to FullStory
-  if (FS) {
-    FS.event(eventName, eventProperties)
+  try {
+    if (FS) {
+      FS.event(eventName, eventProperties)
+    }
+  } catch (error) {
+    // FUTURE DEV: Update w/ error tracking / reporting through integrated system
   }
 }
