@@ -453,19 +453,19 @@ function createEstimateViewModel() {
       const currencyFormat = new Intl.NumberFormat(undefined, {
         style: "currency",
         currency: "USD",
-        trailingZeroDisplay: "stripIfInteger",
+        maximumFractionDigits: 0,
       })
 
-      return currencyFormat.format(this.estimate.low)
+      return currencyFormat.format(Math.round(this.estimate.low))
     },
     get highEstimateString() {
       const currencyFormat = new Intl.NumberFormat(undefined, {
         style: "currency",
         currency: "USD",
-        trailingZeroDisplay: "stripIfInteger",
+        maximumFractionDigits: 0,
       })
 
-      return currencyFormat.format(this.estimate.high)
+      return currencyFormat.format(Math.round(this.estimate.high))
     },
     init() {
       this.jurisdiction = {
@@ -840,7 +840,83 @@ async function fetchAddressMatches(query) {
     throw new Error("Network response was not OK")
   }
   const responseData = await response.json()
-  return responseData.slice(0, 10)
+  return filterSortAndSliceAddressMatches(responseData)
+}
+
+/**
+ * ----------------------------------------------------------------
+ * filterSortAndSliceAddressMatches
+ * ----------------------------------------------------------------
+ * Given Regrid Typeahead API response data,
+ * Filters matches to only include those with a `ll_uuid`, `address`, and 'short' form address (Regrid can return dupes)
+ * Sorts matches by whether or not they are in a supported market, then by score
+ * And returns only the first 10 matches
+ */
+function filterSortAndSliceAddressMatches(regridTypeaheadResponseData) {
+  // Filter and sort matches
+  const filteredAndSortedMatches = regridTypeaheadResponseData
+    .filter((match) => {
+      return (
+        match.ll_uuid && match.address && match.address.match(/^[0-9].*[^0-9]$/)
+      )
+    })
+    .sort((a, b) => {
+      const marketComparison = compareMatchesInMarket(a, b)
+      if (marketComparison != 0) {
+        return marketComparison
+      } else {
+        return compareMatchesScores(a, b)
+      }
+    })
+
+  // Slice matches to only include first 10
+  const slicedMatches = filteredAndSortedMatches.slice(0, 10)
+
+  return slicedMatches
+}
+
+/**
+ * ----------------------------------------------------------------
+ * compareMatchesInMarket
+ * ----------------------------------------------------------------
+ * Given two Regrid Typeahead API matches, compares them to determine which is in a supported market
+ * Returns -1, 1, or 0 to be used in an array sort
+ */
+function compareMatchesInMarket(a, b) {
+  if (isInMarketMatch(a) && !isInMarketMatch(b)) {
+    return -1
+  } else if (!isInMarketMatch(a) && isInMarketMatch(b)) {
+    return 1
+  } else {
+    return 0
+  }
+}
+
+/**
+ * ----------------------------------------------------------------
+ * isInMarketMatch
+ * ----------------------------------------------------------------
+ * Given a Regrid Typeahead API match, returns true if it is in a supported market
+ */
+function isInMarketMatch(match) {
+  return match.context == "Sacramento, CA"
+}
+
+/**
+ * ----------------------------------------------------------------
+ * compareMatchesScores
+ * ----------------------------------------------------------------
+ * Given two Regrid Typeahead API matches, compares them to determine which has a higher score
+ * Returns -1, 1, or 0 to be used in an array sort
+ */
+function compareMatchesScores(a, b) {
+  if (a.score > b.score) {
+    return -1
+  } else if (a.score < b.score) {
+    return 1
+  } else {
+    return 0
+  }
 }
 
 /**
@@ -875,13 +951,14 @@ async function fetchParcelDetails(id) {
  * ----------------------------------------------------------------
  * Maps and returns an object with only the fields needed for our flow, provided by the Regrid Parcel API request
  */
-function filterParcelDetails(regridResponseData) {
-  const regridResultFields = regridResponseData.results[0].properties.fields
+function filterParcelDetails(regridParcelResponseData) {
+  const regridResultFields =
+    regridParcelResponseData.results[0].properties.fields
 
   return {
     apn: regridResultFields.parcelnumb_no_formatting,
     jurisdiction: regridResultFields.county,
-    address: regridResultFields.mailadd,
+    address: regridResultFields.address,
     city: regridResultFields.mail_city,
     state: regridResultFields.mail_state2,
     zip: regridResultFields.mail_zip,
