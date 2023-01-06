@@ -597,7 +597,24 @@ function createFlowStateMachine() {
       },
       addressFormProcessing: {
         transitions: {
-          ...addressProcessingTransition,
+          SUCCESS: {
+            target: "contactForm",
+            trackingEvent: {
+              name: "Address Submission Succeeded",
+            },
+          },
+          SKIP_CONTACT: {
+            target: "estimateResults",
+          },
+          ERROR: {
+            target: "addressFormError",
+            trackingEvent: {
+              name: "Address Submission Failed",
+              properties: {
+                error_str: $store.addressViewModel.error,
+              },
+            },
+          },
         },
       },
       addressFormError: {
@@ -613,7 +630,24 @@ function createFlowStateMachine() {
       },
       modalAddressFormProcessing: {
         transitions: {
-          ...addressProcessingTransition,
+          SUCCESS: {
+            target: "contactForm",
+            trackingEvent: {
+              name: "Address Submission Succeeded",
+            },
+          },
+          SKIP_CONTACT: {
+            target: "estimateResults",
+          },
+          ERROR: {
+            target: "modalAddressFormError",
+            trackingEvent: {
+              name: "Address Submission Failed",
+              properties: {
+                error_str: $store.addressViewModel.error,
+              },
+            },
+          },
           ...exitTransition,
         },
       },
