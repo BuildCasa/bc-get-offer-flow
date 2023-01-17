@@ -526,7 +526,8 @@ function createFlowStateMachine() {
       trackingEvent: {
         name: "Address Submitted",
         properties: {
-          selectedAddress: $store.addressViewModel.selectedMatch,
+          address_str: $store.addressViewModel.selectedMatch.address,
+          regrid_ll_uuid_str: $store.addressViewModel.selectedMatch.ll_uuid,
         },
       },
     },
@@ -669,6 +670,12 @@ function createFlowStateMachine() {
             target: "estimateResults",
             trackingEvent: {
               name: "Contact Submission Succeeded",
+              properties: {
+                jurisdiction_status_str:
+                  $store.estimateViewModel.jurisdiction.status,
+                low_estimate_str: $store.estimateViewModel.lowEstimateString,
+                high_estimate_str: $store.estimateViewModel.highEstimateString,
+              },
             },
           },
           ERROR: {
