@@ -914,9 +914,9 @@ function filterParcelDetails(regridParcelResponseData) {
     apn: regridResultFields.parcelnumb_no_formatting,
     jurisdiction: regridResultFields.county,
     address: regridResultFields.address,
-    city: regridResultFields.city,
+    city: regridResultFields.scity,
     state: regridResultFields.state2,
-    zip: regridResultFields.zip,
+    zip: regridResultFields.szip,
   }
 }
 
