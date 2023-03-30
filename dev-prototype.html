@@ -21,7 +21,7 @@
   </div>
   <div class="flex items-center justify-center h-screen">
     <div class="w-1/4">
-      <form action="" x-data="" @submit="$store.addressViewModel.handleSubmit($event)">
+      <form action="" x-data="" @submit="$store.addressViewModel.handleSubmit($event, { lead: { type: 'NestEgg'} })">
         <div class="flex gap-4">
           <div class="flex-grow relative overflow-visible" @keydown="$store.addressViewModel.handleKeydown($event)">
             <input type="text" name="address" id="addressInput" placeholder="Enter address" required autocomplete="off" class="w-full px-4 py-2 rounded border border-slate-300" x-ref="addressInput" x-model="$store.addressViewModel.inputValue" x-bind="{['x-on:input.debounce.300ms']() {$store.addressViewModel.handleInput()}}" x-bind:disabled="$store.flowState.value == 'addressFormProcessing'">
@@ -47,7 +47,7 @@
       <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" @click.stop>
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Get Offer</h2>
-        <form action="" class="mt-6" @submit="$store.addressViewModel.handleSubmit($event)" >
+        <form action="" class="mt-6" @submit="$store.addressViewModel.handleSubmit($event, { lead: { type: 'NestEgg'} })" >
           <div class="flex flex-col gap-4">
             <div class="flex-grow relative overflow-visible" @keydown="$store.addressViewModel.handleKeydown($event)">
               <input type="text" name="address" id="modalAddressInput" placeholder="Enter address" required autocomplete="off" class="w-full px-4 py-2 rounded border border-slate-300" x-ref="modalAddressInput" x-model="$store.addressViewModel.inputValue" x-bind="{['x-on:input.debounce.300ms']() {$store.addressViewModel.handleInput()}}" x-bind:disabled="$store.flowState.value == 'modalAddressFormProcessing'">
@@ -71,7 +71,7 @@
       <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" @click.stop>
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Contact Form</h2>
-        <form action="" class="mt-6" @submit="$store.contactViewModel.handleSubmit($event)" >
+        <form action="" class="mt-6" @submit="$store.contactViewModel.handleSubmit($event, { lead: { type: 'NestEgg'} })" >
           <div class="flex flex-col gap-4">
             <input type="text" name="firstName" id="firstName" placeholder="First name" required class="px-4 py-2 rounded border border-slate-300 text-left" x-model="$store.contactViewModel.firstName">
             <input type="text" name="lastName" id="lastName" placeholder="Last name" required class="px-4 py-2 rounded border border-slate-300 text-left" x-model="$store.contactViewModel.lastName">

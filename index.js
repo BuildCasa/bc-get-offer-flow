@@ -198,15 +198,15 @@ function createAddressViewModel() {
         regrid_ll_uuid_str: match.ll_uuid,
       })
     },
-    handleSubmit(event) {
+    handleSubmit(event, options = {}) {
       // Block default form submission behavior
       event.preventDefault()
       event.stopPropagation()
 
       // Submit address
-      this.submitAddress()
+      this.submitAddress(options)
     },
-    async submitAddress() {
+    async submitAddress(options = {}) {
       // Debounce submission if form is already processing
       if (
         $store.flowState.value == "addressFormProcessing" ||
@@ -257,6 +257,7 @@ function createAddressViewModel() {
           // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
           if (!$store.estimateViewModel.hasResults) {
             const fetchEstimatePayload = {
+              ...options,
               parcel: {
                 apn: $store.addressViewModel.parcelDetails.apn,
                 jurisdiction:
@@ -358,15 +359,15 @@ function createContactViewModel() {
         processing: contactFormSubmitButton.dataset.wait,
       }
     },
-    handleSubmit(event) {
+    handleSubmit(event, options = {}) {
       // Block default form submission behavior
       event.preventDefault()
       event.stopPropagation()
 
       // Submit contact info to create lead
-      this.submitContact()
+      this.submitContact(options)
     },
-    async submitContact() {
+    async submitContact(options = {}) {
       // Debounce submission if form is already processing
       if ($store.flowState.value == "contactFormProcessing") {
         return
@@ -394,6 +395,7 @@ function createContactViewModel() {
       try {
         // Process the submitted contact info, and transition the state accordingly
         const createLeadPayload = {
+          ...options,
           contact: {
             firstName: this.firstName.trim(),
             lastName: this.lastName.trim(),
