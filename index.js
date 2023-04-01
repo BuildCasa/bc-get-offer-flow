@@ -319,6 +319,7 @@ function createAddressViewModel() {
  * - lastName: String, bound (2-way, via `x-model`) to Last Name input field in the UI
  * - email: String, bound (2-way, via `x-model`) to Email input field in the UI
  * - phone: String, bound (2-way, via `x-model`) to Phone Number input field in the UI
+ * - desiredTimeline: String, bound (2-way, via `x-model`) to Desired Timeline input field in the UI
  * - submitButtonText: Object, w/ `normal` and `processing` strings bound (via `x-text`) to the Contact form submit button
  * - errorMessage: String, bound (via `x-text`) and displayed with the form when it is in an contactFormError state w/ message content
  * - isSubmitted: Boolean, based on if the contact info has been successfully submitted to the create lead endpoint (can be bound)
@@ -332,6 +333,7 @@ function createContactViewModel() {
     lastName: "",
     email: "",
     phone: "",
+    desiredTimeline: "",
     submitButtonText: {
       normal: "",
       processing: "",
@@ -343,6 +345,7 @@ function createContactViewModel() {
       this.lastName = ""
       this.email = ""
       this.phone = ""
+      this.desiredTimeline = ""
       this.errorMessage = ""
       this.isSubmitted = false
 
@@ -401,6 +404,7 @@ function createContactViewModel() {
             lastName: this.lastName.trim(),
             email: this.email.trim(),
             phone: this.phone.trim(),
+            desiredTimeline: this.desiredTimeline.trim(),
             ...$store.addressViewModel.parcelDetails,
           },
         }
