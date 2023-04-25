@@ -19,10 +19,10 @@ const $store = {}
  * Uses a simple set of directives to integrate logic with HTML elements via Webflow element attributes
  * For more info on AlpineJS, visit the docs: https://alpinejs.dev/start-here
  */
-const script = document.createElement("script")
-script.src = "https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js"
-script.defer = true
-document.head.appendChild(script)
+const alpineScript = document.createElement("script")
+alpineScript.src = "https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js"
+alpineScript.defer = true
+document.head.appendChild(alpineScript)
 
 // When Alpine has been loaded, initiate the custom state and business logic that powers the flow
 document.addEventListener("alpine:init", () => {
@@ -423,6 +423,14 @@ function createContactViewModel() {
           "SUCCESS"
         )
 
+        // If the user has an active jurisdiction and an estimate, dynamically load the Calendly script
+        if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate) { 
+          const calendlyScript = document.createElement("script")
+          calendlyScript.src = "https://assets.calendly.com/assets/external/widget.js"
+          calendlyScript.async = true
+          document.head.appendChild(calendlyScript)
+        }
+
         trackEvent("Contact Submission Succeeded", {
           jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
           low_estimate_str: $store.estimateViewModel.lowEstimateString,
@@ -479,6 +487,12 @@ function createEstimateViewModel() {
     },
     get hasResults() {
       return !!this.jurisdiction.status
+    },
+    get hasActiveJurisdiction() {
+      return this.jurisdiction.status == "active"
+    },
+    get hasEstimate() {
+      return !!this.estimate.low && !!this.estimate.high
     },
     get lowEstimateString() {
       const currencyFormat = new Intl.NumberFormat(undefined, {
