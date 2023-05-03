@@ -16,7 +16,8 @@
 
 <body class="bg-slate-700">
   <!-- Default View -->
-  <div class="w-full fixed top-0 flex p-4 justify-end" x-data="">
+  <div class="w-full fixed top-0 flex p-4 gap-4 items-center justify-end" x-data="">
+    <span class="text-white font-semibold" x-text="$store.personalizationViewModel.bcPhoneNumber">(415) 941-5861</span>
     <button class="px-4 py-2 rounded bg-emerald-500 text-white font-semibold" @click="$store.modalHelpers.handleModalFlowStart()">Get Offer</button>
   </div>
   <div class="flex items-center justify-center h-screen">

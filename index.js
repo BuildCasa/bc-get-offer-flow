@@ -35,6 +35,7 @@ function initViewModels() {
   $store.addressViewModel = createAddressViewModel()
   $store.contactViewModel = createContactViewModel()
   $store.estimateViewModel = createEstimateViewModel()
+  $store.personalizationViewModel = createPersonalizationViewModel()
 }
 
 function initFlowState() {
@@ -559,6 +560,36 @@ function createEstimateViewModel() {
 
 /**
  * ----------------------------------------------------------------
+ * createPersonalizationViewModel
+ * ----------------------------------------------------------------
+ * Creates and returns reference to an Alpine store for the personalizationViewModel
+ * Contains data used to personalize the user experience
+ * Initially, it fetches and stores geolocation data from the user's IP address
+ * And, 
+ * Can be accessed in HTML via directive attribute values w/ `$store.personalizationViewModel`
+ *
+ * - userGeo: Object, w/ the geolocation data provided by integrated IP lookup API
+ * - bcPhoneNumber: Getter, returns the correct BuildCasa phone number based on the userGeo
+ * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
+ */
+function createPersonalizationViewModel() {
+  Alpine.store("personalizationViewModel", {
+    userGeo: {},
+    get bcPhoneNumber() {
+      return getBcPhoneNumberForCity(this.userGeo.city)
+    },
+    async init() {
+      const response = await fetch("https://get.geojs.io/v1/ip/geo.json")
+      this.userGeo = await response.json()
+    },
+  })
+
+  // Return reference to the new personalizationViewModel store
+  return Alpine.store("personalizationViewModel")
+}
+
+/**
+ * ----------------------------------------------------------------
  * createFlowStateMachine
  * ----------------------------------------------------------------
  * Creates and returns reference to an Alpine store for the flowStateMachine
@@ -989,6 +1020,119 @@ async function createLead(payload) {
   if (!response.ok) {
     throw new Error("Network response was not OK")
   }
+}
+
+/**
+ * ----------------------------------------------------------------
+ * getBcPhoneNumberForCity
+ * ----------------------------------------------------------------
+ * Given a city, returns the appropriate BuildCasa phone number to display
+ * Ideally, localized to the market, but defaults to a generic number if no market match
+ */
+function getBcPhoneNumberForCity(city) {
+  const defaultPhoneNumber = "(415) 941-5861"
+
+  if (!city || typeof city !== "string") return defaultPhoneNumber
+
+  const normalizedCity = city.toLowerCase().trim()
+  const market = getMarketForCity(normalizedCity)
+  const marketSpecificPhoneNumber = getBcPhoneNumberForMarket(market)
+
+  return marketSpecificPhoneNumber ?? defaultPhoneNumber
+}
+
+/**
+ * ----------------------------------------------------------------
+ * getMarketForCity
+ * ----------------------------------------------------------------
+ * Given a city, returns a matching BuildCasa 'market', if found
+ */
+function getMarketForCity(city) {
+  if (!city || typeof city !== "string") return null
+
+  const normalizedCity = city.toLowerCase().trim()
+  
+  const sacramentoCities = [
+    "auburn",
+    "cedar flat",
+    "granite bay",
+    "lincoln",
+    "loomis",
+    "meadow vista",
+    "newcastle",
+    "north auburn",
+    "penryn",
+    "rocklin",
+    "roseville",
+    "sheridan",
+    "tahoma",
+    "antelope",
+    "arden-arcade",
+    "carmichael",
+    "citrus heights",
+    "clay",
+    "elk grove",
+    "elverta",
+    "fair oaks",
+    "florin",
+    "folsom",
+    "foothill farms",
+    "franklin",
+    "freeport",
+    "fruitridge pocket",
+    "galt",
+    "gold river",
+    "herald",
+    "la riviera",
+    "lemon hill",
+    "mather",
+    "mcclellan park",
+    "north highlands",
+    "orangevale",
+    "parkway",
+    "rancho cordova",
+    "rancho murieta",
+    "rio linda",
+    "rosemont",
+    "sacramento",
+    "vineyard",
+    "walnut grove",
+    "wilton",
+    "davis",
+    "dunnigan",
+    "el macero",
+    "esparto",
+    "guinda",
+    "monument hills",
+    "rumsey",
+    "tancred",
+    "west sacramento",
+    "winters",
+    "woodland",
+  ]
+
+  return sacramentoCities.includes(normalizedCity) ? "sacramento" : null
+}
+
+/**
+ * ----------------------------------------------------------------
+ * getBcPhoneNumberForMarket
+ * ----------------------------------------------------------------
+ * Given a 'market'', returns the appropriate BuildCasa phone number to display
+ * Ideally, localized to the market, but defaults to a generic number if no market match
+ */
+function getBcPhoneNumberForMarket(market) {
+  const defaultPhoneNumber = "(415) 941-5861"
+
+  if (!market || typeof market !== "string") return defaultPhoneNumber
+
+  const normalizedMarket = market.toLowerCase().trim()
+
+  const marketPhoneNumbers = {
+    sacramento: "(916) 619-1442",
+  }
+
+  return marketPhoneNumbers[normalizedMarket] ?? defaultPhoneNumber
 }
 
 /**
