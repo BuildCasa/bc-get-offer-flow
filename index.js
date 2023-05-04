@@ -570,6 +570,7 @@ function createEstimateViewModel() {
  *
  * - userGeo: Object, w/ the geolocation data provided by integrated IP lookup API
  * - bcPhoneNumber: Getter, returns the correct BuildCasa phone number based on the userGeo
+ * - bcPhoneNumberHref: Getter, returns the correct BuildCasa phone number based on the userGeo in href format (for `tel:` links)
  * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
  */
 function createPersonalizationViewModel() {
@@ -577,6 +578,9 @@ function createPersonalizationViewModel() {
     userGeo: {},
     get bcPhoneNumber() {
       return getBcPhoneNumberForCity(this.userGeo.city)
+    },
+    get bcPhoneNumberHref() {
+      return `tel:+1${this.bcPhoneNumber.replace(/\D/g, "")}`
     },
     async init() {
       const response = await fetch("https://get.geojs.io/v1/ip/geo.json")
