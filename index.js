@@ -966,7 +966,7 @@ function filterParcelDetails(regridParcelResponseData) {
     regridParcelResponseData.results[0].properties.fields
 
   return {
-    apn: regridResultFields.parcelnumb_no_formatting,
+    apn: regridResultFields.parcelnumb,
     jurisdiction: regridResultFields.county,
     address: regridResultFields.address,
     city: regridResultFields.scity,
