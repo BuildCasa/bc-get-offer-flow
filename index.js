@@ -569,6 +569,7 @@ function createEstimateViewModel() {
  * Can be accessed in HTML via directive attribute values w/ `$store.personalizationViewModel`
  *
  * - userGeo: Object, w/ the geolocation data provided by integrated IP lookup API
+ * - market: Getter, returns the supported market based on the userGeo city, if one is found
  * - bcPhoneNumber: Getter, returns the correct BuildCasa phone number based on the userGeo
  * - bcPhoneNumberHref: Getter, returns the correct BuildCasa phone number based on the userGeo in href format (for `tel:` links)
  * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
@@ -576,6 +577,9 @@ function createEstimateViewModel() {
 function createPersonalizationViewModel() {
   Alpine.store("personalizationViewModel", {
     userGeo: {},
+    get market() {
+      return getMarketForCity(this.userGeo.city)
+    },
     get bcPhoneNumber() {
       return getBcPhoneNumberForCity(this.userGeo.city)
     },
