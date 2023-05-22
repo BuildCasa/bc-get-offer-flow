@@ -875,45 +875,13 @@ function filterSortAndSliceAddressMatches(regridTypeaheadResponseData) {
       )
     })
     .sort((a, b) => {
-      const marketComparison = compareMatchesInMarket(a, b)
-      if (marketComparison != 0) {
-        return marketComparison
-      } else {
-        return compareMatchesScores(a, b)
-      }
+      return compareMatchesScores(a, b)
     })
 
   // Slice matches to only include first 10
   const slicedMatches = filteredAndSortedMatches.slice(0, 10)
 
   return slicedMatches
-}
-
-/**
- * ----------------------------------------------------------------
- * compareMatchesInMarket
- * ----------------------------------------------------------------
- * Given two Regrid Typeahead API matches, compares them to determine which is in a supported market
- * Returns -1, 1, or 0 to be used in an array sort
- */
-function compareMatchesInMarket(a, b) {
-  if (isInMarketMatch(a) && !isInMarketMatch(b)) {
-    return -1
-  } else if (!isInMarketMatch(a) && isInMarketMatch(b)) {
-    return 1
-  } else {
-    return 0
-  }
-}
-
-/**
- * ----------------------------------------------------------------
- * isInMarketMatch
- * ----------------------------------------------------------------
- * Given a Regrid Typeahead API match, returns true if it is in a supported market
- */
-function isInMarketMatch(match) {
-  return match.context == "Sacramento, CA"
 }
 
 /**
