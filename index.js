@@ -341,6 +341,7 @@ function createContactViewModel() {
     },
     errorMessage: "",
     isSubmitted: false,
+    lotAnalysisStep: "",
     init() {
       this.firstName = ""
       this.lastName = ""
@@ -348,7 +349,8 @@ function createContactViewModel() {
       this.phone = ""
       this.desiredTimeline = ""
       this.errorMessage = ""
-      this.isSubmitted = false
+      this.isSubmitted = false,
+      this.lotAnalysisStep = "Checking..."
 
       // FUTURE DEV: Add logic to pre-fill data based on other sources (link params, etc.) here
 
@@ -392,10 +394,6 @@ function createContactViewModel() {
       // Track contact submission event
       trackEvent("Contact Submitted")
 
-      // Save the time at which the contact form was submitted
-      // Used to later ensure a minimum time has elapsed before transitioning to the estimate results
-      const startTime = Date.now()
-
       try {
         // Process the submitted contact info, and transition the state accordingly
         const createLeadPayload = {
@@ -410,14 +408,13 @@ function createContactViewModel() {
           },
         }
 
-        await createLead(createLeadPayload)
+        // Start sequencing through the lot analysis steps, and the create lead request in parallel
+        await Promise.all([
+          sequenceLotAnalysisSteps(this),
+          createLead(createLeadPayload)
+        ]);
 
         this.isSubmitted = true
-
-        // Wait for a minimum amount of time to have elapsed since the contact form was submitted
-        const elapsedTime = Date.now() - startTime
-        const delay = Math.max(0, 4000 - elapsedTime)
-        await new Promise((resolve) => setTimeout(resolve, delay))
 
         $store.flowState.value = $store.flowStateMachine.transition(
           $store.flowState.value,
@@ -975,6 +972,32 @@ async function fetchEstimateResults(payload) {
 
 /**
  * ----------------------------------------------------------------
+ * sequenceLotAnalysisSteps
+ * ----------------------------------------------------------------
+ * Given a contactViewModel, updates the lotAnalysisStep property to each of the steps in the sequence
+ * Waits for 1.5s between switches, to simulate the lot analysis process
+ */
+async function sequenceLotAnalysisSteps(contactViewModel) {
+  const analysisSteps = [
+    "Checking flood zones...",
+    "Checking fire hazard zones...",
+    "Checking zoning district...",
+    "Checking lot shape & size...",
+  ]
+
+  return new Promise(async (resolve) => {
+    // For each analysis step, wait 1 second, then update the analysis step
+    for (const step of analysisSteps) {
+      contactViewModel.lotAnalysisStep = step
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+    }
+    
+    resolve()
+  })
+}
+
+/**
+ * ----------------------------------------------------------------
  * createLead
  * ----------------------------------------------------------------
  * Given a payload with contact info and address fields, submits request to our Make.com Create Lead endpoint
@@ -1094,13 +1117,10 @@ function getMarketForCity(city) {
  * ----------------------------------------------------------------
  * getBcPhoneNumberForMarket
  * ----------------------------------------------------------------
- * Given a 'market'', returns the appropriate BuildCasa phone number to display
- * Ideally, localized to the market, but defaults to a generic number if no market match
+ * Given a 'market', returns a location-specific BuildCasa phone number to display, if found
  */
 function getBcPhoneNumberForMarket(market) {
-  const defaultPhoneNumber = "(415) 941-5861"
-
-  if (!market || typeof market !== "string") return defaultPhoneNumber
+  if (!market || typeof market !== "string") return null
 
   const normalizedMarket = market.toLowerCase().trim()
 
@@ -1108,7 +1128,7 @@ function getBcPhoneNumberForMarket(market) {
     sacramento: "(916) 619-1442",
   }
 
-  return marketPhoneNumbers[normalizedMarket] ?? defaultPhoneNumber
+  return marketPhoneNumbers[normalizedMarket] ?? null
 }
 
 /**
