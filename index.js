@@ -231,6 +231,7 @@ function createAddressViewModel() {
       // Track address submission event
       trackEvent("Address Submitted", {
         address_str: $store.addressViewModel.selectedMatch.address,
+        context_str: $store.addressViewModel.selectedMatch.context,
         regrid_ll_uuid_str: $store.addressViewModel.selectedMatch.ll_uuid,
       })
 
@@ -285,7 +286,17 @@ function createAddressViewModel() {
             "SUCCESS"
           )
 
-          trackEvent("Address Submission Succeeded")
+          trackEvent("Address Submission Succeeded", {
+            address_str: $store.addressViewModel.parcelDetails.address,
+            address_city_str: $store.addressViewModel.parcelDetails.city,
+            address_state_str: $store.addressViewModel.parcelDetails.state,
+            address_zip_str: $store.addressViewModel.parcelDetails.zip,
+            parcel_apn_str: $store.addressViewModel.parcelDetails.apn,
+            parcel_jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
+            jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
+            estimate_low_real: $store.estimateViewModel.estimate.low,
+            estimate_high_real: $store.estimateViewModel.estimate.high,
+          })
         }
       } catch (error) {
         this.errorMessage =
@@ -392,7 +403,22 @@ function createContactViewModel() {
       )
 
       // Track contact submission event
-      trackEvent("Contact Submitted")
+      trackEvent("Contact Submitted", {
+        address_str: $store.addressViewModel.parcelDetails.address,
+        address_city_str: $store.addressViewModel.parcelDetails.city,
+        address_state_str: $store.addressViewModel.parcelDetails.state,
+        address_zip_str: $store.addressViewModel.parcelDetails.zip,
+        apn_str: $store.addressViewModel.parcelDetails.apn,
+        jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
+        jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
+        estimate_low_real: $store.estimateViewModel.estimate.low,
+        estimate_high_real: $store.estimateViewModel.estimate.high,
+        contact_first_name_str: $store.contactViewModel.firstName,
+        contact_last_name_str: $store.contactViewModel.lastName,
+        contact_email_str: $store.contactViewModel.email,
+        contact_phone_str: $store.contactViewModel.phone,
+        contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
+      })
 
       try {
         // Process the submitted contact info, and transition the state accordingly
@@ -430,9 +456,20 @@ function createContactViewModel() {
         }
 
         trackEvent("Contact Submission Succeeded", {
+          address_str: $store.addressViewModel.parcelDetails.address,
+          address_city_str: $store.addressViewModel.parcelDetails.city,
+          address_state_str: $store.addressViewModel.parcelDetails.state,
+          address_zip_str: $store.addressViewModel.parcelDetails.zip,
+          apn_str: $store.addressViewModel.parcelDetails.apn,
+          jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
           jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
-          low_estimate_str: $store.estimateViewModel.lowEstimateString,
-          high_estimate_str: $store.estimateViewModel.highEstimateString,
+          estimate_low_real: $store.estimateViewModel.estimate.low,
+          estimate_high_real: $store.estimateViewModel.estimate.high,
+          contact_first_name_str: $store.contactViewModel.firstName,
+          contact_last_name_str: $store.contactViewModel.lastName,
+          contact_email_str: $store.contactViewModel.email,
+          contact_phone_str: $store.contactViewModel.phone,
+          contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
         })
       } catch (error) {
         this.errorMessage =
@@ -531,7 +568,22 @@ function createEstimateViewModel() {
       )
 
       // Track Schedule Consultation button click
-      trackEvent("Schedule Consultation Clicked")
+      trackEvent("Schedule Consultation Clicked", {
+        address_str: $store.addressViewModel.parcelDetails.address,
+        address_city_str: $store.addressViewModel.parcelDetails.city,
+        address_state_str: $store.addressViewModel.parcelDetails.state,
+        address_zip_str: $store.addressViewModel.parcelDetails.zip,
+        apn_str: $store.addressViewModel.parcelDetails.apn,
+        jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
+        jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
+        estimate_low_real: $store.estimateViewModel.estimate.low,
+        estimate_high_real: $store.estimateViewModel.estimate.high,
+        contact_first_name_str: $store.contactViewModel.firstName,
+        contact_last_name_str: $store.contactViewModel.lastName,
+        contact_email_str: $store.contactViewModel.email,
+        contact_phone_str: $store.contactViewModel.phone,
+        contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
+      })
     },
     handleRequestCommunityClick(event) {
       // Block default click handling behavior / event propagation
@@ -546,7 +598,20 @@ function createEstimateViewModel() {
 
       // Track Request Community button click
       trackEvent("Community Requested", {
+        address_str: $store.addressViewModel.parcelDetails.address,
+        address_city_str: $store.addressViewModel.parcelDetails.city,
+        address_state_str: $store.addressViewModel.parcelDetails.state,
+        address_zip_str: $store.addressViewModel.parcelDetails.zip,
+        apn_str: $store.addressViewModel.parcelDetails.apn,
         jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
+        jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
+        estimate_low_real: $store.estimateViewModel.estimate.low,
+        estimate_high_real: $store.estimateViewModel.estimate.high,
+        contact_first_name_str: $store.contactViewModel.firstName,
+        contact_last_name_str: $store.contactViewModel.lastName,
+        contact_email_str: $store.contactViewModel.email,
+        contact_phone_str: $store.contactViewModel.phone,
+        contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
       })
     },
   })
