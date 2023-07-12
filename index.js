@@ -129,6 +129,9 @@ function createAddressViewModel() {
       if ($store.contactViewModel.isSubmitted) {
         $store.contactViewModel.isSubmitted = false
       }
+      if ($store.experimentationViewModel.getActiveExperimentVariation("windfall-estimate-or-eligibility-2023-07")) {
+        $store.experimentationViewModel.clearActiveExperiment("windfall-estimate-or-eligibility-2023-07")
+      }
 
       // Fetch and update address matches (or handle errors)
       try {
@@ -198,6 +201,7 @@ function createAddressViewModel() {
         address_str: match.address,
         context_str: match.context,
         regrid_ll_uuid_str: match.ll_uuid,
+        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
       })
     },
     handleSubmit(event, options = {}) {
@@ -234,6 +238,7 @@ function createAddressViewModel() {
         address_str: $store.addressViewModel.selectedMatch.address,
         context_str: $store.addressViewModel.selectedMatch.context,
         regrid_ll_uuid_str: $store.addressViewModel.selectedMatch.ll_uuid,
+        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
       })
 
       // Process the submitted address, and transition the state accordingly
@@ -297,6 +302,7 @@ function createAddressViewModel() {
             jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
             estimate_low_real: $store.estimateViewModel.estimate.low,
             estimate_high_real: $store.estimateViewModel.estimate.high,
+            active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
           })
         }
       } catch (error) {
@@ -403,6 +409,15 @@ function createContactViewModel() {
         "SUBMIT_CONTACT"
       )
 
+      // If the user has an active jurisdiction and an estimate, and the offering / lead type is "Windfall",
+      // set appropriate variation for the Jul 2023 "Estimate or eligibility" experiment
+      if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate &&
+          options && options.lead && options.lead.type && options.lead.type === 'Windfall') {  
+        const experiment = "windfall-estimate-or-eligibility-2023-07"
+        const variation = Math.random() < 0.5 ? "amount-excluded" : "amount-included"
+        $store.experimentationViewModel.setActiveExperimentVariation(experiment, variation)
+      }
+
       // Track contact submission event
       trackEvent("Contact Submitted", {
         address_str: $store.addressViewModel.parcelDetails.address,
@@ -419,6 +434,7 @@ function createContactViewModel() {
         contact_email_str: $store.contactViewModel.email,
         contact_phone_str: $store.contactViewModel.phone,
         contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
+        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
       })
 
       try {
@@ -433,6 +449,7 @@ function createContactViewModel() {
             desiredTimeline: this.desiredTimeline.trim(),
             ...$store.addressViewModel.parcelDetails,
           },
+          activeExperimentVariations: $store.experimentationViewModel.activeExperimentVariations,
         }
 
         // Start sequencing through the lot analysis steps, and the create lead request in parallel
@@ -480,6 +497,7 @@ function createContactViewModel() {
           contact_email_str: $store.contactViewModel.email,
           contact_phone_str: $store.contactViewModel.phone,
           contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
+          active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
         })
       } catch (error) {
         this.errorMessage =
@@ -593,6 +611,7 @@ function createEstimateViewModel() {
         contact_email_str: $store.contactViewModel.email,
         contact_phone_str: $store.contactViewModel.phone,
         contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
+        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
       })
     },
     handleRequestCommunityClick(event) {
@@ -622,6 +641,7 @@ function createEstimateViewModel() {
         contact_email_str: $store.contactViewModel.email,
         contact_phone_str: $store.contactViewModel.phone,
         contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
+        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
       })
     },
   })
@@ -1591,6 +1611,17 @@ function createExperimentationViewModel() {
     },
     getActiveExperimentVariation(experiment) {
       return this.activeExperimentVariations[experiment]
+    },
+    clearActiveExperiment(experiment) {
+      if (this.activeExperimentVariations[experiment]) {
+        delete this.activeExperimentVariations[experiment]
+      }
+    },
+    getFullStoryActiveExperimentVariationsEventPropertyValue() {
+      // Convert the activeExperimentVariations object into a single array of strings,
+      // concatenating the experiment name and variation name with a colon
+      // e.g. ["experiment1:variation1", "experiment2:variation2"]
+      return Object.entries(this.activeExperimentVariations).map(([experiment, variation]) => `${experiment}:${variation}`)
     },
     init() {
       this.activeExperimentVariations = {}
