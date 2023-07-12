@@ -72,7 +72,7 @@
       <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" @click.stop>
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Contact Form</h2>
-        <form action="" class="mt-6" @submit="$store.contactViewModel.handleSubmit($event, { lead: { type: 'NestEgg'} })" >
+        <form action="" class="mt-6" @submit="$store.contactViewModel.handleSubmit($event, { lead: { type: 'Windfall'} })" >
           <div class="flex flex-col gap-4">
             <input type="text" name="firstName" id="firstName" placeholder="First name" required class="px-4 py-2 rounded border border-slate-300 text-left" x-model="$store.contactViewModel.firstName">
             <input type="text" name="lastName" id="lastName" placeholder="Last name" required class="px-4 py-2 rounded border border-slate-300 text-left" x-model="$store.contactViewModel.lastName">
@@ -105,10 +105,16 @@
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Estimate Results</h2>
         <p class="mt-6">Eligible</p>
-        <p class="mt-6">Estimate Low:</p>
-        <div class="mt-2 font-black text-lg text-emerald-500" x-text="$store.estimateViewModel.lowEstimateString"></div>
-        <p class="mt-6">Estimate High:</p>
-        <div class="mt-2 font-black text-lg text-emerald-500" x-text="$store.estimateViewModel.highEstimateString"></div>
+        <div x-show="$store.experimentationViewModel.getActiveExperimentVariation('windfall-estimate-or-eligibility-2023-07')">
+          <p class="mt-6">Estimate or Eligibility Experiment:</p>
+          <div class="mt-2 font-black text-lg" x-text="$store.experimentationViewModel.getActiveExperimentVariation('windfall-estimate-or-eligibility-2023-07')"></div>
+        </div>
+        <div x-show="$store.experimentationViewModel.getActiveExperimentVariation('windfall-estimate-or-eligibility-2023-07') === 'amount-included'">
+          <p class="mt-6">Estimate Low:</p>
+          <div class="mt-2 font-black text-lg text-emerald-500" x-text="$store.estimateViewModel.lowEstimateString"></div>
+          <p class="mt-6">Estimate High:</p>
+          <div class="mt-2 font-black text-lg text-emerald-500" x-text="$store.estimateViewModel.highEstimateString"></div>
+        </div>
         <p class="mt-6">Schedule a consultation to speak with one of our specialists:</p>
         <button class="mt-6 px-4 py-2 rounded bg-emerald-500 text-white" @click="$store.estimateViewModel.handleScheduleConsultationClick($event)">Schedule consultation</button>
       </div>

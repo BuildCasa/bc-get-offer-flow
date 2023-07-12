@@ -36,6 +36,7 @@ function initViewModels() {
   $store.contactViewModel = createContactViewModel()
   $store.estimateViewModel = createEstimateViewModel()
   $store.personalizationViewModel = createPersonalizationViewModel()
+  $store.experimentationViewModel = createExperimentationViewModel()
 }
 
 function initFlowState() {
@@ -447,8 +448,17 @@ function createContactViewModel() {
           "SUCCESS"
         )
 
-        // If the user has an active jurisdiction and an estimate, dynamically load the Calendly script
+        // If the user has an active jurisdiction and an estimate, include additional functionality for results UX
         if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate) { 
+          // If offering / lead type is "Windfall",
+          // set appropriate variation for the Jul 2023 "Estimate or eligibility" experiment
+          if(options && options.lead && options.lead.type && options.lead.type === 'Windfall') {  
+            const experiment = "windfall-estimate-or-eligibility-2023-07"
+            const variation = Math.random() < 0.5 ? "amount-excluded" : "amount-included"
+            $store.experimentationViewModel.setActiveExperimentVariation(experiment, variation)
+          }
+          
+          // Dynamically load the Calendly script
           const calendlyScript = document.createElement("script")
           calendlyScript.src = "https://assets.calendly.com/assets/external/widget.js"
           calendlyScript.async = true
@@ -1558,6 +1568,37 @@ function createPersonalizationViewModel() {
 
   // Return reference to the new personalizationViewModel store
   return Alpine.store("personalizationViewModel")
+}
+
+/**
+ * ----------------------------------------------------------------
+ * createExperimentationViewModel
+ * ----------------------------------------------------------------
+ * Creates and returns reference to an Alpine store for the experimentationViewModel
+ * Contains data used to drive split tests within the user experience
+ * Can be accessed in HTML via directive attribute values w/ `$store.experimentationViewModel`
+ *
+ * - activeExperimentVariations: Object, containing each active experiment as a key, and the active variation as the value
+ * - setActiveExperimentVariation: Function, to set the active variation for a given experiment
+ * - getActiveExperimentVariation: Function, to get the active variation for a given experiment
+ * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
+ */
+function createExperimentationViewModel() {
+  Alpine.store("experimentationViewModel", {
+    activeExperimentVariations: {},
+    setActiveExperimentVariation(experiment, variation) {
+      this.activeExperimentVariations[experiment] = variation
+    },
+    getActiveExperimentVariation(experiment) {
+      return this.activeExperimentVariations[experiment]
+    },
+    init() {
+      this.activeExperimentVariations = {}
+    },
+  })
+
+  // Return reference to the new experimentationViewModel store
+  return Alpine.store("experimentationViewModel")
 }
 
 /**
