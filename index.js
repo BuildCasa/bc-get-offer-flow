@@ -465,17 +465,9 @@ function createContactViewModel() {
           "SUCCESS"
         )
 
-        // If the user has an active jurisdiction and an estimate, include additional functionality for results UX
+        // If the user has an active jurisdiction and an estimate,
+        // dynamically load the Calendly script
         if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate) { 
-          // If offering / lead type is "Windfall",
-          // set appropriate variation for the Jul 2023 "Estimate or eligibility" experiment
-          if(options && options.lead && options.lead.type && options.lead.type === 'Windfall') {  
-            const experiment = "windfall-estimate-or-eligibility-2023-07"
-            const variation = Math.random() < 0.5 ? "amount-excluded" : "amount-included"
-            $store.experimentationViewModel.setActiveExperimentVariation(experiment, variation)
-          }
-          
-          // Dynamically load the Calendly script
           const calendlyScript = document.createElement("script")
           calendlyScript.src = "https://assets.calendly.com/assets/external/widget.js"
           calendlyScript.async = true
