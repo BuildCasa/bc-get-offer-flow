@@ -475,15 +475,15 @@ function createContactViewModel() {
         if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate && confetti) { 
           setTimeout(() => {
             confetti("tsparticles", {
-              angle: 90,
+              angle: 270,
               count: 90,
               position: {
                 x: 50,
-                y: 10,
+                y: -5,
               },
-              spread: 200,
-              startVelocity: 20,
-              ticks: 150,
+              spread: 180,
+              startVelocity: 10,
+              ticks: 200,
               colors: ["#ffffff", "#4cbd98", "#346af8"],
               zIndex: 9999,
               disableForReducedMotion: true,
