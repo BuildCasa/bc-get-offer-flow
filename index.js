@@ -19,10 +19,7 @@ const $store = {}
  * Uses a simple set of directives to integrate logic with HTML elements via Webflow element attributes
  * For more info on AlpineJS, visit the docs: https://alpinejs.dev/start-here
  */
-const alpineScript = document.createElement("script")
-alpineScript.src = "https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js"
-alpineScript.defer = true
-document.head.appendChild(alpineScript)
+loadScript("https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js", {defer: true})
 
 // When Alpine has been loaded, initiate the custom state and business logic that powers the flow
 document.addEventListener("alpine:init", () => {
@@ -458,20 +455,39 @@ function createContactViewModel() {
           createLead(createLeadPayload)
         ]);
 
+        // If the user has an active jurisdiction and an estimate,
+        // dynamically load the Calendly and tsparticles-confetti scripts
+        if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate) { 
+          loadScript("https://assets.calendly.com/assets/external/widget.js", {async: true})
+          await loadScript("https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.11.0/tsparticles.confetti.bundle.min.js", {async: true})
+        }
+
         this.isSubmitted = true
 
+        // Transition to the estimate results state
         $store.flowState.value = $store.flowStateMachine.transition(
           $store.flowState.value,
           "SUCCESS"
         )
 
         // If the user has an active jurisdiction and an estimate,
-        // dynamically load the Calendly script
-        if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate) { 
-          const calendlyScript = document.createElement("script")
-          calendlyScript.src = "https://assets.calendly.com/assets/external/widget.js"
-          calendlyScript.async = true
-          document.head.appendChild(calendlyScript)
+        // pop the confetti animation after a short delay
+        if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate && confetti) { 
+          setTimeout(() => {
+            confetti("tsparticles", {
+              angle: 90,
+              count: 90,
+              position: {
+                x: 50,
+                y: 10,
+              },
+              spread: 200,
+              startVelocity: 20,
+              ticks: 150,
+              colors: ["#ffffff", "#4cbd98", "#346af8"],
+              disableForReducedMotion: true,
+            });
+          }, 500);
         }
 
         trackEvent("Contact Submission Succeeded", {
@@ -2155,4 +2171,32 @@ function trackEvent(eventName, eventProperties = {}) {
   } catch (error) {
     // FUTURE DEV: Update w/ error tracking / reporting through integrated system
   }
+}
+
+/**
+ * ----------------------------------------------------------------
+ * loadScript
+ * ----------------------------------------------------------------
+ * Given a script source URL, loads the script into the DOM
+ * Returns a Promise that resolves when the script has loaded
+ */
+async function loadScript(src, options = {}) {
+  return new Promise(function(resolve, reject) {
+    const script = document.createElement("script")
+    script.src = src
+
+    if (options.defer) {
+      script.defer = true
+    } else if (options.async) {
+      script.async = true
+    }
+
+    script.addEventListener("load", function() {
+      resolve()
+    })
+    script.addEventListener("error", function(e) {
+      reject(e)
+    })
+    document.body.appendChild(script)
+  })
 }
