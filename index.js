@@ -485,6 +485,7 @@ function createContactViewModel() {
               startVelocity: 20,
               ticks: 150,
               colors: ["#ffffff", "#4cbd98", "#346af8"],
+              zIndex: 9999,
               disableForReducedMotion: true,
             });
           }, 500);
