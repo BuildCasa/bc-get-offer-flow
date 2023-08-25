@@ -104,7 +104,7 @@
       <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" x-show="$store.estimateViewModel.jurisdiction.status == 'active' && $store.estimateViewModel.estimate.low && $store.estimateViewModel.estimate.high" @click.stop>
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Estimate Results</h2>
-        <p class="mt-6">Eligible</p>
+        <p class="mt-6">Active jurisdiction, w/ estimate</p>
         <div x-show="$store.experimentationViewModel.getActiveExperimentVariation('windfall-estimate-or-eligibility-2023-07')">
           <p class="mt-6">Estimate or Eligibility Experiment:</p>
           <div class="mt-2 font-black text-lg" x-text="$store.experimentationViewModel.getActiveExperimentVariation('windfall-estimate-or-eligibility-2023-07')"></div>
@@ -119,16 +119,18 @@
         <button class="mt-6 px-4 py-2 rounded bg-emerald-500 text-white" @click="$store.estimateViewModel.handleScheduleConsultationClick($event)">Schedule consultation</button>
       </div>
       <!-- Ineligible -->
-      <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" x-show="$store.estimateViewModel.jurisdiction.status == 'active' && (!$store.estimateViewModel.estimate.low || !$store.estimateViewModel.estimate.high)" @click.stop>
+      <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" x-show="(!$store.estimateViewModel.hasResults) || ($store.estimateViewModel.jurisdiction.status == 'active' && (!$store.estimateViewModel.estimate.low || !$store.estimateViewModel.estimate.high))" @click.stop>
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Estimate Results</h2>
-        <p class="mt-6">In-target, ineligible</p>
+        <p class="mt-6">Unknown OR active jurisdiction, but no estimate</p>
+        <p class="mt-6">Schedule a consultation to speak with one of our specialists:</p>
+        <button class="mt-6 px-4 py-2 rounded bg-emerald-500 text-white" @click="$store.estimateViewModel.handleScheduleConsultationClick($event)">Schedule consultation</button>
       </div>
       <!-- Out-of-Target -->
       <div class="flex-shrink-0 flex-grow-0 relative w-1/4 bg-white rounded-xl shadow-xl p-8 text-center" x-show="$store.flowState.value == 'requestedCommunity' || $store.estimateViewModel.jurisdiction.status == 'inactive'" @click.stop>
         <button class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700" @click="$store.modalHelpers.handleModalClose()">&#x2715</button>
         <h2 class="font-semibold text-xl">Estimate Results</h2>
-        <p class="mt-6">Out-of-target</p>
+        <p class="mt-6">Inactive jurisdiction</p>
         <button class="mt-6 px-4 py-2 rounded bg-emerald-500 text-white" x-show="$store.flowState.value != 'requestedCommunity'" @click="$store.estimateViewModel.handleRequestCommunityClick($event)">Request BuildCasa!</button>
         <p class="mt-6 text-emerald-500 font-semibold" x-show="$store.flowState.value == 'requestedCommunity'">Request received!</p>
       </div>
