@@ -402,16 +402,35 @@ function createContactViewModel() {
 
       try {
         // Process the submitted contact info, and transition the state accordingly
+        
+        // Create contact object for the create lead payload
+        let contact = {
+          firstName: this.firstName.trim(),
+          lastName: this.lastName.trim(),
+          email: this.email.trim(),
+          phone: this.phone.trim(),
+          desiredTimeline: this.desiredTimeline.trim(),
+        }
+
+        // Add address info to the contact object
+        // If parcel details are available, use them
+        // Otherwise, use the address info from the selected address
+        if ($store.addressViewModel.hasParcelDetails) {
+          contact = {
+            ...contact,
+            ...$store.addressViewModel.parcelDetails,
+          }
+        } else if ($store.addressViewModel.isSelected) {
+          contact = {
+            ...contact,
+            address: [$store.addressViewModel.selectedMatch.address, $store.addressViewModel.selectedMatch.context].join(', '),
+          }
+        }
+        
+        // Put together the create lead payload
         const createLeadPayload = {
           ...options,
-          contact: {
-            firstName: this.firstName.trim(),
-            lastName: this.lastName.trim(),
-            email: this.email.trim(),
-            phone: this.phone.trim(),
-            desiredTimeline: this.desiredTimeline.trim(),
-            ...$store.addressViewModel.parcelDetails,
-          },
+          contact: contact,
           activeExperimentVariations: $store.experimentationViewModel.activeExperimentVariations,
         }
 
@@ -2100,7 +2119,6 @@ function trackEvent(eventName, eventProperties = {}) {
  * Includes address, estimate, and contact details, as well as active experiment variations
  */
 function getDefaultTrackingProperties() {
-  const eventProperties = {}
   let eventProperties = {}
 
   // Include address-related properties
