@@ -194,12 +194,7 @@ function createAddressViewModel() {
       this.keyboardNavIndex = -1
 
       // Track address selection event
-      trackEvent("Address Selected", {
-        address_str: match.address,
-        context_str: match.context,
-        regrid_ll_uuid_str: match.ll_uuid,
-        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
-      })
+      trackEvent("Address Selected")
     },
     handleSubmit(event, options = {}) {
       // Block default form submission behavior
@@ -231,12 +226,7 @@ function createAddressViewModel() {
       )
 
       // Track address submission event
-      trackEvent("Address Submitted", {
-        address_str: $store.addressViewModel.selectedMatch.address,
-        context_str: $store.addressViewModel.selectedMatch.context,
-        regrid_ll_uuid_str: $store.addressViewModel.selectedMatch.ll_uuid,
-        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
-      })
+      trackEvent("Address Submitted")
 
       // Process the submitted address, and transition the state accordingly
       try {
@@ -289,18 +279,7 @@ function createAddressViewModel() {
             "SUCCESS"
           )
 
-          trackEvent("Address Submission Succeeded", {
-            address_str: $store.addressViewModel.parcelDetails.address,
-            address_city_str: $store.addressViewModel.parcelDetails.city,
-            address_state_str: $store.addressViewModel.parcelDetails.state,
-            address_zip_str: $store.addressViewModel.parcelDetails.zip,
-            parcel_apn_str: $store.addressViewModel.parcelDetails.apn,
-            parcel_jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
-            jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
-            estimate_low_real: $store.estimateViewModel.estimate.low,
-            estimate_high_real: $store.estimateViewModel.estimate.high,
-            active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
-          })
+          trackEvent("Address Submission Succeeded")
         }
       } catch (error) {
         this.errorMessage =
@@ -416,23 +395,7 @@ function createContactViewModel() {
       }
 
       // Track contact submission event
-      trackEvent("Contact Submitted", {
-        address_str: $store.addressViewModel.parcelDetails.address,
-        address_city_str: $store.addressViewModel.parcelDetails.city,
-        address_state_str: $store.addressViewModel.parcelDetails.state,
-        address_zip_str: $store.addressViewModel.parcelDetails.zip,
-        apn_str: $store.addressViewModel.parcelDetails.apn,
-        jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
-        jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
-        estimate_low_real: $store.estimateViewModel.estimate.low,
-        estimate_high_real: $store.estimateViewModel.estimate.high,
-        contact_first_name_str: $store.contactViewModel.firstName,
-        contact_last_name_str: $store.contactViewModel.lastName,
-        contact_email_str: $store.contactViewModel.email,
-        contact_phone_str: $store.contactViewModel.phone,
-        contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
-        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
-      })
+      trackEvent("Contact Submitted")
 
       try {
         // Process the submitted contact info, and transition the state accordingly
@@ -491,23 +454,7 @@ function createContactViewModel() {
           }, 500);
         }
 
-        trackEvent("Contact Submission Succeeded", {
-          address_str: $store.addressViewModel.parcelDetails.address,
-          address_city_str: $store.addressViewModel.parcelDetails.city,
-          address_state_str: $store.addressViewModel.parcelDetails.state,
-          address_zip_str: $store.addressViewModel.parcelDetails.zip,
-          apn_str: $store.addressViewModel.parcelDetails.apn,
-          jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
-          jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
-          estimate_low_real: $store.estimateViewModel.estimate.low,
-          estimate_high_real: $store.estimateViewModel.estimate.high,
-          contact_first_name_str: $store.contactViewModel.firstName,
-          contact_last_name_str: $store.contactViewModel.lastName,
-          contact_email_str: $store.contactViewModel.email,
-          contact_phone_str: $store.contactViewModel.phone,
-          contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
-          active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
-        })
+        trackEvent("Contact Submission Succeeded")
       } catch (error) {
         this.errorMessage =
           "There was an error processing your info. Please try again, or contact us for help."
@@ -530,7 +477,7 @@ function createContactViewModel() {
 
 /**
  * ----------------------------------------------------------------
- * createContactEstimateViewModel
+ * createEstimateViewModel
  * ----------------------------------------------------------------
  * Creates and returns reference to an Alpine store for the estimateViewModel
  * Represents data returned by the Buildcasa estimate generation system
@@ -605,23 +552,7 @@ function createEstimateViewModel() {
       )
 
       // Track Schedule Consultation button click
-      trackEvent("Schedule Consultation Clicked", {
-        address_str: $store.addressViewModel.parcelDetails.address,
-        address_city_str: $store.addressViewModel.parcelDetails.city,
-        address_state_str: $store.addressViewModel.parcelDetails.state,
-        address_zip_str: $store.addressViewModel.parcelDetails.zip,
-        apn_str: $store.addressViewModel.parcelDetails.apn,
-        jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
-        jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
-        estimate_low_real: $store.estimateViewModel.estimate.low,
-        estimate_high_real: $store.estimateViewModel.estimate.high,
-        contact_first_name_str: $store.contactViewModel.firstName,
-        contact_last_name_str: $store.contactViewModel.lastName,
-        contact_email_str: $store.contactViewModel.email,
-        contact_phone_str: $store.contactViewModel.phone,
-        contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
-        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
-      })
+      trackEvent("Schedule Consultation Clicked")
     },
     handleRequestCommunityClick(event) {
       // Block default click handling behavior / event propagation
@@ -635,23 +566,7 @@ function createEstimateViewModel() {
       )
 
       // Track Request Community button click
-      trackEvent("Community Requested", {
-        address_str: $store.addressViewModel.parcelDetails.address,
-        address_city_str: $store.addressViewModel.parcelDetails.city,
-        address_state_str: $store.addressViewModel.parcelDetails.state,
-        address_zip_str: $store.addressViewModel.parcelDetails.zip,
-        apn_str: $store.addressViewModel.parcelDetails.apn,
-        jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
-        jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
-        estimate_low_real: $store.estimateViewModel.estimate.low,
-        estimate_high_real: $store.estimateViewModel.estimate.high,
-        contact_first_name_str: $store.contactViewModel.firstName,
-        contact_last_name_str: $store.contactViewModel.lastName,
-        contact_email_str: $store.contactViewModel.email,
-        contact_phone_str: $store.contactViewModel.phone,
-        contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
-        active_experiment_variations_strs: $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue(),
-      })
+      trackEvent("Community Requested")
     },
   })
 
@@ -2167,11 +2082,85 @@ function trackEvent(eventName, eventProperties = {}) {
   // If FS is available (FullStory tracking is active), send event to FullStory
   try {
     if (FS) {
-      FS.event(eventName, eventProperties)
+      FS.event(eventName, {...getDefaultTrackingProperties(), eventProperties})
     }
   } catch (error) {
     // FUTURE DEV: Update w/ error tracking / reporting through integrated system
   }
+}
+
+/**
+ * ----------------------------------------------------------------
+ * getDefaultTrackingProperties
+ * ----------------------------------------------------------------
+ * Returns an object with the properties to be included in event tracking by default
+ * Includes address, estimate, and contact details, as well as active experiment variations
+ */
+function getDefaultTrackingProperties() {
+  const eventProperties = {}
+
+  // Include address-related properties
+  // If parcel details are available, use them to populate address properties
+  // Else, if selected match is available, use it to populate address properties
+  if ($store.addressViewModel.hasParcelDetails) {
+    const parcelDetailsProperties = {
+      address_str: $store.addressViewModel.parcelDetails.address,
+      address_city_str: $store.addressViewModel.parcelDetails.city,
+      address_state_str: $store.addressViewModel.parcelDetails.state,
+      address_zip_str: $store.addressViewModel.parcelDetails.zip,
+      parcel_apn_str: $store.addressViewModel.parcelDetails.apn,
+      parcel_jurisdiction_str: $store.addressViewModel.parcelDetails.jurisdiction,
+    }
+     eventProperties = {
+      ...eventProperties,
+      ...parcelDetailsProperties,
+    }
+  } else if ($store.addressViewModel.selectedMatch) {
+    const selectedMatchProperties = {
+      address_str: $store.addressViewModel.selectedMatch.address,
+      address_context_str: $store.addressViewModel.selectedMatch.context,
+      regrid_ll_uuid_str: $store.addressViewModel.selectedMatch.ll_uuid,
+    }
+    eventProperties = {
+      ...eventProperties,
+      ...selectedMatchProperties,
+    }
+  }
+
+  // Include estimate-related properties
+  // If estimate results are available, use them to populate estimate properties
+  if ($store.estimateViewModel.hasEstimateResults) {
+    const estimateProperties = {
+      jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
+      estimate_low_real: $store.estimateViewModel.estimate.low,
+      estimate_high_real: $store.estimateViewModel.estimate.high,
+    }
+     eventProperties = {
+      ...eventProperties,
+      ...estimateProperties,
+    }
+  }
+
+  // Include contact-related properties
+  // If contact details are available, use them to populate contact properties
+  if ($store.contactViewModel.hasContactDetails) {
+    const contactProperties = {
+      contact_first_name_str: $store.contactViewModel.firstName,
+      contact_last_name_str: $store.contactViewModel.lastName,
+      contact_email_str: $store.contactViewModel.email,
+      contact_phone_str: $store.contactViewModel.phone,
+      contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
+    }
+    eventProperties = {
+      ...eventProperties,
+      ...contactProperties,
+    }
+  }
+
+  // Include active experiment variations
+  eventProperties.active_experiment_variations_strs = $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue()
+
+  return eventProperties
 }
 
 /**
