@@ -334,6 +334,14 @@ function createContactViewModel() {
       processing: "",
     },
     errorMessage: "",
+    get hasContactDetails() {
+      return (
+        !!this.firstName.trim() &&
+        !!this.lastName.trim() &&
+        !!this.email.trim() &&
+        !!this.phone.trim()
+      )
+    },
     isSubmitted: false,
     lotAnalysisStep: "",
     init() {
