@@ -282,17 +282,12 @@ function createAddressViewModel() {
           trackEvent("Address Submission Succeeded")
         }
       } catch (error) {
-        this.errorMessage =
-          "There was an error processing your address. Please try again, or contact us for help."
-
         $store.flowState.value = $store.flowStateMachine.transition(
           $store.flowState.value,
-          "ERROR"
+          "SUCCESS"
         )
 
-        trackEvent("Address Submission Failed", {
-          error_str: this.errorMessage,
-        })
+        trackEvent("Address Submission Errors (Non-Blocking)")
       }
     },
   })
