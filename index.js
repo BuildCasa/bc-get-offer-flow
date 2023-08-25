@@ -440,10 +440,15 @@ function createContactViewModel() {
           createLead(createLeadPayload)
         ]);
 
+        // As long as the user is not in an inactive jurisdiction,
+        // dynamically load the Calendly script
+        if (!$store.estimateViewModel.hasResults || $store.estimateViewModel.hasActiveJurisdiction) {
+          loadScript("https://assets.calendly.com/assets/external/widget.js", {async: true})
+        }
+
         // If the user has an active jurisdiction and an estimate,
         // dynamically load the Calendly and tsparticles-confetti scripts
         if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate) { 
-          loadScript("https://assets.calendly.com/assets/external/widget.js", {async: true})
           await loadScript("https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.11.0/tsparticles.confetti.bundle.min.js", {async: true})
         }
 
