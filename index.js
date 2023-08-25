@@ -2101,6 +2101,7 @@ function trackEvent(eventName, eventProperties = {}) {
  */
 function getDefaultTrackingProperties() {
   const eventProperties = {}
+  let eventProperties = {}
 
   // Include address-related properties
   // If parcel details are available, use them to populate address properties
