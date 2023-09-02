@@ -412,6 +412,14 @@ function createContactViewModel() {
           desiredTimeline: this.desiredTimeline.trim(),
         }
 
+        // Validate email address and phone number
+        if (!validateEmailAddress(contact.email)) {
+          throw new Error("Please enter a valid email address, and try again.", { cause: "INVALID_EMAIL" })
+        }
+        if (!validatePhoneNumber(contact.phone)) {
+          throw new Error("Please enter a valid phone number, including area code, and try again.", { cause: "INVALID_PHONE" })
+        }
+
         // Add address info to the contact object
         // If parcel details are available, use them
         // Otherwise, use the address info from the selected address
@@ -483,8 +491,14 @@ function createContactViewModel() {
 
         trackEvent("Contact Submission Succeeded")
       } catch (error) {
-        this.errorMessage =
+        // If error is thrown due to invalid email or phone number, show the specific error message
+        // Otherwise, show a generic error message
+        if (error && error.cause && (error.cause === "INVALID_EMAIL" || error.cause === "INVALID_PHONE")) {
+          this.errorMessage = error.message
+        } else {
+          this.errorMessage =
           "There was an error processing your info. Please try again, or contact us for help."
+        }
 
         $store.flowState.value = $store.flowStateMachine.transition(
           $store.flowState.value,
@@ -1991,6 +2005,28 @@ async function fetchEstimateResults(payload) {
     throw new Error("Network response was not OK")
   }
   return await response.json()
+}
+
+/**
+ * ----------------------------------------------------------------
+ * validateEmailAddress
+ * ----------------------------------------------------------------
+ * Given a string input, returns true if it is a valid email address
+ */
+function validateEmailAddress(input) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  return emailRegex.test(input)
+}
+
+/**
+ * ----------------------------------------------------------------
+ * validatePhoneNumber
+ * ----------------------------------------------------------------
+ * Given a string input, returns true if it is a valid phone number
+ */
+function validatePhoneNumber(input) {
+  const phoneRegex = /^\+?\d{0,3}?\s?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$|^\d{10}$/
+  return phoneRegex.test(input)
 }
 
 /**
