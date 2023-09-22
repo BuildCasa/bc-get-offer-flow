@@ -471,7 +471,7 @@ function createContactViewModel() {
         // If the user has an active jurisdiction and an estimate,
         // pop the confetti animation after a short delay
         if ($store.estimateViewModel.hasActiveJurisdiction && $store.estimateViewModel.hasEstimate && confetti) { 
-          const confettiColors = (options && options.lead && options.lead.type && options.lead.type === 'WeBuyCALots') ? ["ffffff", "#1c429c", "#f0bd1b"] : ["#ffffff", "#4cbd98", "#346af8"]
+          const confettiColors = (options && options.lead && options.lead.type && options.lead.type === 'webuyCAlots') ? ["ffffff", "#1c429c", "#f0bd1b"] : ["#ffffff", "#4cbd98", "#346af8"]
           
           setTimeout(() => {
             confetti("tsparticles", {
