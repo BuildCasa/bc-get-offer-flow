@@ -329,11 +329,11 @@ function createContactViewModel() {
       processing: "",
     },
     errorMessage: "",
-    get hasContactDetails() {
+    get hasAnyContactDetails() {
       return (
-        !!this.firstName.trim() &&
-        !!this.lastName.trim() &&
-        !!this.email.trim() &&
+        !!this.firstName.trim() ||
+        !!this.lastName.trim() ||
+        !!this.email.trim() ||
         !!this.phone.trim()
       )
     },
@@ -1821,12 +1821,34 @@ function createModalHelpers() {
       trackEvent("Modal Get Offer Flow Opened")
     },
     handleModalClose() {
-      $store.flowState.value = $store.flowStateMachine.transition(
-        $store.flowState.value,
-        "EXIT"
-      )
+      // TODO: Move this logic into the flowStateMachine
+      let proceedWithExit = true
 
-      trackEvent("Get Offer Modal Closed")
+      // If the user is on the contact form, and has entered any data,
+      // confirm they want to exit before closing the modal
+      if (
+        $store.flowState.value == "contactForm" &&
+        $store.contactViewModel.hasAnyContactDetails
+      ) {
+        proceedWithExit = confirm(
+          "Are you sure you want to stop before you've seen how much your extra lot space could be worth?"
+        )
+      }
+
+      // If the user is on the contact form processing state,
+      // prevent them from exiting until the processing is complete
+      if ($store.flowState.value == "contactFormProcessing") {
+        proceedWithExit = false
+      }
+      
+      if (proceedWithExit) {
+        $store.flowState.value = $store.flowStateMachine.transition(
+          $store.flowState.value,
+          "EXIT"
+        )
+
+        trackEvent("Get Offer Modal Closed")
+      }
     },
   })
 
@@ -2208,7 +2230,7 @@ function getDefaultTrackingProperties() {
 
   // Include contact-related properties
   // If contact details are available, use them to populate contact properties
-  if ($store.contactViewModel.hasContactDetails) {
+  if ($store.contactViewModel.hasAnyContactDetails) {
     const contactProperties = {
       contact_first_name_str: $store.contactViewModel.firstName,
       contact_last_name_str: $store.contactViewModel.lastName,
