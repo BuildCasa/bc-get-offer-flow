@@ -362,15 +362,13 @@ function createContactViewModel() {
         processing: contactFormSubmitButton.dataset.wait,
       }
     },
-    handlePhoneInput(event) {
-      event.target.value = formatPhoneInput(event.target.value);
+    formatPhoneInput(input) {
+      return formatPhoneInput(input)
     },
     handleSubmit(event, options = {}) {
       // Block default form submission behavior
       event.preventDefault()
       event.stopPropagation()
-
-      this.phone = formatPhoneInput(this.phone.trim()); // Format one last time before submitting to catch and validate any unexpected input values
 
       // Submit contact info to create lead
       this.submitContact(options)
