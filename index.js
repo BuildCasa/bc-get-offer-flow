@@ -244,9 +244,13 @@ function createAddressViewModel() {
         } else {
           // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
           if (!$store.addressViewModel.hasParcelDetails) {
-            $store.addressViewModel.parcelDetails = await fetchParcelDetails(
-              $store.addressViewModel.selectedMatch.ll_uuid
-            )
+            // Combine appropriate fields from Regrid Typeahead and Parcel APIs into a single object
+            $store.addressViewModel.parcelDetails = {
+            ...await fetchParcelDetails($store.addressViewModel.selectedMatch.ll_uuid),
+            address: $store.addressViewModel.selectedMatch.address,
+            city: $store.addressViewModel.selectedMatch.context.split(", ")[0],
+            state: $store.addressViewModel.selectedMatch.context.split(", ")[1],
+            }
           }
 
           // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
@@ -2001,9 +2005,9 @@ function filterParcelDetails(regridParcelResponseData) {
   return {
     apn: regridResultFields.parcelnumb,
     jurisdiction: regridResultFields.county,
-    address: regridResultFields.address,
-    city: regridResultFields.scity,
-    state: regridResultFields.state2,
+    // address: regridResultFields.address,
+    // city: regridResultFields.scity,
+    // state: regridResultFields.state2,
     zip: regridResultFields.szip,
   }
 }
