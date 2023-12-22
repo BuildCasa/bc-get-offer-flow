@@ -1617,8 +1617,8 @@ function createAduCalculatorViewModel() {
     init: function() {
       this.homeValue = this.formatInput('500000');
       this.homeSize = this.formatInput('2000');
-      this.aduCost = this.formatInput('250000');
-      this.aduSize = this.formatInput('1000');
+      this.aduCost = this.formatInput('200000');
+      this.aduSize = this.formatInput('800');
       this.result = this.calculateResult();
     },
     handleInput: function(e) {
