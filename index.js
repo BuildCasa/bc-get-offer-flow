@@ -1644,12 +1644,12 @@ function createAduCalculatorViewModel() {
       return value;
     },
     calculateResult: function() {
-      if (!this.homeValue || !this.homeSize || !this.aduCost || !this.aduSize) return;
-
       const homeValue = this.convertFieldValueToNumber(this.homeValue);
       const homeSize = this.convertFieldValueToNumber(this.homeSize);
       const aduCost = this.convertFieldValueToNumber(this.aduCost);
       const aduSize = this.convertFieldValueToNumber(this.aduSize);
+
+      if (!homeValue || !homeSize || !aduCost || !aduSize) return '--';
 
       let result = ((homeValue / homeSize) * aduSize) - aduCost - 50000;
 
