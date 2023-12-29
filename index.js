@@ -1615,9 +1615,9 @@ function createAduCalculatorViewModel() {
     aduSize: null,
     result: null,
     init: function() {
-      this.homeValue = this.formatInput('500000');
+      this.homeValue = this.formatInput('1000000');
       this.homeSize = this.formatInput('2000');
-      this.aduCost = this.formatInput('200000');
+      this.aduCost = this.formatInput('250000');
       this.aduSize = this.formatInput('800');
       this.result = this.calculateResult();
     },
@@ -1653,7 +1653,7 @@ function createAduCalculatorViewModel() {
 
       let result = ((homeValue / homeSize) * aduSize) - aduCost - 50000;
 
-      result = (result < 10000) ? 10000 : Math.floor(result / 10000) * 10000;
+      result = (result < 10000) ? 10000 : Math.ceil(result / 10000) * 10000;
 
       result = new Intl.NumberFormat('en-US', {
         style: 'currency',
