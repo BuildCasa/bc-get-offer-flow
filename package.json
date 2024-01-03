@@ -6,9 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint:check": "npx eslint . --ext .js,.cjs,.mjs",
+    "lint:fix": "npx eslint . --ext .js,.cjs,.mjs --fix",
+    "format:check": "npx prettier . --check",
+    "format:fix": "npx prettier . --write"
   },
   "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "3.1.1",
     "vite": "^5.0.8"
   }
 }

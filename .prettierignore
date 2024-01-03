@@ -1,0 +1,11 @@
+# Prettier ignores all files specified in .gitignore
+# Include any additional files you want to ignore here
+
+# Package lock files
+# --------
+package-lock.json
+
+# Build output
+# ALWAYS IGNORE dist folder for Prettier formatting
+# --------
+dist
