@@ -1649,7 +1649,7 @@ function createAduCalculatorViewModel() {
       const aduCost = this.convertFieldValueToNumber(this.aduCost);
       const aduSize = this.convertFieldValueToNumber(this.aduSize);
 
-      if (!homeValue || !homeSize || !aduCost || !aduSize) return '--';
+      if (!homeValue || !homeSize || !aduSize) return '--';
 
       let result = ((homeValue / homeSize) * aduSize) - aduCost - 50000;
 
