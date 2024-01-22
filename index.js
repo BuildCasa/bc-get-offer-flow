@@ -1886,13 +1886,20 @@ function createModalHelpers() {
         $store.flowState.value == "requestedCommunity"
       )
     },
-    handleModalFlowStart() {
+    handleModalFlowStart(cta = null) {
       $store.flowState.value = $store.flowStateMachine.transition(
         $store.flowState.value,
         "START_MODAL_FLOW"
       )
 
-      trackEvent("Modal Get Offer Flow Opened")
+      let eventProperties = {}
+      if (cta) {
+        eventProperties = {
+          cta_str: cta,
+        }
+      }
+
+      trackEvent("Modal Get Offer Flow Opened", eventProperties)
     },
     handleModalClose() {
       // TODO: Move this logic into the flowStateMachine
