@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
 module.exports = {
   env: {
@@ -25,7 +25,10 @@ module.exports = {
       .readFileSync(path.join(__dirname, '.prettierignore'), 'utf8')
       .split('\n')
       .filter((line) => line && !line.startsWith('#')),
-    // Include any additional ignore patterns here
+    // Ignore the legacy script file (pre-build system)
+    // TODO: Remove this once fully transitioned to built scripts
+    'index.js',
+    // Include any additional ignore patterns here...
   ],
   overrides: [
     {
@@ -43,4 +46,4 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {},
-};
+}
