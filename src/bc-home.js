@@ -32,15 +32,14 @@ import { createModalHelpers } from './modules/LegacyModalHelpers'
  * ----------------------------------------------------------------
  */
 
+// Add Alpine to the global scope for browser console access during development and debugging
 window.Alpine = Alpine
 
-// Create global variable to hold references to the Alpine stores used for state management
+// Create global variable to hold references to the Alpine stores created for state management
 const $store = {}
 
 // Initialize the Alpine stores with custom state and business logic that powers the Get Offer flow
-initViewModels($store)
-initFlowState($store)
-initUIHelpers($store)
+initAlpineStores($store)
 
 // Start Alpine.js to enable the interactive behaviors of the Get Offer flow
 Alpine.start()
@@ -50,6 +49,12 @@ Alpine.start()
  * Initialization Functions
  * ----------------------------------------------------------------
  */
+
+function initAlpineStores(globalStore) {
+  initViewModels(globalStore)
+  initFlowState(globalStore)
+  initUIHelpers(globalStore)
+}
 
 function initViewModels(globalStore) {
   createAddressViewModel(globalStore)
