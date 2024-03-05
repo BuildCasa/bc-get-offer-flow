@@ -269,7 +269,7 @@ function createContactViewModel(globalStore) {
     },
   })
 
-  // Add a reference to the new addressViewModel Alpine store to the global store
+  // Add a reference to the new contactViewModel Alpine store to the global store
   globalStore.contactViewModel = Alpine.store('contactViewModel')
 }
 
