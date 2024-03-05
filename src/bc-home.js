@@ -14,6 +14,8 @@
  * ----------------------------------------------------------------
  */
 import Alpine from 'alpinejs'
+import { createAddressViewModel } from './modules/LegacyAddressViewModel'
+import { trackEvent } from './modules/LegacyTracking'
 
 /*
  * ----------------------------------------------------------------
@@ -39,7 +41,7 @@ Alpine.start()
  */
 
 function initViewModels(globalStore) {
-  globalStore.addressViewModel = createAddressViewModel()
+  createAddressViewModel(globalStore)
   globalStore.contactViewModel = createContactViewModel()
   globalStore.estimateViewModel = createEstimateViewModel()
   globalStore.personalizationViewModel = createPersonalizationViewModel()
@@ -63,271 +65,6 @@ function initUIHelpers(globalStore) {
  * These scripts will be split out into their own modules / files
  * Then refactored for better flexibility and maintainability
  */
-
-/**
- * ----------------------------------------------------------------
- * createAddressViewModel
- * ----------------------------------------------------------------
- * Creates and returns reference to an Alpine store for the addressViewModel
- * Represents data provided by users via the Address form and/or URL params
- * Passed to Hubspot and used to generate estimate offer through the flow
- * Can be accessed in HTML via directive attribute values w/ `$store.addressViewModel`
- *
- * - inputValue: String, bound (2-way, via `x-model`) to Address input field in the UI
- * - matches: Array, matching addresses returned by the typeahead API, and displayed in UI typeahead via `x-for`
- * - keyboardNavIndex: Number, tracks which of the matches is currently selected via keyboard (up/down arrows) navigation
- * - selectedMatch: Object, w/ the address data provided by integrated typeahead/address API(s)
- * - parcelDetails: Object, w/ the APN, jurisdiction, and address data provided by integrated typeahead/address API(s)
- * - submitButtonText: Object, w/ `normal` and `processing` strings bound (via `x-text`) to the Address form submit button
- * - errorMessage: String, bound (via `x-text`) and displayed with the form when it is in an addressFormError state w/ message content
- * - isSelected: Getter, returns boolean value based on if there is a valid selected address (can be bound)
- * - hasParcelDetails: Getter, returns boolean value based on if there is a valid set of parcel details for the selected address (can be bound)
- * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
- * - handleInput: Function, bound (via `x-on:input` / `@input`) to run when the user changes the value in the input field
- * - handleKeydown: Function, bound (via `x-on:keydown` / `@keydown`) to run when the user presses any keys while focused within the typeahead component
- * - handleMatchSelection: Function, bound (via `x-on:click` / `@click`) or called programmatically to select an address match
- * - handleSubmit: Function, bound (via `x-on:submit` / `@submit`) to run when submit events are fired on the form elements
- * - submitAddress: Function, called programmatically to process the address submission and trigger state transitions
- */
-function createAddressViewModel() {
-  Alpine.store('addressViewModel', {
-    inputValue: '',
-    matches: [],
-    keyboardNavIndex: -1,
-    selectedMatch: {},
-    parcelDetails: {},
-    submitButtonText: {
-      normal: '',
-      processing: '',
-    },
-    errorMessage: '',
-    get isSelected() {
-      return (
-        Object.keys(this.selectedMatch).length != 0 &&
-        !!this.selectedMatch.ll_uuid
-      )
-    },
-    get hasParcelDetails() {
-      return (
-        Object.keys(this.parcelDetails).length != 0 &&
-        !!this.parcelDetails.jurisdiction &&
-        !!this.parcelDetails.apn
-      )
-    },
-    init() {
-      // FUTURE DEV: Add logic to pre-fill data based on other sources (link params, etc.) here
-
-      // Pre-fill submit button text values based on Webflow settings
-      // Preserves Webflow DX for editing button values through the UI (`button` and `waiting` settings)
-      // But allows dynamically controlling displayed text in site, based on current UI state, via Alpine
-      const addressFormSubmitButton = document.getElementById(
-        'address-form-submit-button',
-      )
-      this.submitButtonText = {
-        normal: addressFormSubmitButton.value,
-        processing: addressFormSubmitButton.dataset.wait,
-      }
-    },
-    async handleInput() {
-      // FUTURE DEV: Currently, calls to this handler are being debounced with an x-bind directive on the input element
-      // Might be more clear to move debounce logic to this script in the future (if we can figure out the 'this' craziness)
-
-      // Clear any previously selected and/or submitted address, parcel details, and estimate results
-      if (this.isSelected) {
-        this.selectedMatch = {}
-      }
-      if (this.hasParcelDetails) {
-        this.parcelDetails = {}
-      }
-      if ($store.estimateViewModel.hasResults) {
-        $store.estimateViewModel.init()
-      }
-      if ($store.contactViewModel.isSubmitted) {
-        $store.contactViewModel.isSubmitted = false
-      }
-      if (
-        $store.experimentationViewModel.getActiveExperimentVariation(
-          'windfall-estimate-or-eligibility-2023-07',
-        )
-      ) {
-        $store.experimentationViewModel.clearActiveExperiment(
-          'windfall-estimate-or-eligibility-2023-07',
-        )
-      }
-
-      // Fetch and update address matches (or handle errors)
-      try {
-        this.matches = await fetchAddressMatches(this.inputValue)
-      } catch (error) {
-        this.errorMessage =
-          'There was an error finding your address. Please try again, or contact us for help.'
-
-        $store.flowState.value = $store.flowStateMachine.transition(
-          $store.flowState.value,
-          'ERROR',
-        )
-      }
-    },
-    handleKeydown(event) {
-      // Don't intercept keydown events for any keys other than ArrowUp, ArrowDown, or Enter
-      if (
-        event.key != 'Enter' &&
-        event.key != 'ArrowUp' &&
-        event.key != 'ArrowDown'
-      ) {
-        return
-      }
-
-      // Don't intercept keydown events if the address matches are not being displayed
-      if (this.isSelected || this.matches.length === 0) {
-        return
-      }
-
-      // If ArrowUp, ArrowDown, or Enter are pressed while address matches are being displayed, block default behavior
-      event.preventDefault()
-      event.stopPropagation()
-
-      // And apply special logic to navigate and select an address from the available matches
-      if (event.key === 'Enter' && this.keyboardNavIndex != -1) {
-        // If Enter key is pressed, select the match at the current position
-        this.handleMatchSelection(this.matches[this.keyboardNavIndex])
-      } else if (event.key === 'ArrowUp') {
-        // If ArrowUp key is pressed and no matches have been navigated to via keyboard yet, navigate to the bottom of the list
-        // Else, navigate up one match from the current position
-        this.keyboardNavIndex =
-          this.keyboardNavIndex <= -1
-            ? this.matches.length - 1
-            : this.keyboardNavIndex - 1
-      } else if (event.key === 'ArrowDown') {
-        // If ArrowDown key is pressed and current position is at the bottom of the list, navigate to the starting position
-        // Else, navigate down one match from the current position
-        this.keyboardNavIndex =
-          this.keyboardNavIndex >= this.matches.length - 1
-            ? -1
-            : this.keyboardNavIndex + 1
-      }
-    },
-    handleMatchSelection(match) {
-      // Set selected address
-      this.selectedMatch = match
-
-      // Update input value
-      this.inputValue = match.address + ', ' + match.context
-
-      // Re-initialize matches / keyboard nav
-      this.matches = []
-      this.keyboardNavIndex = -1
-
-      // Track address selection event
-      trackEvent('Address Selected')
-    },
-    handleSubmit(event, options = {}) {
-      // Block default form submission behavior
-      event.preventDefault()
-      event.stopPropagation()
-
-      // Submit address
-      this.submitAddress(options)
-    },
-    async submitAddress(options = {}) {
-      // Debounce submission if form is already processing
-      if (
-        $store.flowState.value == 'addressFormProcessing' ||
-        $store.flowState.value == 'modalAddressFormProcessing'
-      ) {
-        return
-      }
-
-      // Remove active focus (to avoid inadvertant submits given the modal UX)
-      document.activeElement?.blur()
-
-      // Clear out any existing error message
-      this.errorMessage = ''
-
-      // Transition to the address processing state
-      $store.flowState.value = $store.flowStateMachine.transition(
-        $store.flowState.value,
-        'SUBMIT_ADDRESS',
-      )
-
-      // Track address submission event
-      trackEvent('Address Submitted')
-
-      // Process the submitted address, and transition the state accordingly
-      try {
-        // If the contact has already been submitted, skip the contact form and transition directly to the estimate results
-        // Otherwise, transition to the contact form
-        if (
-          this.hasParcelDetails &&
-          $store.estimateViewModel.hasResults &&
-          $store.contactViewModel.isSubmitted
-        ) {
-          $store.flowState.value = $store.flowStateMachine.transition(
-            $store.flowState.value,
-            'SKIP_CONTACT',
-          )
-        } else {
-          // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
-          if (!$store.addressViewModel.hasParcelDetails) {
-            // Combine appropriate fields from Regrid Typeahead and Parcel APIs into a single object
-            $store.addressViewModel.parcelDetails = {
-              ...(await fetchParcelDetails(
-                $store.addressViewModel.selectedMatch.ll_uuid,
-              )),
-              address: $store.addressViewModel.selectedMatch.address,
-              city: $store.addressViewModel.selectedMatch.context.split(
-                ', ',
-              )[0],
-              state:
-                $store.addressViewModel.selectedMatch.context.split(', ')[1],
-            }
-          }
-
-          // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
-          if (!$store.estimateViewModel.hasResults) {
-            const fetchEstimatePayload = {
-              ...options,
-              parcel: {
-                apn: $store.addressViewModel.parcelDetails.apn,
-                jurisdiction:
-                  $store.addressViewModel.parcelDetails.jurisdiction,
-              },
-              address: {
-                address: $store.addressViewModel.parcelDetails.address,
-                city: $store.addressViewModel.parcelDetails.city,
-                state: $store.addressViewModel.parcelDetails.state,
-                zip: $store.addressViewModel.parcelDetails.zip,
-              },
-            }
-
-            const estimateResults =
-              await fetchEstimateResults(fetchEstimatePayload)
-
-            $store.estimateViewModel.jurisdiction = estimateResults.jurisdiction
-            $store.estimateViewModel.estimate = estimateResults.estimate
-          }
-
-          $store.flowState.value = $store.flowStateMachine.transition(
-            $store.flowState.value,
-            'SUCCESS',
-          )
-
-          trackEvent('Address Submission Succeeded')
-        }
-      } catch (error) {
-        $store.flowState.value = $store.flowStateMachine.transition(
-          $store.flowState.value,
-          'SUCCESS',
-        )
-
-        trackEvent('Address Submission Errors (Non-Blocking)')
-      }
-    },
-  })
-
-  // Return reference to the new addressViewModel store
-  return Alpine.store('addressViewModel')
-}
 
 /**
  * ----------------------------------------------------------------
@@ -443,7 +180,7 @@ function createContactViewModel() {
       }
 
       // Track contact submission event
-      trackEvent('Contact Submitted')
+      trackEvent('Contact Submitted', $store)
 
       try {
         // Process the submitted contact info, and transition the state accordingly
@@ -567,7 +304,7 @@ function createContactViewModel() {
           }, 500)
         }
 
-        trackEvent('Contact Submission Succeeded')
+        trackEvent('Contact Submission Succeeded', $store)
       } catch (error) {
         // If error is thrown due to invalid email or phone number, show the specific error message
         // Otherwise, show a generic error message
@@ -587,7 +324,7 @@ function createContactViewModel() {
           'ERROR',
         )
 
-        trackEvent('Contact Submission Failed', {
+        trackEvent('Contact Submission Failed', $store, {
           error_str: this.errorMessage,
         })
       }
@@ -675,7 +412,7 @@ function createEstimateViewModel() {
       )
 
       // Track Schedule Consultation button click
-      trackEvent('Schedule Consultation Clicked')
+      trackEvent('Schedule Consultation Clicked', $store)
     },
     handleRequestCommunityClick(event) {
       // Block default click handling behavior / event propagation
@@ -689,7 +426,7 @@ function createEstimateViewModel() {
       )
 
       // Track Request Community button click
-      trackEvent('Community Requested')
+      trackEvent('Community Requested', $store)
     },
   })
 
@@ -1892,7 +1629,7 @@ function createFlowStateMachine() {
       const destinationTransition = currentStateDefinition.transitions[event]
 
       if (!destinationTransition) {
-        trackEvent('Invalid State Transition Triggered', {
+        trackEvent('Invalid State Transition Triggered', $store, {
           current_state_str: currentState,
           event_str: event,
         })
@@ -1973,7 +1710,7 @@ function createModalHelpers() {
         }
       }
 
-      trackEvent('Modal Get Offer Flow Opened', eventProperties)
+      trackEvent('Modal Get Offer Flow Opened', $store, eventProperties)
     },
     handleModalClose() {
       // TODO: Move this logic into the flowStateMachine
@@ -2002,188 +1739,13 @@ function createModalHelpers() {
           'EXIT',
         )
 
-        trackEvent('Get Offer Modal Closed')
+        trackEvent('Get Offer Modal Closed', $store)
       }
     },
   })
 
   // Return reference to the new modalHelpers store
   return Alpine.store('modalHelpers')
-}
-
-/**
- * ----------------------------------------------------------------
- * fetchAddressMatches
- * ----------------------------------------------------------------
- * Given query (provided by user through address typeahead input), returns matching addresses
- * Fetches matches from Regrid Typeahead API, filters results, and returns them
- */
-async function fetchAddressMatches(query) {
-  // Prepare request to the Regrid Typeahead API
-  const url = 'https://app.regrid.com/api/v1/typeahead.json'
-  const token =
-    '1SnpL7AQekjA4mH2vqUmkGm9AAfQxi_6mxwdm4qDzo_C-xSTx9z3pd9rTsRWDWV4'
-
-  const request = new Request(`${url}/?token=${token}&query=${query}`, {
-    method: 'GET',
-  })
-
-  // Fetch and filter matches
-  const response = await fetch(request)
-  if (!response.ok) {
-    throw new Error('Network response was not OK')
-  }
-  const responseData = await response.json()
-  return filterSortAndSliceAddressMatches(responseData)
-}
-
-/**
- * ----------------------------------------------------------------
- * filterSortAndSliceAddressMatches
- * ----------------------------------------------------------------
- * Given Regrid Typeahead API response data,
- * Filters matches to only include those with a `ll_uuid`, `address`, and 'short' form address (Regrid can return dupes)
- * Sorts matches by whether or not they are in a supported market, then by score
- * And returns only the first 10 matches
- */
-function filterSortAndSliceAddressMatches(regridTypeaheadResponseData) {
-  // Filter and sort matches
-  const filteredAndSortedMatches = regridTypeaheadResponseData
-    .filter((match) => {
-      return (
-        match.ll_uuid && match.address && match.address.match(/^[0-9].*[^0-9]$/)
-      )
-    })
-    .sort((a, b) => {
-      const marketComparison = compareMatchesInMarket(a, b)
-      if (marketComparison != 0) {
-        return marketComparison
-      } else {
-        return compareMatchesScores(a, b)
-      }
-    })
-
-  // Slice matches to only include first 10
-  const slicedMatches = filteredAndSortedMatches.slice(0, 10)
-
-  return slicedMatches
-}
-
-/**
- * ----------------------------------------------------------------
- * compareMatchesInMarket
- * ----------------------------------------------------------------
- * Given two Regrid Typeahead API matches, compares them to determine which is in a supported market
- * Returns -1, 1, or 0 to be used in an array sort
- */
-function compareMatchesInMarket(a, b) {
-  if (isInMarketMatch(a) && !isInMarketMatch(b)) {
-    return -1
-  } else if (!isInMarketMatch(a) && isInMarketMatch(b)) {
-    return 1
-  } else {
-    return 0
-  }
-}
-
-/**
- * ----------------------------------------------------------------
- * isInMarketMatch
- * ----------------------------------------------------------------
- * Given a Regrid Typeahead API match, returns true if it is in a supported market
- * Currently, only markets in California are supported
- */
-function isInMarketMatch(match) {
-  return match.context.endsWith('CA')
-}
-
-/**
- * ----------------------------------------------------------------
- * compareMatchesScores
- * ----------------------------------------------------------------
- * Given two Regrid Typeahead API matches, compares them to determine which has a higher score
- * Returns -1, 1, or 0 to be used in an array sort
- */
-function compareMatchesScores(a, b) {
-  if (a.score > b.score) {
-    return -1
-  } else if (a.score < b.score) {
-    return 1
-  } else {
-    return 0
-  }
-}
-
-/**
- * ----------------------------------------------------------------
- * fetchParcelDetails
- * ----------------------------------------------------------------
- * Given id (`ll_uuid` provided for every match via Redrid typeahead API), returns parcel details needed for estimate generation
- * Fetches full details from Regrid Parcel API, filters and formays results to only fields we need, and returns the object
- */
-async function fetchParcelDetails(id) {
-  const parcelLookupUrl = 'https://app.regrid.com/api/v1/parcel/'
-  const parcelLookupToken =
-    '1SnpL7AQekjA4mH2vqUmkGm9AAfQxi_6mxwdm4qDzo_C-xSTx9z3pd9rTsRWDWV4'
-  const parcelLookupRequest = new Request(
-    `${parcelLookupUrl}${id}.json?token=${parcelLookupToken}&return_custom=false`,
-    {
-      method: 'GET',
-    },
-  )
-
-  const response = await fetch(parcelLookupRequest)
-  if (!response.ok) {
-    throw new Error('Network response was not OK')
-  }
-  const responseData = await response.json()
-  return filterParcelDetails(responseData)
-}
-
-/**
- * ----------------------------------------------------------------
- * filterParcelDetails
- * ----------------------------------------------------------------
- * Maps and returns an object with only the fields needed for our flow, provided by the Regrid Parcel API request
- */
-function filterParcelDetails(regridParcelResponseData) {
-  const regridResultFields =
-    regridParcelResponseData.results[0].properties.fields
-
-  return {
-    apn: regridResultFields.parcelnumb,
-    jurisdiction: regridResultFields.county,
-    // address: regridResultFields.address,
-    // city: regridResultFields.scity,
-    // state: regridResultFields.state2,
-    zip: regridResultFields.szip,
-  }
-}
-
-/**
- * ----------------------------------------------------------------
- * fetchEstimateResults
- * ----------------------------------------------------------------
- * Given a payload with the parcel `apn` and `jurisdiction`, submits request to our Make.com Get Estimate endpoint
- * Endpoint is integrated with our Airtable offer database to look up and return estimate values, and jurisdiction status
- */
-async function fetchEstimateResults(payload) {
-  const request = new Request(
-    'https://hook.us1.make.com/t9mrl5xiqcub1netw5sk7l1vjgoz3gt9',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    },
-  )
-
-  const response = await fetch(request)
-  if (!response.ok) {
-    throw new Error('Network response was not OK')
-  }
-  return await response.json()
 }
 
 /**
@@ -2369,103 +1931,6 @@ function getBcPhoneNumberForMarket(market, marketsData) {
   }
 
   return null
-}
-
-/**
- * ----------------------------------------------------------------
- * trackEvent
- * ----------------------------------------------------------------
- * Given an event name and properties, submits an event to any of our event tracking services
- * Currently only supports FullStory
- */
-function trackEvent(eventName, eventProperties = {}) {
-  // If FS is available (FullStory tracking is active), send event to FullStory
-  try {
-    if (FS) {
-      FS.event(eventName, {
-        ...getDefaultTrackingProperties(),
-        eventProperties,
-      })
-    }
-  } catch (error) {
-    // FUTURE DEV: Update w/ error tracking / reporting through integrated system
-  }
-}
-
-/**
- * ----------------------------------------------------------------
- * getDefaultTrackingProperties
- * ----------------------------------------------------------------
- * Returns an object with the properties to be included in event tracking by default
- * Includes address, estimate, and contact details, as well as active experiment variations
- */
-function getDefaultTrackingProperties() {
-  let eventProperties = {}
-
-  // Include address-related properties
-  // If parcel details are available, use them to populate address properties
-  // Else, if selected match is available, use it to populate address properties
-  if ($store.addressViewModel.hasParcelDetails) {
-    const parcelDetailsProperties = {
-      address_str: $store.addressViewModel.parcelDetails.address,
-      address_city_str: $store.addressViewModel.parcelDetails.city,
-      address_state_str: $store.addressViewModel.parcelDetails.state,
-      address_zip_str: $store.addressViewModel.parcelDetails.zip,
-      parcel_apn_str: $store.addressViewModel.parcelDetails.apn,
-      parcel_jurisdiction_str:
-        $store.addressViewModel.parcelDetails.jurisdiction,
-    }
-    eventProperties = {
-      ...eventProperties,
-      ...parcelDetailsProperties,
-    }
-  } else if ($store.addressViewModel.selectedMatch) {
-    const selectedMatchProperties = {
-      address_str: $store.addressViewModel.selectedMatch.address,
-      address_context_str: $store.addressViewModel.selectedMatch.context,
-      regrid_ll_uuid_str: $store.addressViewModel.selectedMatch.ll_uuid,
-    }
-    eventProperties = {
-      ...eventProperties,
-      ...selectedMatchProperties,
-    }
-  }
-
-  // Include estimate-related properties
-  // If estimate results are available, use them to populate estimate properties
-  if ($store.estimateViewModel.hasEstimateResults) {
-    const estimateProperties = {
-      jurisdiction_status_str: $store.estimateViewModel.jurisdiction.status,
-      estimate_low_real: $store.estimateViewModel.estimate.low,
-      estimate_high_real: $store.estimateViewModel.estimate.high,
-    }
-    eventProperties = {
-      ...eventProperties,
-      ...estimateProperties,
-    }
-  }
-
-  // Include contact-related properties
-  // If contact details are available, use them to populate contact properties
-  if ($store.contactViewModel.hasAnyContactDetails) {
-    const contactProperties = {
-      contact_first_name_str: $store.contactViewModel.firstName,
-      contact_last_name_str: $store.contactViewModel.lastName,
-      contact_email_str: $store.contactViewModel.email,
-      contact_phone_str: $store.contactViewModel.phone,
-      contact_desired_timeline_str: $store.contactViewModel.desiredTimeline,
-    }
-    eventProperties = {
-      ...eventProperties,
-      ...contactProperties,
-    }
-  }
-
-  // Include active experiment variations
-  eventProperties.active_experiment_variations_strs =
-    $store.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue()
-
-  return eventProperties
 }
 
 /**
