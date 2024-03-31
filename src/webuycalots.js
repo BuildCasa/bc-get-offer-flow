@@ -1,8 +1,8 @@
 /*
  * ================================================================
- * BuildCasa Get Offer Flow
+ * BuildCasa - webuyCAlots - Custom Script
  * ================================================================
- * This is the custom JavaScript that helps power the BuildCasa.com Get Offer flow
+ * This is the custom JavaScript that helps power the webuycalots.com interactive site elements
  * It provides the state management and business logic for the BuildCasa Webflow site
  * The state is connected with the HTML and presentation logic via AlpineJS stores and directives
  * The site pages, HTML, and CSS are all designed, built, and hosted via the BuildCasa Webflow account
