@@ -1,7 +1,7 @@
 {
-  "name": "bc-get-offer-flow",
+  "name": "bc-web-scripts",
   "private": true,
-  "version": "6.9.0",
+  "version": "8.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
