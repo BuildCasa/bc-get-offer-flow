@@ -9,8 +9,3 @@ package-lock.json
 # ALWAYS IGNORE dist folder for Prettier formatting
 # --------
 dist
-
-# Legacy script (pre-build system)
-# TODO: Remove this once fully transitioned to built scripts
-# --------
-index.js

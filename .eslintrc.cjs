@@ -25,9 +25,6 @@ module.exports = {
       .readFileSync(path.join(__dirname, '.prettierignore'), 'utf8')
       .split('\n')
       .filter((line) => line && !line.startsWith('#')),
-    // Ignore the legacy script file (pre-build system)
-    // TODO: Remove this once fully transitioned to built scripts
-    'index.js',
     // Include any additional ignore patterns here...
   ],
   overrides: [
