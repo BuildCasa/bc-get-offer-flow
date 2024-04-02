@@ -3,33 +3,15 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import Alpine from 'alpinejs'
 import { trackEvent } from './LegacyTracking'
 
-/**
- * Creates and returns reference to an Alpine store for the addressViewModel
- * Represents data provided by users via the Address form and/or URL params
- * Passed to Hubspot and used to generate estimate offer through the flow
- * Can be accessed in HTML via directive attribute values w/ `globalStore.addressViewModel`
- *
- * - inputValue: String, bound (2-way, via `x-model`) to Address input field in the UI
- * - matches: Array, matching addresses returned by the typeahead API, and displayed in UI typeahead via `x-for`
- * - keyboardNavIndex: Number, tracks which of the matches is currently selected via keyboard (up/down arrows) navigation
- * - selectedMatch: Object, w/ the address data provided by integrated typeahead/address API(s)
- * - parcelDetails: Object, w/ the APN, jurisdiction, and address data provided by integrated typeahead/address API(s)
- * - submitButtonText: Object, w/ `normal` and `processing` strings bound (via `x-text`) to the Address form submit button
- * - errorMessage: String, bound (via `x-text`) and displayed with the form when it is in an addressFormError state w/ message content
- * - isSelected: Getter, returns boolean value based on if there is a valid selected address (can be bound)
- * - hasParcelDetails: Getter, returns boolean value based on if there is a valid set of parcel details for the selected address (can be bound)
- * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
- * - handleInput: Function, bound (via `x-on:input` / `@input`) to run when the user changes the value in the input field
- * - handleKeydown: Function, bound (via `x-on:keydown` / `@keydown`) to run when the user presses any keys while focused within the typeahead component
- * - handleMatchSelection: Function, bound (via `x-on:click` / `@click`) or called programmatically to select an address match
- * - handleSubmit: Function, bound (via `x-on:submit` / `@submit`) to run when submit events are fired on the form elements
- * - submitAddress: Function, called programmatically to process the address submission and trigger state transitions
+/*
+ * ----------------------------------------------------------------
+ * Functions
+ * ----------------------------------------------------------------
  */
 function createAddressViewModel(globalStore) {
-  Alpine.store('addressViewModel', {
+  return {
     inputValue: '',
     matches: [],
     keyboardNavIndex: -1,
@@ -265,10 +247,7 @@ function createAddressViewModel(globalStore) {
         trackEvent('Address Submission Errors (Non-Blocking)', globalStore)
       }
     },
-  })
-
-  // Add a reference to the new addressViewModel Alpine store to the global store
-  globalStore.addressViewModel = Alpine.store('addressViewModel')
+  }
 }
 
 /*

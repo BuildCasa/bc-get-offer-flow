@@ -14,16 +14,14 @@
  * ----------------------------------------------------------------
  */
 import Alpine from 'alpinejs'
-import { createAddressViewModel } from './modules/LegacyAddressViewModel'
-import { createContactViewModel } from './modules/LegacyContactViewModel'
-import { createEstimateViewModel } from './modules/LegacyEstimateViewModel'
-import { createPersonalizationViewModel } from './modules/LegacyPersonalizationViewModel'
-import { createExperimentationViewModel } from './modules/LegacyExperimentationViewModel'
-import {
-  createFlowStateMachine,
-  createFlowState,
-} from './modules/LegacyFlowState'
-import { createModalHelpers } from './modules/LegacyModalHelpers'
+import { createAlpineStoreFactory } from './modules/AlpineStoreFactory'
+import { createAddressViewModel } from './modules/AddressViewModel'
+import { createContactViewModel } from './modules/ContactViewModel'
+import { createEstimateViewModel } from './modules/EstimateViewModel'
+import { createPersonalizationViewModel } from './modules/PersonalizationViewModel'
+import { createExperimentationViewModel } from './modules/ExperimentationViewModel'
+import { createFlowStateMachine, createFlowState } from './modules/FlowState'
+import { createModalHelpers } from './modules/ModalHelpers'
 
 /*
  * ----------------------------------------------------------------
@@ -34,13 +32,16 @@ import { createModalHelpers } from './modules/LegacyModalHelpers'
 // Add Alpine to the global scope for browser console access during development and debugging
 window.Alpine = Alpine
 
-// Create global variable to hold references to the Alpine stores created for state management
+// Create Alpine store factory to simplify the creation of Alpine stores for state management
+const $storeFactory = createAlpineStoreFactory(Alpine)
+
+// Create global variable to hold references to the stores
 const $store = {}
 
-// Initialize the Alpine stores with custom state and business logic that powers the Get Offer flow
-initAlpineStores($store)
+// Initialize the stores with custom state and business logic that powers the site interactivity
+initStores()
 
-// Start Alpine.js to enable the interactive behaviors of the Get Offer flow
+// Start Alpine.js to enable the site interactivity
 Alpine.start()
 
 /*
@@ -48,26 +49,42 @@ Alpine.start()
  * Initialization Functions
  * ----------------------------------------------------------------
  */
+function initStores() {
+  // Create viewModel stores
+  $store.addressViewModel = $storeFactory.createStore(
+    'addressViewModel',
+    createAddressViewModel($store),
+  )
+  $store.contactViewModel = $storeFactory.createStore(
+    'contactViewModel',
+    createContactViewModel($store),
+  )
+  $store.estimateViewModel = $storeFactory.createStore(
+    'estimateViewModel',
+    createEstimateViewModel($store),
+  )
+  $store.personalizationViewModel = $storeFactory.createStore(
+    'personalizationViewModel',
+    createPersonalizationViewModel(),
+  )
+  $store.experimentationViewModel = $storeFactory.createStore(
+    'experimentationViewModel',
+    createExperimentationViewModel(),
+  )
 
-function initAlpineStores(globalStore) {
-  initViewModels(globalStore)
-  initFlowState(globalStore)
-  initUIHelpers(globalStore)
-}
+  // Create flow state stores
+  $store.flowStateMachine = $storeFactory.createStore(
+    'flowStateMachine',
+    createFlowStateMachine($store),
+  )
+  $store.flowState = $storeFactory.createStore(
+    'flowState',
+    createFlowState($store),
+  )
 
-function initViewModels(globalStore) {
-  createAddressViewModel(globalStore)
-  createContactViewModel(globalStore)
-  createEstimateViewModel(globalStore)
-  createPersonalizationViewModel(globalStore)
-  createExperimentationViewModel(globalStore)
-}
-
-function initFlowState(globalStore) {
-  createFlowStateMachine(globalStore)
-  createFlowState(globalStore)
-}
-
-function initUIHelpers(globalStore) {
-  createModalHelpers(globalStore)
+  // Create UI helper stores
+  $store.modalHelpers = $storeFactory.createStore(
+    'modalHelpers',
+    createModalHelpers($store),
+  )
 }

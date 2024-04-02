@@ -1,25 +1,10 @@
 /*
  * ----------------------------------------------------------------
- * Imports
+ * Functions
  * ----------------------------------------------------------------
  */
-import Alpine from 'alpinejs'
-
-/**
- * Creates and returns reference to an Alpine store for the personalizationViewModel
- * Contains data used to personalize the user experience
- * Initially, it fetches and stores geolocation data from the user's IP address
- * And,
- * Can be accessed in HTML via directive attribute values w/ `$store.personalizationViewModel`
- *
- * - userGeo: Object, w/ the geolocation data provided by integrated IP lookup API
- * - market: Getter, returns the supported market based on the userGeo city, if one is found
- * - bcPhoneNumber: Getter, returns the correct BuildCasa phone number based on the userGeo
- * - bcPhoneNumberHref: Getter, returns the correct BuildCasa phone number based on the userGeo in href format (for `tel:` links)
- * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
- */
-function createPersonalizationViewModel(globalStore) {
-  Alpine.store('personalizationViewModel', {
+function createPersonalizationViewModel() {
+  return {
     userGeo: {},
     marketsData: {},
     get market() {
@@ -936,12 +921,7 @@ function createPersonalizationViewModel(globalStore) {
       const response = await fetch('https://get.geojs.io/v1/ip/geo.json')
       this.userGeo = await response.json()
     },
-  })
-
-  // Add a reference to the new personalizationViewModel Alpine store to the global store
-  globalStore.personalizationViewModel = Alpine.store(
-    'personalizationViewModel',
-  )
+  }
 }
 
 /**

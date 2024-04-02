@@ -3,19 +3,12 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import Alpine from 'alpinejs'
 import { trackEvent } from './LegacyTracking'
 
-/**
- * Creates and returns reference to an Alpine store for the flowStateMachine
- * A finite state machine that defines which `states` are possible for the Get Offer UI Flow
- * And for every `state`, which `transitions` are possible _from_ that state — defined with:
- * - EVENT: Key for the `transition`
- * - target: String, matching the key for the `state` that should be set when the `transition` `EVENT` is triggered
- *
- * This state machine also defines a `transition` method which is used to call and process the transition events,
- * Returns the resulting `state` — to update the value for the `flowState` Alpine store that drives the main UI state
- * e.g. `$store.flowState.value = $store.flowStateMachine.transition($store.flowState.value, "EVENT")
+/*
+ * ----------------------------------------------------------------
+ * Functions
+ * ----------------------------------------------------------------
  */
 function createFlowStateMachine(globalStore) {
   // Create transition definition objects for *shared* transition events / paths
@@ -40,8 +33,8 @@ function createFlowStateMachine(globalStore) {
     },
   }
 
-  // Create state machine Alpine store
-  Alpine.store('flowStateMachine', {
+  // Create state machine store
+  return {
     defaultState: 'default',
     states: {
       default: {
@@ -158,32 +151,18 @@ function createFlowStateMachine(globalStore) {
       const destinationState = destinationTransition.target
       return destinationState
     },
-  })
-
-  // Add a reference to the new flowStateMachine Alpine store to the global store
-  globalStore.flowStateMachine = Alpine.store('flowStateMachine')
+  }
 }
 
-/**
- * Creates and returns reference to an Alpine store for the main flowState
- * Used to drive the main UI state as users progress through the Get Offer flow
- * Can be accessed in HTML via directive attribute values w/ `$store.flowState`
- *
- * - value: String, for the current UI state that should be displayed, generally bound via `x-show`
- * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
- */
 function createFlowState(globalStore) {
-  Alpine.store('flowState', {
+  return {
     value: '',
     init() {
       // FUTURE DEV: Update w/ logic to set initial UI state based on other sources (link params, etc.) here
 
       this.value = globalStore.flowStateMachine.defaultState
     },
-  })
-
-  // Add a reference to the new flowState Alpine store to the global store
-  globalStore.flowState = Alpine.store('flowState')
+  }
 }
 
 /*

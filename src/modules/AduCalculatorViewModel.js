@@ -1,12 +1,10 @@
 /*
  * ----------------------------------------------------------------
- * Imports
+ * Functions
  * ----------------------------------------------------------------
  */
-import Alpine from 'alpinejs'
-
-function createAduCalculatorViewModel(globalStore) {
-  Alpine.store('aduCalculatorViewModel', {
+function createAduCalculatorViewModel() {
+  return {
     homeValue: null,
     homeSize: null,
     aduCost: null,
@@ -65,10 +63,7 @@ function createAduCalculatorViewModel(globalStore) {
     convertFieldValueToNumber: function (fieldValue) {
       return Number(fieldValue.replace(/[^0-9.-]+/g, ''))
     },
-  })
-
-  // Add a reference to the new aduCalculatorViewModel Alpine store to the global store
-  globalStore.aduCalculatorViewModel = Alpine.store('aduCalculatorViewModel')
+  }
 }
 
 /*

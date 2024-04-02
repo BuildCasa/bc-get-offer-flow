@@ -3,28 +3,15 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import Alpine from 'alpinejs'
 import { trackEvent } from './LegacyTracking'
 
-/**
- * Creates and returns reference to an Alpine store for the estimateViewModel
- * Represents data returned by the Buildcasa estimate generation system
- * Determines which offer results state and next steps to display to users
- * Can be accessed in HTML via directive attribute values w/ `globalStore.estimateViewModel`
- *
- * - jurisdiction:
- *   - status: String, the active/inactive status of the jurisdiction for the provided address, to determine which results state to display (via `x-show`)
- * - estimate:
- *   - low: Number, low value for the estimate range, bound in the UI via `x-text`
- *   - high: Number, high value for the estimate range, bound in the UI via `x-text`
- * - hasResults: Getter,
- * - lowEstimateString: Getter,
- * - highEstimateString: Getter,
- * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
- * - handleScheduleConsultationClick: Function, to handle Schedule Consultation button click via `x-on:click` / `@click`
+/*
+ * ----------------------------------------------------------------
+ * Functions
+ * ----------------------------------------------------------------
  */
 function createEstimateViewModel(globalStore) {
-  Alpine.store('estimateViewModel', {
+  return {
     jurisdiction: {
       status: '',
     },
@@ -96,10 +83,7 @@ function createEstimateViewModel(globalStore) {
       // Track Request Community button click
       trackEvent('Community Requested', globalStore)
     },
-  })
-
-  // Add a reference to the new estimateViewModel Alpine store to the global store
-  globalStore.estimateViewModel = Alpine.store('estimateViewModel')
+  }
 }
 
 /*

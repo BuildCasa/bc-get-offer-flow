@@ -3,30 +3,16 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import Alpine from 'alpinejs'
 import { loadScript } from './ExternalScripts'
 import { trackEvent } from './LegacyTracking'
 
-/**
- * Creates and returns reference to an Alpine store for the contactViewModel
- * Represents data provided by users via the Contact form and/or URL params
- * Passed to Hubspot to populate and/or update Contact data in our CRM
- * Can be accessed in HTML via directive attribute values w/ `globalStore.contactViewModel`
- *
- * - firstName: String, bound (2-way, via `x-model`) to First Name input field in the UI
- * - lastName: String, bound (2-way, via `x-model`) to Last Name input field in the UI
- * - email: String, bound (2-way, via `x-model`) to Email input field in the UI
- * - phone: String, bound (2-way, via `x-model`) to Phone Number input field in the UI
- * - desiredTimeline: String, bound (2-way, via `x-model`) to Desired Timeline input field in the UI
- * - submitButtonText: Object, w/ `normal` and `processing` strings bound (via `x-text`) to the Contact form submit button
- * - errorMessage: String, bound (via `x-text`) and displayed with the form when it is in an contactFormError state w/ message content
- * - isSubmitted: Boolean, based on if the contact info has been successfully submitted to the create lead endpoint (can be bound)
- * - init: Function, run automatically by Alpine as soon as the store is created, to initialize the values (including advanced logic)
- * - handleSubmit: Function, bound (via `x-on:submit` / `@submit`) to run when submit events are fired on the form
- * - submitContact: Function, called programmatically to process the contact submission and trigger state transitions
+/*
+ * ----------------------------------------------------------------
+ * Functions
+ * ----------------------------------------------------------------
  */
 function createContactViewModel(globalStore) {
-  Alpine.store('contactViewModel', {
+  return {
     firstName: '',
     lastName: '',
     email: '',
@@ -267,10 +253,7 @@ function createContactViewModel(globalStore) {
         })
       }
     },
-  })
-
-  // Add a reference to the new contactViewModel Alpine store to the global store
-  globalStore.contactViewModel = Alpine.store('contactViewModel')
+  }
 }
 
 /**

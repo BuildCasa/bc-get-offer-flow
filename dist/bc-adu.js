@@ -1,6 +1,6 @@
-import { m as n, c as l, a as r, b as s, d as c, e as m, f as d, g as h, h as f } from "./bc-shared-1bUUMsGq.js";
-function V(e) {
-  n.store("aduCalculatorViewModel", {
+import { m as l, c as u, a as s, b as c, d as m, e as d, f as h, g as S, h as w, i as V } from "./bc-shared-JSbguHMz.js";
+function f() {
+  return {
     homeValue: null,
     homeSize: null,
     aduCost: null,
@@ -16,43 +16,61 @@ function V(e) {
       t.preventDefault();
     },
     formatInput: function(t) {
-      const u = "en-US";
-      let i = t;
-      return i = i.replace(/\D/g, ""), i = new Intl.NumberFormat(u, {
+      const r = "en-US";
+      let a = t;
+      return a = a.replace(/\D/g, ""), a = new Intl.NumberFormat(r, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
-      }).format(i), i = i !== "0" ? i : "", i;
+      }).format(a), a = a !== "0" ? a : "", a;
     },
     calculateResult: function() {
-      const t = this.convertFieldValueToNumber(this.homeValue), u = this.convertFieldValueToNumber(this.homeSize), i = this.convertFieldValueToNumber(this.aduCost), o = this.convertFieldValueToNumber(this.aduSize);
-      if (!t || !u || !o)
+      const t = this.convertFieldValueToNumber(this.homeValue), r = this.convertFieldValueToNumber(this.homeSize), a = this.convertFieldValueToNumber(this.aduCost), n = this.convertFieldValueToNumber(this.aduSize);
+      if (!t || !r || !n)
         return "--";
-      let a = t / u * o - i - 5e4;
-      return a = a < 1e4 ? 1e4 : Math.ceil(a / 1e4) * 1e4, a = new Intl.NumberFormat("en-US", {
+      let i = t / r * n - a - 5e4;
+      return i = i < 1e4 ? 1e4 : Math.ceil(i / 1e4) * 1e4, i = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
-      }).format(a), a;
+      }).format(i), i;
     },
     convertFieldValueToNumber: function(t) {
       return Number(t.replace(/[^0-9.-]+/g, ""));
     }
-  }), e.aduCalculatorViewModel = n.store("aduCalculatorViewModel");
+  };
 }
-window.Alpine = n;
-const w = {};
-p(w);
-n.start();
-function p(e) {
-  F(e), M(e), I(e);
-}
-function F(e) {
-  l(e), r(e), s(e), c(e), m(e), V(e);
-}
-function M(e) {
-  d(e), h(e);
-}
-function I(e) {
-  f(e);
+window.Alpine = l;
+const o = V(l), e = {};
+M();
+l.start();
+function M() {
+  e.addressViewModel = o.createStore(
+    "addressViewModel",
+    u(e)
+  ), e.contactViewModel = o.createStore(
+    "contactViewModel",
+    s(e)
+  ), e.estimateViewModel = o.createStore(
+    "estimateViewModel",
+    c(e)
+  ), e.personalizationViewModel = o.createStore(
+    "personalizationViewModel",
+    m()
+  ), e.experimentationViewModel = o.createStore(
+    "experimentationViewModel",
+    d()
+  ), e.aduCalculatorViewModel = o.createStore(
+    "aduCalculatorViewModel",
+    f()
+  ), e.flowStateMachine = o.createStore(
+    "flowStateMachine",
+    h(e)
+  ), e.flowState = o.createStore(
+    "flowState",
+    S(e)
+  ), e.modalHelpers = o.createStore(
+    "modalHelpers",
+    w(e)
+  );
 }

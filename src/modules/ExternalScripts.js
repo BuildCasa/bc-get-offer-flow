@@ -1,3 +1,9 @@
+/*
+ * ----------------------------------------------------------------
+ * Functions
+ * ----------------------------------------------------------------
+ */
+
 /**
  * Given a script source URL, loads the script into the DOM
  * Returns a Promise that resolves when the script has loaded
