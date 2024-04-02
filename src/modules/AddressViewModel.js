@@ -7,246 +7,303 @@ import { trackEvent } from './LegacyTracking'
 
 /*
  * ----------------------------------------------------------------
- * Functions
+ * Classes
  * ----------------------------------------------------------------
  */
-function createAddressViewModel(globalStore) {
-  return {
-    inputValue: '',
-    matches: [],
-    keyboardNavIndex: -1,
-    selectedMatch: {},
-    parcelDetails: {},
-    submitButtonText: {
-      normal: '',
-      processing: '',
-    },
-    errorMessage: '',
-    get isSelected() {
-      return (
-        Object.keys(this.selectedMatch).length != 0 &&
-        !!this.selectedMatch.ll_uuid
+/** Class definition for an AddressViewModel. */
+class AddressViewModel {
+  globalStore
+  inputValue = ''
+  matches = []
+  keyboardNavIndex = -1
+  selectedMatch = {}
+  parcelDetails = {}
+  submitButtonText = {
+    normal: '',
+    processing: '',
+  }
+  errorMessage = ''
+
+  /**
+   * Create an AddressViewModel instance.
+   * @param {unknown} globalStore - Reference to the global store.
+   */
+  constructor(globalStore) {
+    this.globalStore = globalStore
+
+    // Pre-fill submit button text values based on Webflow settings
+    // Preserves Webflow DX for editing button values through the UI (`button` and `waiting` settings)
+    // But allows dynamically controlling displayed text in site, based on current UI state, via Alpine
+    const addressFormSubmitButton = document.getElementById(
+      'address-form-submit-button',
+    )
+    this.submitButtonText = {
+      normal: addressFormSubmitButton.value,
+      processing: addressFormSubmitButton.dataset.wait,
+    }
+
+    // FUTURE DEV: Add logic to pre-fill data based on other sources (link params, etc.) here
+  }
+
+  /**
+   * Whether or not an address match has been selected with the typeahead.
+   * @type {boolean}
+   */
+  get isSelected() {
+    return (
+      Object.keys(this.selectedMatch).length != 0 &&
+      !!this.selectedMatch.ll_uuid
+    )
+  }
+
+  /**
+   * Whether or not the parcel details (jurisdiction and apn) have been set for the address.
+   * @type {boolean}
+   */
+  get hasParcelDetails() {
+    return (
+      Object.keys(this.parcelDetails).length != 0 &&
+      !!this.parcelDetails.jurisdiction &&
+      !!this.parcelDetails.apn
+    )
+  }
+
+  /**
+   * Handles input events from the address typeahead input field.
+   * Fetches and updates address matches based on the current input value.
+   * @returns {Promise.<void>} Promise that resolves when input handling is complete.
+   */
+  async handleInput() {
+    // FUTURE DEV: Currently, calls to this handler are being debounced with an x-bind directive on the input element
+    // Might be more clear to move debounce logic to this script in the future (if we can figure out the 'this' craziness)
+
+    // Clear any previously selected and/or submitted address, parcel details, and estimate results
+    if (this.isSelected) {
+      this.selectedMatch = {}
+    }
+    if (this.hasParcelDetails) {
+      this.parcelDetails = {}
+    }
+    if (this.globalStore.estimateViewModel.hasResults) {
+      this.globalStore.estimateViewModel.init()
+    }
+    if (this.globalStore.contactViewModel.isSubmitted) {
+      this.globalStore.contactViewModel.isSubmitted = false
+    }
+    if (
+      this.globalStore.experimentationViewModel.getActiveExperimentVariation(
+        'windfall-estimate-or-eligibility-2023-07',
       )
-    },
-    get hasParcelDetails() {
-      return (
-        Object.keys(this.parcelDetails).length != 0 &&
-        !!this.parcelDetails.jurisdiction &&
-        !!this.parcelDetails.apn
+    ) {
+      this.globalStore.experimentationViewModel.clearActiveExperiment(
+        'windfall-estimate-or-eligibility-2023-07',
       )
-    },
-    init() {
-      // FUTURE DEV: Add logic to pre-fill data based on other sources (link params, etc.) here
+    }
 
-      // Pre-fill submit button text values based on Webflow settings
-      // Preserves Webflow DX for editing button values through the UI (`button` and `waiting` settings)
-      // But allows dynamically controlling displayed text in site, based on current UI state, via Alpine
-      const addressFormSubmitButton = document.getElementById(
-        'address-form-submit-button',
-      )
-      this.submitButtonText = {
-        normal: addressFormSubmitButton.value,
-        processing: addressFormSubmitButton.dataset.wait,
-      }
-    },
-    async handleInput() {
-      // FUTURE DEV: Currently, calls to this handler are being debounced with an x-bind directive on the input element
-      // Might be more clear to move debounce logic to this script in the future (if we can figure out the 'this' craziness)
+    // Fetch and update address matches (or handle errors)
+    try {
+      this.matches = await fetchAddressMatches(this.inputValue)
+    } catch (error) {
+      this.errorMessage =
+        'There was an error finding your address. Please try again, or contact us for help.'
 
-      // Clear any previously selected and/or submitted address, parcel details, and estimate results
-      if (this.isSelected) {
-        this.selectedMatch = {}
-      }
-      if (this.hasParcelDetails) {
-        this.parcelDetails = {}
-      }
-      if (globalStore.estimateViewModel.hasResults) {
-        globalStore.estimateViewModel.init()
-      }
-      if (globalStore.contactViewModel.isSubmitted) {
-        globalStore.contactViewModel.isSubmitted = false
-      }
-      if (
-        globalStore.experimentationViewModel.getActiveExperimentVariation(
-          'windfall-estimate-or-eligibility-2023-07',
-        )
-      ) {
-        globalStore.experimentationViewModel.clearActiveExperiment(
-          'windfall-estimate-or-eligibility-2023-07',
-        )
-      }
-
-      // Fetch and update address matches (or handle errors)
-      try {
-        this.matches = await fetchAddressMatches(this.inputValue)
-      } catch (error) {
-        this.errorMessage =
-          'There was an error finding your address. Please try again, or contact us for help.'
-
-        globalStore.flowState.value = globalStore.flowStateMachine.transition(
-          globalStore.flowState.value,
+      this.globalStore.flowState.value =
+        this.globalStore.flowStateMachine.transition(
+          this.globalStore.flowState.value,
           'ERROR',
         )
-      }
-    },
-    handleKeydown(event) {
-      // Don't intercept keydown events for any keys other than ArrowUp, ArrowDown, or Enter
-      if (
-        event.key != 'Enter' &&
-        event.key != 'ArrowUp' &&
-        event.key != 'ArrowDown'
-      ) {
-        return
-      }
+    }
+  }
 
-      // Don't intercept keydown events if the address matches are not being displayed
-      if (this.isSelected || this.matches.length === 0) {
-        return
-      }
+  /**
+   * Handles keyboard events for the address typeahead input field.
+   * Navigates up or down the list of matches if ArrowUp or ArrowDown are pressed.
+   * Selects the address at the current keyboardNavIndex if Enter is pressed.
+   * @param {KeyboardEvent} event - Keyboard event object.
+   * @returns {void}
+   */
+  handleKeydown(event) {
+    // Don't intercept keydown events for any keys other than ArrowUp, ArrowDown, or Enter
+    if (
+      event.key != 'Enter' &&
+      event.key != 'ArrowUp' &&
+      event.key != 'ArrowDown'
+    ) {
+      return
+    }
 
-      // If ArrowUp, ArrowDown, or Enter are pressed while address matches are being displayed, block default behavior
-      event.preventDefault()
-      event.stopPropagation()
+    // Don't intercept keydown events if the address matches are not being displayed
+    if (this.isSelected || this.matches.length === 0) {
+      return
+    }
 
-      // And apply special logic to navigate and select an address from the available matches
-      if (event.key === 'Enter' && this.keyboardNavIndex != -1) {
-        // If Enter key is pressed, select the match at the current position
-        this.handleMatchSelection(this.matches[this.keyboardNavIndex])
-      } else if (event.key === 'ArrowUp') {
-        // If ArrowUp key is pressed and no matches have been navigated to via keyboard yet, navigate to the bottom of the list
-        // Else, navigate up one match from the current position
-        this.keyboardNavIndex =
-          this.keyboardNavIndex <= -1
-            ? this.matches.length - 1
-            : this.keyboardNavIndex - 1
-      } else if (event.key === 'ArrowDown') {
-        // If ArrowDown key is pressed and current position is at the bottom of the list, navigate to the starting position
-        // Else, navigate down one match from the current position
-        this.keyboardNavIndex =
-          this.keyboardNavIndex >= this.matches.length - 1
-            ? -1
-            : this.keyboardNavIndex + 1
-      }
-    },
-    handleMatchSelection(match) {
-      // Set selected address
-      this.selectedMatch = match
+    // If ArrowUp, ArrowDown, or Enter are pressed while address matches are being displayed, block default behavior
+    event.preventDefault()
+    event.stopPropagation()
 
-      // Update input value
-      this.inputValue = match.address + ', ' + match.context
+    // And apply special logic to navigate and select an address from the available matches
+    if (event.key === 'Enter' && this.keyboardNavIndex != -1) {
+      // If Enter key is pressed, select the match at the current position
+      this.handleMatchSelection(this.matches[this.keyboardNavIndex])
+    } else if (event.key === 'ArrowUp') {
+      // If ArrowUp key is pressed and no matches have been navigated to via keyboard yet, navigate to the bottom of the list
+      // Else, navigate up one match from the current position
+      this.keyboardNavIndex =
+        this.keyboardNavIndex <= -1
+          ? this.matches.length - 1
+          : this.keyboardNavIndex - 1
+    } else if (event.key === 'ArrowDown') {
+      // If ArrowDown key is pressed and current position is at the bottom of the list, navigate to the starting position
+      // Else, navigate down one match from the current position
+      this.keyboardNavIndex =
+        this.keyboardNavIndex >= this.matches.length - 1
+          ? -1
+          : this.keyboardNavIndex + 1
+    }
+  }
 
-      // Re-initialize matches / keyboard nav
-      this.matches = []
-      this.keyboardNavIndex = -1
+  /**
+   * Handles the selection of an address match from the list of available matches.
+   * Updates the selected address and typeahead input value.
+   * Clears the matches list and keyboard navigation index.
+   * @param {unknown} match
+   */
+  handleMatchSelection(match) {
+    // Set selected address
+    this.selectedMatch = match
 
-      // Track address selection event
-      trackEvent('Address Selected', globalStore)
-    },
-    handleSubmit(event, options = {}) {
-      // Block default form submission behavior
-      event.preventDefault()
-      event.stopPropagation()
+    // Update input value
+    this.inputValue = match.address + ', ' + match.context
 
-      // Submit address
-      this.submitAddress(options)
-    },
-    async submitAddress(options = {}) {
-      // Debounce submission if form is already processing
-      if (
-        globalStore.flowState.value == 'addressFormProcessing' ||
-        globalStore.flowState.value == 'modalAddressFormProcessing'
-      ) {
-        return
-      }
+    // Re-initialize matches / keyboard nav
+    this.matches = []
+    this.keyboardNavIndex = -1
 
-      // Remove active focus (to avoid inadvertant submits given the modal UX)
-      document.activeElement?.blur()
+    // Track address selection event
+    trackEvent('Address Selected', this.globalStore)
+  }
 
-      // Clear out any existing error message
-      this.errorMessage = ''
+  /**
+   * Handles the submission event for the address typeahead form.
+   * @param {SubmitEvent} event - Form submission event object.
+   * @param {object} options - Additional options for the submission.
+   * @returns {void}
+   */
+  handleSubmit(event, options = {}) {
+    // Block default form submission behavior
+    event.preventDefault()
+    event.stopPropagation()
 
-      // Transition to the address processing state
-      globalStore.flowState.value = globalStore.flowStateMachine.transition(
-        globalStore.flowState.value,
+    // Submit address
+    this.submitAddress(options)
+  }
+
+  /**
+   * Submits the selected address for processing.
+   * Transitions the flow state based on the results of the submission.
+   * @param {object} options - Additional options for the submission.
+   * @returns {Promise.<void>} Promise that resolves when the address submission is complete.
+   */
+  async submitAddress(options = {}) {
+    // Debounce submission if form is already processing
+    if (
+      this.globalStore.flowState.value == 'addressFormProcessing' ||
+      this.globalStore.flowState.value == 'modalAddressFormProcessing'
+    ) {
+      return
+    }
+
+    // Remove active focus (to avoid inadvertant submits given the modal UX)
+    document.activeElement?.blur()
+
+    // Clear out any existing error message
+    this.errorMessage = ''
+
+    // Transition to the address processing state
+    this.globalStore.flowState.value =
+      this.globalStore.flowStateMachine.transition(
+        this.globalStore.flowState.value,
         'SUBMIT_ADDRESS',
       )
 
-      // Track address submission event
-      trackEvent('Address Submitted', globalStore)
+    // Track address submission event
+    trackEvent('Address Submitted', this.globalStore)
 
-      // Process the submitted address, and transition the state accordingly
-      try {
-        // If the contact has already been submitted, skip the contact form and transition directly to the estimate results
-        // Otherwise, transition to the contact form
-        if (
-          this.hasParcelDetails &&
-          globalStore.estimateViewModel.hasResults &&
-          globalStore.contactViewModel.isSubmitted
-        ) {
-          globalStore.flowState.value = globalStore.flowStateMachine.transition(
-            globalStore.flowState.value,
+    // Process the submitted address, and transition the state accordingly
+    try {
+      // If the contact has already been submitted, skip the contact form and transition directly to the estimate results
+      // Otherwise, transition to the contact form
+      if (
+        this.hasParcelDetails &&
+        this.globalStore.estimateViewModel.hasResults &&
+        this.globalStore.contactViewModel.isSubmitted
+      ) {
+        this.globalStore.flowState.value =
+          this.globalStore.flowStateMachine.transition(
+            this.globalStore.flowState.value,
             'SKIP_CONTACT',
           )
-        } else {
-          // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
-          if (!globalStore.addressViewModel.hasParcelDetails) {
-            // Combine appropriate fields from Regrid Typeahead and Parcel APIs into a single object
-            globalStore.addressViewModel.parcelDetails = {
-              ...(await fetchParcelDetails(
-                globalStore.addressViewModel.selectedMatch.ll_uuid,
-              )),
-              address: globalStore.addressViewModel.selectedMatch.address,
-              city: globalStore.addressViewModel.selectedMatch.context.split(
+      } else {
+        // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
+        if (!this.globalStore.addressViewModel.hasParcelDetails) {
+          // Combine appropriate fields from Regrid Typeahead and Parcel APIs into a single object
+          this.globalStore.addressViewModel.parcelDetails = {
+            ...(await fetchParcelDetails(
+              this.globalStore.addressViewModel.selectedMatch.ll_uuid,
+            )),
+            address: this.globalStore.addressViewModel.selectedMatch.address,
+            city: this.globalStore.addressViewModel.selectedMatch.context.split(
+              ', ',
+            )[0],
+            state:
+              this.globalStore.addressViewModel.selectedMatch.context.split(
                 ', ',
-              )[0],
-              state:
-                globalStore.addressViewModel.selectedMatch.context.split(
-                  ', ',
-                )[1],
-            }
+              )[1],
+          }
+        }
+
+        // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
+        if (!this.globalStore.estimateViewModel.hasResults) {
+          const fetchEstimatePayload = {
+            ...options,
+            parcel: {
+              apn: this.globalStore.addressViewModel.parcelDetails.apn,
+              jurisdiction:
+                this.globalStore.addressViewModel.parcelDetails.jurisdiction,
+            },
+            address: {
+              address: this.globalStore.addressViewModel.parcelDetails.address,
+              city: this.globalStore.addressViewModel.parcelDetails.city,
+              state: this.globalStore.addressViewModel.parcelDetails.state,
+              zip: this.globalStore.addressViewModel.parcelDetails.zip,
+            },
           }
 
-          // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
-          if (!globalStore.estimateViewModel.hasResults) {
-            const fetchEstimatePayload = {
-              ...options,
-              parcel: {
-                apn: globalStore.addressViewModel.parcelDetails.apn,
-                jurisdiction:
-                  globalStore.addressViewModel.parcelDetails.jurisdiction,
-              },
-              address: {
-                address: globalStore.addressViewModel.parcelDetails.address,
-                city: globalStore.addressViewModel.parcelDetails.city,
-                state: globalStore.addressViewModel.parcelDetails.state,
-                zip: globalStore.addressViewModel.parcelDetails.zip,
-              },
-            }
+          const estimateResults =
+            await fetchEstimateResults(fetchEstimatePayload)
 
-            const estimateResults =
-              await fetchEstimateResults(fetchEstimatePayload)
+          this.globalStore.estimateViewModel.jurisdiction =
+            estimateResults.jurisdiction
+          this.globalStore.estimateViewModel.estimate = estimateResults.estimate
+        }
 
-            globalStore.estimateViewModel.jurisdiction =
-              estimateResults.jurisdiction
-            globalStore.estimateViewModel.estimate = estimateResults.estimate
-          }
-
-          globalStore.flowState.value = globalStore.flowStateMachine.transition(
-            globalStore.flowState.value,
+        this.globalStore.flowState.value =
+          this.globalStore.flowStateMachine.transition(
+            this.globalStore.flowState.value,
             'SUCCESS',
           )
 
-          trackEvent('Address Submission Succeeded', globalStore)
-        }
-      } catch (error) {
-        globalStore.flowState.value = globalStore.flowStateMachine.transition(
-          globalStore.flowState.value,
+        trackEvent('Address Submission Succeeded', this.globalStore)
+      }
+    } catch (error) {
+      this.globalStore.flowState.value =
+        this.globalStore.flowStateMachine.transition(
+          this.globalStore.flowState.value,
           'SUCCESS',
         )
 
-        trackEvent('Address Submission Errors (Non-Blocking)', globalStore)
-      }
-    },
+      trackEvent('Address Submission Errors (Non-Blocking)', this.globalStore)
+    }
   }
 }
 
@@ -255,6 +312,15 @@ function createAddressViewModel(globalStore) {
  * Functions
  * ----------------------------------------------------------------
  */
+
+/**
+ * Factory function for creating an AddressViewModel instance.
+ * @param {unknown} globalStore - Reference to the global store.
+ * @returns {AddressViewModel} New AddressViewModel instance.
+ */
+function createAddressViewModel(globalStore) {
+  return new AddressViewModel(globalStore)
+}
 
 /**
  * Given query (provided by user through address typeahead input), returns matching addresses

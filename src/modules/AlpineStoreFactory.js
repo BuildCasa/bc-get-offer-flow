@@ -20,7 +20,7 @@ class AlpineStoreFactory {
    * Create, register, and return a reference to a global Alpine.Store.
    * @param {string} key - Descriptive key for the Alpine.Store registry.
    * @param {object} data - Initial data for the store.
-   * @returns {import("alpinejs").Stores} Reference to the registered store.
+   * @returns {unknown} Reference to the registered store.
    */
   createStore(key, data) {
     this.#Alpine.store(key, data)
@@ -37,7 +37,7 @@ class AlpineStoreFactory {
 /**
  * Factory function for creating an AlpineStoreFactory instance.
  * @param {import("alpinejs").Alpine} Alpine - Current Alpine.js instance.
- * @returns {AlpineStoreFactory} New instance of AlpineStoreFactory.
+ * @returns {AlpineStoreFactory} New AlpineStoreFactory instance.
  */
 function createAlpineStoreFactory(Alpine) {
   return new AlpineStoreFactory(Alpine)
