@@ -6,14 +6,14 @@
 
 /** Class definition for an Alpine.js store factory. */
 class AlpineStoreFactory {
-  #Alpine
+  _Alpine
 
   /**
    * Create an AlpineStoreFactory instance.
    * @param {import("alpinejs").Alpine} Alpine - Current Alpine.js instance.
    */
   constructor(Alpine) {
-    this.#Alpine = Alpine
+    this._Alpine = Alpine
   }
 
   /**
@@ -23,8 +23,8 @@ class AlpineStoreFactory {
    * @returns {unknown} Reference to the registered store.
    */
   createStore(key, data) {
-    this.#Alpine.store(key, data)
-    return this.#Alpine.store(key)
+    this._Alpine.store(key, data)
+    return this._Alpine.store(key)
   }
 }
 

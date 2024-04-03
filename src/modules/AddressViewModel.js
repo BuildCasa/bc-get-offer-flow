@@ -5,8 +5,6 @@
  */
 /** Class definition for an AddressViewModel. */
 class AddressViewModel {
-  globalStore
-  trackingService
   inputValue = ''
   matches = []
   keyboardNavIndex = -1
@@ -18,14 +16,17 @@ class AddressViewModel {
   }
   errorMessage = ''
 
+  _globalStore
+  _trackingService
+
   /**
    * Create an AddressViewModel instance.
    * @param {unknown} globalStore - Reference to the global store.
    * @param {object} trackingService - Reference to the desired TrackingService to use for event tracking.
    */
   constructor(globalStore, trackingService) {
-    this.globalStore = globalStore
-    this.trackingService = trackingService
+    this._globalStore = globalStore
+    this._trackingService = trackingService
 
     // Pre-fill submit button text values based on Webflow settings
     // Preserves Webflow DX for editing button values through the UI (`button` and `waiting` settings)
@@ -80,18 +81,18 @@ class AddressViewModel {
     if (this.hasParcelDetails) {
       this.parcelDetails = {}
     }
-    if (this.globalStore.estimateViewModel.hasResults) {
-      this.globalStore.estimateViewModel.init()
+    if (this._globalStore.estimateViewModel.hasResults) {
+      this._globalStore.estimateViewModel.init()
     }
-    if (this.globalStore.contactViewModel.isSubmitted) {
-      this.globalStore.contactViewModel.isSubmitted = false
+    if (this._globalStore.contactViewModel.isSubmitted) {
+      this._globalStore.contactViewModel.isSubmitted = false
     }
     if (
-      this.globalStore.experimentationViewModel.getActiveExperimentVariation(
+      this._globalStore.experimentationViewModel.getActiveExperimentVariation(
         'windfall-estimate-or-eligibility-2023-07',
       )
     ) {
-      this.globalStore.experimentationViewModel.clearActiveExperiment(
+      this._globalStore.experimentationViewModel.clearActiveExperiment(
         'windfall-estimate-or-eligibility-2023-07',
       )
     }
@@ -103,9 +104,9 @@ class AddressViewModel {
       this.errorMessage =
         'There was an error finding your address. Please try again, or contact us for help.'
 
-      this.globalStore.flowState.value =
-        this.globalStore.flowStateMachine.transition(
-          this.globalStore.flowState.value,
+      this._globalStore.flowState.value =
+        this._globalStore.flowStateMachine.transition(
+          this._globalStore.flowState.value,
           'ERROR',
         )
     }
@@ -176,7 +177,7 @@ class AddressViewModel {
     this.keyboardNavIndex = -1
 
     // Track address selection event
-    this.trackingService.track('Address Selected')
+    this._trackingService.track('Address Selected')
   }
 
   /**
@@ -203,8 +204,8 @@ class AddressViewModel {
   async submitAddress(options = {}) {
     // Debounce submission if form is already processing
     if (
-      this.globalStore.flowState.value == 'addressFormProcessing' ||
-      this.globalStore.flowState.value == 'modalAddressFormProcessing'
+      this._globalStore.flowState.value == 'addressFormProcessing' ||
+      this._globalStore.flowState.value == 'modalAddressFormProcessing'
     ) {
       return
     }
@@ -216,14 +217,14 @@ class AddressViewModel {
     this.errorMessage = ''
 
     // Transition to the address processing state
-    this.globalStore.flowState.value =
-      this.globalStore.flowStateMachine.transition(
-        this.globalStore.flowState.value,
+    this._globalStore.flowState.value =
+      this._globalStore.flowStateMachine.transition(
+        this._globalStore.flowState.value,
         'SUBMIT_ADDRESS',
       )
 
     // Track address submission event
-    this.trackingService.track('Address Submitted')
+    this._trackingService.track('Address Submitted')
 
     // Process the submitted address, and transition the state accordingly
     try {
@@ -231,74 +232,75 @@ class AddressViewModel {
       // Otherwise, transition to the contact form
       if (
         this.hasParcelDetails &&
-        this.globalStore.estimateViewModel.hasResults &&
-        this.globalStore.contactViewModel.isSubmitted
+        this._globalStore.estimateViewModel.hasResults &&
+        this._globalStore.contactViewModel.isSubmitted
       ) {
-        this.globalStore.flowState.value =
-          this.globalStore.flowStateMachine.transition(
-            this.globalStore.flowState.value,
+        this._globalStore.flowState.value =
+          this._globalStore.flowStateMachine.transition(
+            this._globalStore.flowState.value,
             'SKIP_CONTACT',
           )
       } else {
         // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
-        if (!this.globalStore.addressViewModel.hasParcelDetails) {
+        if (!this._globalStore.addressViewModel.hasParcelDetails) {
           // Combine appropriate fields from Regrid Typeahead and Parcel APIs into a single object
-          this.globalStore.addressViewModel.parcelDetails = {
+          this._globalStore.addressViewModel.parcelDetails = {
             ...(await fetchParcelDetails(
-              this.globalStore.addressViewModel.selectedMatch.ll_uuid,
+              this._globalStore.addressViewModel.selectedMatch.ll_uuid,
             )),
-            address: this.globalStore.addressViewModel.selectedMatch.address,
-            city: this.globalStore.addressViewModel.selectedMatch.context.split(
+            address: this._globalStore.addressViewModel.selectedMatch.address,
+            city: this._globalStore.addressViewModel.selectedMatch.context.split(
               ', ',
             )[0],
             state:
-              this.globalStore.addressViewModel.selectedMatch.context.split(
+              this._globalStore.addressViewModel.selectedMatch.context.split(
                 ', ',
               )[1],
           }
         }
 
         // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
-        if (!this.globalStore.estimateViewModel.hasResults) {
+        if (!this._globalStore.estimateViewModel.hasResults) {
           const fetchEstimatePayload = {
             ...options,
             parcel: {
-              apn: this.globalStore.addressViewModel.parcelDetails.apn,
+              apn: this._globalStore.addressViewModel.parcelDetails.apn,
               jurisdiction:
-                this.globalStore.addressViewModel.parcelDetails.jurisdiction,
+                this._globalStore.addressViewModel.parcelDetails.jurisdiction,
             },
             address: {
-              address: this.globalStore.addressViewModel.parcelDetails.address,
-              city: this.globalStore.addressViewModel.parcelDetails.city,
-              state: this.globalStore.addressViewModel.parcelDetails.state,
-              zip: this.globalStore.addressViewModel.parcelDetails.zip,
+              address: this._globalStore.addressViewModel.parcelDetails.address,
+              city: this._globalStore.addressViewModel.parcelDetails.city,
+              state: this._globalStore.addressViewModel.parcelDetails.state,
+              zip: this._globalStore.addressViewModel.parcelDetails.zip,
             },
           }
 
           const estimateResults =
             await fetchEstimateResults(fetchEstimatePayload)
 
-          this.globalStore.estimateViewModel.jurisdiction =
+          this._globalStore.estimateViewModel.jurisdiction =
             estimateResults.jurisdiction
-          this.globalStore.estimateViewModel.estimate = estimateResults.estimate
+          this._globalStore.estimateViewModel.estimate =
+            estimateResults.estimate
         }
 
-        this.globalStore.flowState.value =
-          this.globalStore.flowStateMachine.transition(
-            this.globalStore.flowState.value,
+        this._globalStore.flowState.value =
+          this._globalStore.flowStateMachine.transition(
+            this._globalStore.flowState.value,
             'SUCCESS',
           )
 
-        this.trackingService.track('Address Submission Succeeded')
+        this._trackingService.track('Address Submission Succeeded')
       }
     } catch (error) {
-      this.globalStore.flowState.value =
-        this.globalStore.flowStateMachine.transition(
-          this.globalStore.flowState.value,
+      this._globalStore.flowState.value =
+        this._globalStore.flowStateMachine.transition(
+          this._globalStore.flowState.value,
           'SUCCESS',
         )
 
-      this.trackingService.track('Address Submission Errors (Non-Blocking)')
+      this._trackingService.track('Address Submission Errors (Non-Blocking)')
     }
   }
 }
