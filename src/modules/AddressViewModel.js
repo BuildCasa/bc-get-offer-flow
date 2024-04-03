@@ -1,18 +1,12 @@
 /*
  * ----------------------------------------------------------------
- * Imports
- * ----------------------------------------------------------------
- */
-import { trackEvent } from './LegacyTracking'
-
-/*
- * ----------------------------------------------------------------
  * Classes
  * ----------------------------------------------------------------
  */
 /** Class definition for an AddressViewModel. */
 class AddressViewModel {
   globalStore
+  trackingService
   inputValue = ''
   matches = []
   keyboardNavIndex = -1
@@ -27,9 +21,11 @@ class AddressViewModel {
   /**
    * Create an AddressViewModel instance.
    * @param {unknown} globalStore - Reference to the global store.
+   * @param {object} trackingService - Reference to the desired TrackingService to use for event tracking.
    */
-  constructor(globalStore) {
+  constructor(globalStore, trackingService) {
     this.globalStore = globalStore
+    this.trackingService = trackingService
 
     // Pre-fill submit button text values based on Webflow settings
     // Preserves Webflow DX for editing button values through the UI (`button` and `waiting` settings)
@@ -180,7 +176,7 @@ class AddressViewModel {
     this.keyboardNavIndex = -1
 
     // Track address selection event
-    trackEvent('Address Selected', this.globalStore)
+    this.trackingService.track('Address Selected')
   }
 
   /**
@@ -227,7 +223,7 @@ class AddressViewModel {
       )
 
     // Track address submission event
-    trackEvent('Address Submitted', this.globalStore)
+    this.trackingService.track('Address Submitted')
 
     // Process the submitted address, and transition the state accordingly
     try {
@@ -293,7 +289,7 @@ class AddressViewModel {
             'SUCCESS',
           )
 
-        trackEvent('Address Submission Succeeded', this.globalStore)
+        this.trackingService.track('Address Submission Succeeded')
       }
     } catch (error) {
       this.globalStore.flowState.value =
@@ -302,7 +298,7 @@ class AddressViewModel {
           'SUCCESS',
         )
 
-      trackEvent('Address Submission Errors (Non-Blocking)', this.globalStore)
+      this.trackingService.track('Address Submission Errors (Non-Blocking)')
     }
   }
 }
@@ -316,10 +312,11 @@ class AddressViewModel {
 /**
  * Factory function for creating an AddressViewModel instance.
  * @param {unknown} globalStore - Reference to the global store.
+ * @param {object} trackingService - Reference to the desired TrackingService to use for event tracking.
  * @returns {AddressViewModel} New AddressViewModel instance.
  */
-function createAddressViewModel(globalStore) {
-  return new AddressViewModel(globalStore)
+function createAddressViewModel(globalStore, trackingService) {
+  return new AddressViewModel(globalStore, trackingService)
 }
 
 /**

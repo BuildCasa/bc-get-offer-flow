@@ -4,14 +4,13 @@
  * ----------------------------------------------------------------
  */
 import { loadScript } from './ExternalScripts'
-import { trackEvent } from './LegacyTracking'
 
 /*
  * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
-function createContactViewModel(globalStore) {
+function createContactViewModel(globalStore, trackingService) {
   return {
     firstName: '',
     lastName: '',
@@ -104,7 +103,7 @@ function createContactViewModel(globalStore) {
       }
 
       // Track contact submission event
-      trackEvent('Contact Submitted', globalStore)
+      trackingService.track('Contact Submitted')
 
       try {
         // Process the submitted contact info, and transition the state accordingly
@@ -228,7 +227,7 @@ function createContactViewModel(globalStore) {
           }, 500)
         }
 
-        trackEvent('Contact Submission Succeeded', globalStore)
+        trackingService.track('Contact Submission Succeeded')
       } catch (error) {
         // If error is thrown due to invalid email or phone number, show the specific error message
         // Otherwise, show a generic error message
@@ -248,7 +247,7 @@ function createContactViewModel(globalStore) {
           'ERROR',
         )
 
-        trackEvent('Contact Submission Failed', globalStore, {
+        trackingService.track('Contact Submission Failed', {
           error_str: this.errorMessage,
         })
       }

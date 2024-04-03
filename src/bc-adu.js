@@ -15,6 +15,7 @@
  */
 import Alpine from 'alpinejs'
 import { createAlpineStoreFactory } from './modules/AlpineStoreFactory'
+import { createFullStoryTrackingService } from './modules/FullStoryTrackingService'
 import { createAddressViewModel } from './modules/AddressViewModel'
 import { createContactViewModel } from './modules/ContactViewModel'
 import { createEstimateViewModel } from './modules/EstimateViewModel'
@@ -39,6 +40,9 @@ const $storeFactory = createAlpineStoreFactory(Alpine)
 // Create global variable to hold references to the stores
 const $store = {}
 
+// Create global variable to hold reference to the TrackingService for event tracking and analytics
+const $trackingService = createFullStoryTrackingService(window.FS, $store)
+
 // Initialize the stores with custom state and business logic that powers the site interactivity
 initStores()
 
@@ -54,15 +58,15 @@ function initStores() {
   // Create viewModel stores
   $store.addressViewModel = $storeFactory.createStore(
     'addressViewModel',
-    createAddressViewModel($store),
+    createAddressViewModel($store, $trackingService),
   )
   $store.contactViewModel = $storeFactory.createStore(
     'contactViewModel',
-    createContactViewModel($store),
+    createContactViewModel($store, $trackingService),
   )
   $store.estimateViewModel = $storeFactory.createStore(
     'estimateViewModel',
-    createEstimateViewModel($store),
+    createEstimateViewModel($store, $trackingService),
   )
   $store.personalizationViewModel = $storeFactory.createStore(
     'personalizationViewModel',
@@ -80,7 +84,7 @@ function initStores() {
   // Create flow state stores
   $store.flowStateMachine = $storeFactory.createStore(
     'flowStateMachine',
-    createFlowStateMachine($store),
+    createFlowStateMachine($trackingService),
   )
   $store.flowState = $storeFactory.createStore(
     'flowState',
@@ -90,6 +94,6 @@ function initStores() {
   // Create UI helper stores
   $store.modalHelpers = $storeFactory.createStore(
     'modalHelpers',
-    createModalHelpers($store),
+    createModalHelpers($store, $trackingService),
   )
 }

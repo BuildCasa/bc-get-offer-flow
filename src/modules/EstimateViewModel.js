@@ -1,16 +1,9 @@
 /*
  * ----------------------------------------------------------------
- * Imports
- * ----------------------------------------------------------------
- */
-import { trackEvent } from './LegacyTracking'
-
-/*
- * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
-function createEstimateViewModel(globalStore) {
+function createEstimateViewModel(globalStore, trackingService) {
   return {
     jurisdiction: {
       status: '',
@@ -67,7 +60,7 @@ function createEstimateViewModel(globalStore) {
       )
 
       // Track Schedule Consultation button click
-      trackEvent('Schedule Consultation Clicked', globalStore)
+      trackingService.track('Schedule Consultation Clicked')
     },
     handleRequestCommunityClick(event) {
       // Block default click handling behavior / event propagation
@@ -81,7 +74,7 @@ function createEstimateViewModel(globalStore) {
       )
 
       // Track Request Community button click
-      trackEvent('Community Requested', globalStore)
+      trackingService.track('Community Requested')
     },
   }
 }

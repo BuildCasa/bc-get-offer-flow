@@ -1,16 +1,9 @@
 /*
  * ----------------------------------------------------------------
- * Imports
- * ----------------------------------------------------------------
- */
-import { trackEvent } from './LegacyTracking'
-
-/*
- * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
-function createFlowStateMachine(globalStore) {
+function createFlowStateMachine(trackingService) {
   // Create transition definition objects for *shared* transition events / paths
   const submitAddressTransition = {
     SUBMIT_ADDRESS: {
@@ -141,7 +134,7 @@ function createFlowStateMachine(globalStore) {
       const destinationTransition = currentStateDefinition.transitions[event]
 
       if (!destinationTransition) {
-        trackEvent('Invalid State Transition Triggered', globalStore, {
+        trackingService.track('Invalid State Transition Triggered', {
           current_state_str: currentState,
           event_str: event,
         })

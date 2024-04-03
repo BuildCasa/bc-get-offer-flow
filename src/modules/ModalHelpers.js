@@ -1,16 +1,9 @@
 /*
  * ----------------------------------------------------------------
- * Imports
- * ----------------------------------------------------------------
- */
-import { trackEvent } from './LegacyTracking'
-
-/*
- * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
-function createModalHelpers(globalStore) {
+function createModalHelpers(globalStore, trackingService) {
   return {
     get isOpen() {
       return (
@@ -38,7 +31,7 @@ function createModalHelpers(globalStore) {
         }
       }
 
-      trackEvent('Modal Get Offer Flow Opened', globalStore, eventProperties)
+      trackingService.track('Modal Get Offer Flow Opened', eventProperties)
     },
     handleModalClose() {
       // TODO: Move this logic into the flowStateMachine
@@ -67,7 +60,7 @@ function createModalHelpers(globalStore) {
           'EXIT',
         )
 
-        trackEvent('Get Offer Modal Closed', globalStore)
+        trackingService.track('Get Offer Modal Closed')
       }
     },
   }
