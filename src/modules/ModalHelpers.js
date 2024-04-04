@@ -19,10 +19,7 @@ function createModalHelpers(globalStore, trackingService) {
       )
     },
     handleModalFlowStart(cta = null) {
-      globalStore.flowState.value = globalStore.flowStateMachine.transition(
-        globalStore.flowState.value,
-        'START_MODAL_FLOW',
-      )
+      globalStore.flowState.transition('START_MODAL_FLOW')
 
       let eventProperties = {}
       if (cta) {
@@ -55,10 +52,7 @@ function createModalHelpers(globalStore, trackingService) {
       }
 
       if (proceedWithExit) {
-        globalStore.flowState.value = globalStore.flowStateMachine.transition(
-          globalStore.flowState.value,
-          'EXIT',
-        )
+        globalStore.flowState.transition('EXIT')
 
         trackingService.track('Get Offer Modal Closed')
       }

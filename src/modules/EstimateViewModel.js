@@ -54,10 +54,7 @@ function createEstimateViewModel(globalStore, trackingService) {
       event.stopPropagation()
 
       // Transition to Schedule Consultation state
-      globalStore.flowState.value = globalStore.flowStateMachine.transition(
-        globalStore.flowState.value,
-        'SCHEDULE',
-      )
+      globalStore.flowState.transition('SCHEDULE')
 
       // Track Schedule Consultation button click
       trackingService.track('Schedule Consultation Clicked')
@@ -68,10 +65,7 @@ function createEstimateViewModel(globalStore, trackingService) {
       event.stopPropagation()
 
       // Transition to Schedule Consultation state
-      globalStore.flowState.value = globalStore.flowStateMachine.transition(
-        globalStore.flowState.value,
-        'REQUEST_COMMUNITY',
-      )
+      globalStore.flowState.transition('REQUEST_COMMUNITY')
 
       // Track Request Community button click
       trackingService.track('Community Requested')

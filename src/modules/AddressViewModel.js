@@ -104,11 +104,7 @@ class AddressViewModel {
       this.errorMessage =
         'There was an error finding your address. Please try again, or contact us for help.'
 
-      this._globalStore.flowState.value =
-        this._globalStore.flowStateMachine.transition(
-          this._globalStore.flowState.value,
-          'ERROR',
-        )
+      this._globalStore.flowState.transition('ERROR')
     }
   }
 
@@ -217,11 +213,7 @@ class AddressViewModel {
     this.errorMessage = ''
 
     // Transition to the address processing state
-    this._globalStore.flowState.value =
-      this._globalStore.flowStateMachine.transition(
-        this._globalStore.flowState.value,
-        'SUBMIT_ADDRESS',
-      )
+    this._globalStore.flowState.transition('SUBMIT_ADDRESS')
 
     // Track address submission event
     this._trackingService.track('Address Submitted')
@@ -235,11 +227,7 @@ class AddressViewModel {
         this._globalStore.estimateViewModel.hasResults &&
         this._globalStore.contactViewModel.isSubmitted
       ) {
-        this._globalStore.flowState.value =
-          this._globalStore.flowStateMachine.transition(
-            this._globalStore.flowState.value,
-            'SKIP_CONTACT',
-          )
+        this._globalStore.flowState.transition('SKIP_CONTACT')
       } else {
         // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
         if (!this._globalStore.addressViewModel.hasParcelDetails) {
@@ -285,20 +273,12 @@ class AddressViewModel {
             estimateResults.estimate
         }
 
-        this._globalStore.flowState.value =
-          this._globalStore.flowStateMachine.transition(
-            this._globalStore.flowState.value,
-            'SUCCESS',
-          )
+        this._globalStore.flowState.transition('SUCCESS')
 
         this._trackingService.track('Address Submission Succeeded')
       }
     } catch (error) {
-      this._globalStore.flowState.value =
-        this._globalStore.flowStateMachine.transition(
-          this._globalStore.flowState.value,
-          'SUCCESS',
-        )
+      this._globalStore.flowState.transition('SUCCESS')
 
       this._trackingService.track('Address Submission Errors (Non-Blocking)')
     }

@@ -21,7 +21,8 @@ import { createContactViewModel } from './modules/ContactViewModel'
 import { createEstimateViewModel } from './modules/EstimateViewModel'
 import { createPersonalizationViewModel } from './modules/PersonalizationViewModel'
 import { createExperimentationViewModel } from './modules/ExperimentationViewModel'
-import { createFlowStateMachine, createFlowState } from './modules/FlowState'
+import { createFlowState } from './modules/FlowState'
+import { createDefaultGetOfferFlowStateMachine } from './modules/DefaultGetOfferFlowStateMachine'
 import { createModalHelpers } from './modules/ModalHelpers'
 
 /*
@@ -76,14 +77,10 @@ function initStores() {
     createExperimentationViewModel(),
   )
 
-  // Create flow state stores
-  $store.flowStateMachine = $storeFactory.createStore(
-    'flowStateMachine',
-    createFlowStateMachine($trackingService),
-  )
+  // Create flow state store
   $store.flowState = $storeFactory.createStore(
     'flowState',
-    createFlowState($store),
+    createFlowState(createDefaultGetOfferFlowStateMachine(), $trackingService),
   )
 
   // Create UI helper stores

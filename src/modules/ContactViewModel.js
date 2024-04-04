@@ -78,10 +78,7 @@ function createContactViewModel(globalStore, trackingService) {
       this.errorMessage = ''
 
       // Transition to the contact processing state
-      globalStore.flowState.value = globalStore.flowStateMachine.transition(
-        globalStore.flowState.value,
-        'SUBMIT_CONTACT',
-      )
+      globalStore.flowState.transition('SUBMIT_CONTACT')
 
       // If the user has an active jurisdiction and an estimate, and the offering / lead type is "Windfall",
       // set appropriate variation for the Jul 2023 "Estimate or eligibility" experiment
@@ -189,10 +186,7 @@ function createContactViewModel(globalStore, trackingService) {
         this.isSubmitted = true
 
         // Transition to the estimate results state
-        globalStore.flowState.value = globalStore.flowStateMachine.transition(
-          globalStore.flowState.value,
-          'SUCCESS',
-        )
+        globalStore.flowState.transition('SUCCESS')
 
         // If the user has an active jurisdiction and an estimate,
         // pop the confetti animation after a short delay
@@ -242,10 +236,7 @@ function createContactViewModel(globalStore, trackingService) {
             'There was an error processing your info. Please try again, or contact us for help.'
         }
 
-        globalStore.flowState.value = globalStore.flowStateMachine.transition(
-          globalStore.flowState.value,
-          'ERROR',
-        )
+        globalStore.flowState.transition('ERROR')
 
         trackingService.track('Contact Submission Failed', {
           error_str: this.errorMessage,

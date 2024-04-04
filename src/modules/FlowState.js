@@ -1,159 +1,45 @@
+// TODO: Create JSDoc interface for FlowStateMachine.
+
 /*
  * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
-function createFlowStateMachine(trackingService) {
-  // Create transition definition objects for *shared* transition events / paths
-  const submitAddressTransition = {
-    SUBMIT_ADDRESS: {
-      target: 'addressFormProcessing',
-    },
-  }
-  const modalSubmitAddressTransition = {
-    SUBMIT_ADDRESS: {
-      target: 'modalAddressFormProcessing',
-    },
-  }
-  const submitContactTransition = {
-    SUBMIT_CONTACT: {
-      target: 'contactFormProcessing',
-    },
-  }
-  const exitTransition = {
-    EXIT: {
-      target: 'default',
-    },
+
+/**
+ * Factory function for creating a FlowState instance.
+ * @param {FlowStateMachine} stateMachine - The state machine that defines the flow states, events, and transitions.
+ * @param {object} trackingService - The tracking service object.
+ * @param {string} [initialValue] - Optional: The initial value for the state (otherwise uses the stateMachine defaultState).
+ * @returns {FlowState} New FlowState instance.
+ */
+function createFlowState(stateMachine, trackingService, initialValue) {
+  let value = initialValue
+  if (!value || !stateMachine?.states[value]) {
+    value = stateMachine?.defaultState
   }
 
-  // Create state machine store
   return {
-    defaultState: 'default',
-    states: {
-      default: {
-        transitions: {
-          ...submitAddressTransition,
-          START_MODAL_FLOW: {
-            target: 'modalAddressForm',
-          },
-        },
-      },
-      addressFormProcessing: {
-        transitions: {
-          SUCCESS: {
-            target: 'contactForm',
-          },
-          SKIP_CONTACT: {
-            target: 'estimateResults',
-          },
-          ERROR: {
-            target: 'addressFormError',
-          },
-        },
-      },
-      addressFormError: {
-        transitions: {
-          ...submitAddressTransition,
-        },
-      },
-      modalAddressForm: {
-        transitions: {
-          ...modalSubmitAddressTransition,
-          ...exitTransition,
-        },
-      },
-      modalAddressFormProcessing: {
-        transitions: {
-          SUCCESS: {
-            target: 'contactForm',
-          },
-          SKIP_CONTACT: {
-            target: 'estimateResults',
-          },
-          ERROR: {
-            target: 'modalAddressFormError',
-          },
-          ...exitTransition,
-        },
-      },
-      modalAddressFormError: {
-        transitions: {
-          ...modalSubmitAddressTransition,
-          ...exitTransition,
-        },
-      },
-      contactForm: {
-        transitions: {
-          ...submitContactTransition,
-          ...exitTransition,
-        },
-      },
-      contactFormProcessing: {
-        transitions: {
-          SUCCESS: {
-            target: 'estimateResults',
-          },
-          ERROR: {
-            target: 'contactFormError',
-          },
-          ...exitTransition,
-        },
-      },
-      contactFormError: {
-        transitions: {
-          ...submitContactTransition,
-          ...exitTransition,
-        },
-      },
-      estimateResults: {
-        transitions: {
-          SCHEDULE: {
-            target: 'scheduleConsultation',
-          },
-          REQUEST_COMMUNITY: {
-            target: 'requestedCommunity',
-          },
-          ...exitTransition,
-        },
-      },
-      scheduleConsultation: {
-        transitions: {
-          ...exitTransition,
-        },
-      },
-      requestedCommunity: {
-        transitions: {
-          ...exitTransition,
-        },
-      },
-    },
-    // Method to trigger state transitions, given the current state, and a valid transition event
-    // For a successful transition, returns the resulting state
-    transition(currentState, event) {
-      const currentStateDefinition = this.states[currentState]
-      const destinationTransition = currentStateDefinition.transitions[event]
+    value: value,
 
-      if (!destinationTransition) {
+    /**
+     * Transition to a new state, based on the current state and a valid transition event.
+     * @param {string} event - Event to trigger the desired state transition.
+     * @returns {void}
+     */
+    transition(event) {
+      const currentStateDefinition = stateMachine.states[this.value]
+      const destinationTransition = currentStateDefinition?.transitions[event]
+
+      if (!currentStateDefinition || !destinationTransition) {
         trackingService.track('Invalid State Transition Triggered', {
-          current_state_str: currentState,
+          current_state_str: this.value,
           event_str: event,
         })
-        return currentState
+        return
       }
 
-      const destinationState = destinationTransition.target
-      return destinationState
-    },
-  }
-}
-
-function createFlowState(globalStore) {
-  return {
-    value: '',
-    init() {
-      // FUTURE DEV: Update w/ logic to set initial UI state based on other sources (link params, etc.) here
-
-      this.value = globalStore.flowStateMachine.defaultState
+      this.value = destinationTransition.target
     },
   }
 }
@@ -163,4 +49,4 @@ function createFlowState(globalStore) {
  * Exports
  * ----------------------------------------------------------------
  */
-export { createFlowStateMachine, createFlowState }
+export { createFlowState }
