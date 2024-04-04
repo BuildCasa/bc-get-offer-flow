@@ -1,4 +1,4 @@
-// TODO: Create JSDoc interface for FlowStateMachine.
+// TODO: Create JSDoc interfaces for FlowStateMachine, and FlowState.
 
 /*
  * ----------------------------------------------------------------
