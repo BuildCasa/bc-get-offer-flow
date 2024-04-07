@@ -13,27 +13,45 @@
  * @returns {AddressViewModel} New AddressViewModel instance.
  */
 function createAddressViewModel(globalStore, trackingService) {
-  // Pre-fill submit button text values based on Webflow settings
-  // Preserves Webflow DX for editing button values through the UI (`button` and `waiting` settings)
-  // But allows dynamically controlling displayed text in site, based on current UI state, via Alpine
-  const addressFormSubmitButton = document.getElementById(
-    'address-form-submit-button',
-  )
-  const submitButtonText = {
-    normal: addressFormSubmitButton.value,
-    processing: addressFormSubmitButton.dataset.wait,
-  }
-
-  // FUTURE DEV: Add logic to pre-fill data based on other sources (link params, etc.) here
-
   return {
     inputValue: '',
     matches: [],
     keyboardNavIndex: -1,
     selectedMatch: {},
     parcelDetails: {},
-    submitButtonText: submitButtonText,
+    submitButtonText: {
+      normal: 'Get Offer',
+      processing: 'Getting Offer...',
+    },
     errorMessage: '',
+
+    /**
+     * Initializes the address view model properties.
+     * Run automatically by Alpine, but can also be called manually to reset the view model state.
+     * Need to call this manually on store creation if we stop using Alpine as our UI library.
+     * @returns {void}
+     */
+    init() {
+      this.inputValue = ''
+      this.matches = []
+      this.keyboardNavIndex = -1
+      this.selectedMatch = {}
+      this.parcelDetails = {}
+      this.errorMessage = ''
+
+      // Pre-fill submit button text values based on Webflow settings
+      // Preserves Webflow DX for editing button values through the UI (`button` and `waiting` settings)
+      // But allows dynamically controlling displayed text in site, based on current UI state, via Alpine
+      const addressFormSubmitButton = document.getElementById(
+        'address-form-submit-button',
+      )
+      this.submitButtonText = {
+        normal: addressFormSubmitButton.value,
+        processing: addressFormSubmitButton.dataset.wait,
+      }
+
+      // FUTURE DEV: Add logic to pre-fill data based on other sources (link params, etc.) here
+    },
 
     /**
      * Whether or not an address match has been selected with the typeahead.
