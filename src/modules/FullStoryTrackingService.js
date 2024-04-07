@@ -22,10 +22,11 @@ function createFullStoryTrackingService(FS, globalStore) {
     track(eventName, eventProperties = {}) {
       // If FS is available (FullStory tracking is active), send event to FullStory
       try {
-        console.log('Tracking event:', eventName, {
-          ...this._defaultTrackingProperties,
-          ...eventProperties,
-        })
+        // Console log the event for debugging purposes
+        // console.log('Tracking event:', eventName, {
+        //   ...this._defaultTrackingProperties,
+        //   ...eventProperties,
+        // })
         if (FS) {
           FS.event(eventName, {
             ...this._defaultTrackingProperties,
