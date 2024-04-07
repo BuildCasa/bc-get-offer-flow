@@ -3,6 +3,9 @@ function createDefaultGetOfferFlowStateMachine() {
   const submitAddressTransition = {
     SUBMIT_ADDRESS: {
       target: 'addressFormProcessing',
+      // effects: {
+      //   onTransition: [() => {}],
+      // },
     },
   }
   const modalSubmitAddressTransition = {
@@ -30,8 +33,15 @@ function createDefaultGetOfferFlowStateMachine() {
           ...submitAddressTransition,
           START_MODAL_FLOW: {
             target: 'modalAddressForm',
+            // effects: {
+            //   onTransition: [() => {}],
+            // },
           },
         },
+        // effects: {
+        //   onEntry: [() => {}],
+        //   onExit: [() => {}],
+        // },
       },
       addressFormProcessing: {
         transitions: {

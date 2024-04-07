@@ -28,19 +28,51 @@ function createFlowState(stateMachine, trackingService, initialValue) {
      * @returns {void}
      */
     transition(event) {
-      const currentStateDefinition = stateMachine.states[this.value]
-      const destinationTransition = currentStateDefinition?.transitions[event]
+      // Get references to the current state, transition, and target state definitions from the state machine
+      const currentState = this.value
+      const currentStateDef = stateMachine?.states?.[currentState]
+      const transitionDef = currentStateDef?.transitions?.[event]
+      const transitionTarget = transitionDef?.target
+      const targetStateDef = stateMachine?.states?.[transitionTarget]
 
-      if (!currentStateDefinition || !destinationTransition) {
+      // If any of the necessary definitions (current state, transition, or target state) do not exist,
+      // the transition is invalid and no state change nor effects should take place
+      if (
+        !currentStateDef ||
+        !transitionDef ||
+        !transitionTarget ||
+        !targetStateDef
+      ) {
         trackingService.track('Invalid State Transition Triggered', {
-          current_state_str: this.value,
+          current_state_str: currentState,
           event_str: event,
         })
         return
       }
 
-      this.value = destinationTransition.target
+      // Run any exit effects for the current state before transitioning to the new state
+      const currentStateExitEffects = currentStateDef.effects?.onExit
+      runEffects(currentStateExitEffects)
+
+      // Run any transition effects for the current state before transitioning to the new state
+      const transitionEffects = transitionDef.effects?.onTransition
+      runEffects(transitionEffects)
+
+      // Transition to the target state
+      this.value = transitionTarget
+
+      // Run any entry effects for the new (target) state
+      const targetStateEntryEffects = targetStateDef.effects?.onEntry
+      runEffects(targetStateEntryEffects)
     },
+  }
+}
+
+function runEffects(effects) {
+  if (effects && effects.length) {
+    effects.forEach((effect) => {
+      effect()
+    })
   }
 }
 
