@@ -198,8 +198,11 @@ function createAddressViewModel(globalStore, trackingService) {
       event.preventDefault()
       event.stopPropagation()
 
+      // Transition state according to desired logic for address submission events
+      globalStore.flowState.transition('SUBMIT_ADDRESS')
+
       // Submit address
-      this.submitAddress(options)
+      // this.submitAddress(options)
     },
 
     /**
@@ -209,32 +212,38 @@ function createAddressViewModel(globalStore, trackingService) {
      * @returns {Promise.<void>} Promise that resolves when the address submission is complete.
      */
     async submitAddress(options = {}) {
+      // Removed — not needed with state machine implementation
       // Debounce submission if form is already processing
-      if (
-        globalStore.flowState.value == 'addressFormProcessing' ||
-        globalStore.flowState.value == 'modalAddressFormProcessing'
-      ) {
-        return
-      }
+      // if (
+      //   globalStore.flowState.value == 'addressFormProcessing' ||
+      //   globalStore.flowState.value == 'modalAddressFormProcessing'
+      // ) {
+      //   return
+      // }
 
+      // TEST - Removed - Might not be needed with state machine implementation
+      // IF needed, move to handleSubmit method
       // Remove active focus (to avoid inadvertant submits given the modal UX)
-      document.activeElement?.blur()
+      // document.activeElement?.blur()
 
+      // Moved to error state exit effect
       // Clear out any existing error message
-      this.errorMessage = ''
+      // this.errorMessage = ''
 
+      // Moved to handleSubmit method
       // Transition to the address processing state
-      globalStore.flowState.transition('SUBMIT_ADDRESS')
+      // globalStore.flowState.transition('SUBMIT_ADDRESS')
 
+      // Moved to transition effect
       // Track address submission event
-      trackingService.track('Address Submitted')
+      // trackingService.track('Address Submitted')
 
       // Process the submitted address, and transition the state accordingly
       try {
         // If the contact has already been submitted, skip the contact form and transition directly to the estimate results
         // Otherwise, transition to the contact form
         if (
-          this.hasParcelDetails &&
+          globalStore.addressViewModel.hasParcelDetails &&
           globalStore.estimateViewModel.hasResults &&
           globalStore.contactViewModel.isSubmitted
         ) {
@@ -285,12 +294,17 @@ function createAddressViewModel(globalStore, trackingService) {
 
           globalStore.flowState.transition('SUCCESS')
 
-          trackingService.track('Address Submission Succeeded')
+          // Moved to transition effect
+          // trackingService.track('Address Submission Succeeded')
         }
       } catch (error) {
-        globalStore.flowState.transition('SUCCESS')
+        //
+        globalStore.flowState.transition('NON_BLOCKING_ERROR')
 
-        trackingService.track('Address Submission Errors (Non-Blocking)')
+        // globalStore.flowState.transition('SUCCESS')
+
+        // Moved to new non-blocking error transition effect
+        // trackingService.track('Address Submission Errors (Non-Blocking)')
       }
     },
   }

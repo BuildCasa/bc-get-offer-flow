@@ -80,7 +80,10 @@ function initStores() {
   // Create flow state store
   $store.flowState = $storeFactory.createStore(
     'flowState',
-    createFlowState(createDefaultGetOfferFlowStateMachine(), $trackingService),
+    createFlowState(
+      createDefaultGetOfferFlowStateMachine($store, $trackingService),
+      $trackingService,
+    ),
   )
 
   // Create UI helper stores

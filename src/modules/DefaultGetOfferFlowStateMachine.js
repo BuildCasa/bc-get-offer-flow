@@ -1,16 +1,27 @@
-function createDefaultGetOfferFlowStateMachine() {
+function createDefaultGetOfferFlowStateMachine(globalStore, trackingService) {
   // Create transition definition objects for *shared* transition events / paths
   const submitAddressTransition = {
     SUBMIT_ADDRESS: {
       target: 'addressFormProcessing',
-      // effects: {
-      //   onTransition: [() => {}],
-      // },
+      effects: {
+        onTransition: [
+          () => {
+            trackingService?.track('Address Submitted')
+          },
+        ],
+      },
     },
   }
   const modalSubmitAddressTransition = {
     SUBMIT_ADDRESS: {
       target: 'modalAddressFormProcessing',
+      effects: {
+        onTransition: [
+          () => {
+            trackingService?.track('Address Submitted')
+          },
+        ],
+      },
     },
   }
   const submitContactTransition = {
@@ -47,6 +58,25 @@ function createDefaultGetOfferFlowStateMachine() {
         transitions: {
           SUCCESS: {
             target: 'contactForm',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Address Submission Succeeded')
+                },
+              ],
+            },
+          },
+          NON_BLOCKING_ERROR: {
+            target: 'contactForm',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track(
+                    'Address Submission Completed with Non-Blocking Error',
+                  )
+                },
+              ],
+            },
           },
           SKIP_CONTACT: {
             target: 'estimateResults',
@@ -60,6 +90,15 @@ function createDefaultGetOfferFlowStateMachine() {
         transitions: {
           ...submitAddressTransition,
         },
+        effects: {
+          onEntry: [() => {}],
+          onExit: [
+            () => {
+              // Clear out any existing error message
+              globalStore.addressViewModel.errorMessage = ''
+            },
+          ],
+        },
       },
       modalAddressForm: {
         transitions: {
@@ -71,6 +110,25 @@ function createDefaultGetOfferFlowStateMachine() {
         transitions: {
           SUCCESS: {
             target: 'contactForm',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Address Submission Succeeded')
+                },
+              ],
+            },
+          },
+          NON_BLOCKING_ERROR: {
+            target: 'contactForm',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track(
+                    'Address Submission Completed with Non-Blocking Error',
+                  )
+                },
+              ],
+            },
           },
           SKIP_CONTACT: {
             target: 'estimateResults',
@@ -85,6 +143,15 @@ function createDefaultGetOfferFlowStateMachine() {
         transitions: {
           ...modalSubmitAddressTransition,
           ...exitTransition,
+        },
+        effects: {
+          onEntry: [() => {}],
+          onExit: [
+            () => {
+              // Clear out any existing error message
+              globalStore.addressViewModel.errorMessage = ''
+            },
+          ],
         },
       },
       contactForm: {
