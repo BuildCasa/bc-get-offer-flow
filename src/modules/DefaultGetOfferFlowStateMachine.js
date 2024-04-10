@@ -1,3 +1,17 @@
+/*
+ * ----------------------------------------------------------------
+ * Imports
+ * ----------------------------------------------------------------
+ */
+import { fetchParcelDetails } from './RegridAddressService.js'
+import { fetchEstimateResults } from './MakeBuildCasaBackendService.js'
+
+/*
+ * ----------------------------------------------------------------
+ * Functions
+ * ----------------------------------------------------------------
+ */
+
 function createDefaultGetOfferFlowStateMachine(globalStore, trackingService) {
   // Create transition definition objects for *shared* transition events / paths
   const submitAddressTransition = {
@@ -85,13 +99,91 @@ function createDefaultGetOfferFlowStateMachine(globalStore, trackingService) {
             target: 'addressFormError',
           },
         },
+        effects: {
+          onEntry: [
+            async () => {
+              // Process the submitted address, and transition the state accordingly
+              try {
+                // If the contact has already been submitted, skip the contact form and transition directly to the estimate results
+                // Otherwise, transition to the contact form
+                if (
+                  globalStore.addressViewModel.hasParcelDetails &&
+                  globalStore.estimateViewModel.hasResults &&
+                  globalStore.contactViewModel.isSubmitted
+                ) {
+                  globalStore.flowState.transition('SKIP_CONTACT')
+                } else {
+                  // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
+                  if (!globalStore.addressViewModel.hasParcelDetails) {
+                    // Combine appropriate fields from Regrid Typeahead and Parcel APIs into a single object
+                    globalStore.addressViewModel.parcelDetails = {
+                      ...(await fetchParcelDetails(
+                        globalStore.addressViewModel.selectedMatch.ll_uuid,
+                      )),
+                      address:
+                        globalStore.addressViewModel.selectedMatch.address,
+                      city: globalStore.addressViewModel.selectedMatch.context.split(
+                        ', ',
+                      )[0],
+                      state:
+                        globalStore.addressViewModel.selectedMatch.context.split(
+                          ', ',
+                        )[1],
+                    }
+                  }
+
+                  // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
+                  if (!globalStore.estimateViewModel.hasResults) {
+                    const fetchEstimatePayload = {
+                      ...globalStore.addressViewModel.options,
+                      parcel: {
+                        apn: globalStore.addressViewModel.parcelDetails.apn,
+                        jurisdiction:
+                          globalStore.addressViewModel.parcelDetails
+                            .jurisdiction,
+                      },
+                      address: {
+                        address:
+                          globalStore.addressViewModel.parcelDetails.address,
+                        city: globalStore.addressViewModel.parcelDetails.city,
+                        state: globalStore.addressViewModel.parcelDetails.state,
+                        zip: globalStore.addressViewModel.parcelDetails.zip,
+                      },
+                    }
+
+                    const estimateResults =
+                      await fetchEstimateResults(fetchEstimatePayload)
+
+                    globalStore.estimateViewModel.jurisdiction =
+                      estimateResults.jurisdiction
+                    globalStore.estimateViewModel.estimate =
+                      estimateResults.estimate
+                  }
+
+                  // Transition state according to desired logic for successful address processing
+                  globalStore.flowState.transition('SUCCESS')
+
+                  // Moved to transition effect
+                  // trackingService.track('Address Submission Succeeded')
+                }
+              } catch (error) {
+                // Transition state according to desired logic for non-blocking error
+                globalStore.flowState.transition('NON_BLOCKING_ERROR')
+
+                // globalStore.flowState.transition('SUCCESS')
+
+                // Moved to new non-blocking error transition effect
+                // trackingService.track('Address Submission Errors (Non-Blocking)')
+              }
+            },
+          ],
+        },
       },
       addressFormError: {
         transitions: {
           ...submitAddressTransition,
         },
         effects: {
-          onEntry: [() => {}],
           onExit: [
             () => {
               // Clear out any existing error message
@@ -137,6 +229,77 @@ function createDefaultGetOfferFlowStateMachine(globalStore, trackingService) {
             target: 'modalAddressFormError',
           },
           ...exitTransition,
+        },
+        effects: {
+          onEntry: [
+            async () => {
+              // Process the submitted address, and transition the state accordingly
+              try {
+                // If the contact has already been submitted, skip the contact form and transition directly to the estimate results
+                // Otherwise, transition to the contact form
+                if (
+                  globalStore.addressViewModel.hasParcelDetails &&
+                  globalStore.estimateViewModel.hasResults &&
+                  globalStore.contactViewModel.isSubmitted
+                ) {
+                  globalStore.flowState.transition('SKIP_CONTACT')
+                } else {
+                  // If the parcel details haven't already been acquired for the address, fetch them from the Regrid API
+                  if (!globalStore.addressViewModel.hasParcelDetails) {
+                    // Combine appropriate fields from Regrid Typeahead and Parcel APIs into a single object
+                    globalStore.addressViewModel.parcelDetails = {
+                      ...(await fetchParcelDetails(
+                        globalStore.addressViewModel.selectedMatch.ll_uuid,
+                      )),
+                      address:
+                        globalStore.addressViewModel.selectedMatch.address,
+                      city: globalStore.addressViewModel.selectedMatch.context.split(
+                        ', ',
+                      )[0],
+                      state:
+                        globalStore.addressViewModel.selectedMatch.context.split(
+                          ', ',
+                        )[1],
+                    }
+                  }
+
+                  // If the estimate results haven't already been acquired for the address, fetch them from our estimate endpoint
+                  if (!globalStore.estimateViewModel.hasResults) {
+                    const fetchEstimatePayload = {
+                      ...globalStore.addressViewModel.options,
+                      parcel: {
+                        apn: globalStore.addressViewModel.parcelDetails.apn,
+                        jurisdiction:
+                          globalStore.addressViewModel.parcelDetails
+                            .jurisdiction,
+                      },
+                      address: {
+                        address:
+                          globalStore.addressViewModel.parcelDetails.address,
+                        city: globalStore.addressViewModel.parcelDetails.city,
+                        state: globalStore.addressViewModel.parcelDetails.state,
+                        zip: globalStore.addressViewModel.parcelDetails.zip,
+                      },
+                    }
+
+                    const estimateResults =
+                      await fetchEstimateResults(fetchEstimatePayload)
+
+                    globalStore.estimateViewModel.jurisdiction =
+                      estimateResults.jurisdiction
+                    globalStore.estimateViewModel.estimate =
+                      estimateResults.estimate
+                  }
+
+                  // Transition state according to desired logic for successful address processing
+                  globalStore.flowState.transition('SUCCESS')
+                }
+              } catch (error) {
+                // Transition state according to desired logic for non-blocking error
+                globalStore.flowState.transition('NON_BLOCKING_ERROR')
+              }
+            },
+          ],
         },
       },
       modalAddressFormError: {
