@@ -5,8 +5,10 @@
  */
 
 /**
- * Given a payload with the parcel `apn` and `jurisdiction`, submits request to our Make.com Get Estimate endpoint
- * Endpoint is integrated with our Airtable offer database to look up and return estimate values, and jurisdiction status
+ * Submits request to our Make.com Get Estimate endpoint with the provided address and parcel details.
+ * Endpoint is integrated with our offer database to look up jurisdiction status and estimate values.
+ * @param {Object} payload - Object with parcel details needed for estimate generation.
+ * @returns {Promise<Object>} Promise that resolves to an object with jurisdiction status and estimate values.
  */
 async function fetchEstimateResults(payload) {
   const request = new Request(
