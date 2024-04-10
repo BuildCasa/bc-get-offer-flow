@@ -43,7 +43,7 @@ function createFlowState(stateMachine, trackingService, initialValue) {
         !transitionTarget ||
         !targetStateDef
       ) {
-        trackingService.track('Invalid State Transition Triggered', {
+        trackingService.track('Invalid State Transition', {
           current_state_str: currentState,
           event_str: event,
         })
@@ -68,6 +68,11 @@ function createFlowState(stateMachine, trackingService, initialValue) {
   }
 }
 
+/**
+ * Helper function to run a series of effects (functions) provided by the state machine definitions.
+ * @param {Function[]} effects - List of effects to run.
+ * @returns {void}
+ */
 function runEffects(effects) {
   if (effects && effects.length) {
     effects.forEach((effect) => {
