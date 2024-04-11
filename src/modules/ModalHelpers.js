@@ -1,25 +1,10 @@
 /*
  * ----------------------------------------------------------------
- * Imports
+ * Functions
  * ----------------------------------------------------------------
  */
-import Alpine from 'alpinejs'
-import { trackEvent } from './LegacyTracking'
-
-/**
- * ----------------------------------------------------------------
- * createModalHelpers
- * ----------------------------------------------------------------
- * Creates and returns reference to an Alpine store for modalHelpers
- * Which help control the UX for the modal-based implementation of the Get Offer flow
- * Centralizes some more complex expressions to make Webflow dev safer and more convenient
- * Can be accessed in HTML via directive attribute values w/ `$store.modalHelpers`
- *
- * - iOpen: Getter, that returns true if modal should be displayed based on current flowState, generally bound via `x-show`
- * - handleModalClose: Function, that triggers the flowStateMachine EXIT transition if called, bound UI events via `x-on:click` or `@click`
- */
-function createModalHelpers(globalStore) {
-  Alpine.store('modalHelpers', {
+function createModalHelpers(globalStore, trackingService) {
+  return {
     get isOpen() {
       return (
         globalStore.flowState.value == 'modalAddressForm' ||
@@ -34,10 +19,7 @@ function createModalHelpers(globalStore) {
       )
     },
     handleModalFlowStart(cta = null) {
-      globalStore.flowState.value = globalStore.flowStateMachine.transition(
-        globalStore.flowState.value,
-        'START_MODAL_FLOW',
-      )
+      globalStore.flowState.transition('START_MODAL_FLOW')
 
       let eventProperties = {}
       if (cta) {
@@ -46,7 +28,7 @@ function createModalHelpers(globalStore) {
         }
       }
 
-      trackEvent('Modal Get Offer Flow Opened', globalStore, eventProperties)
+      trackingService.track('Modal Get Offer Flow Opened', eventProperties)
     },
     handleModalClose() {
       // TODO: Move this logic into the flowStateMachine
@@ -70,18 +52,12 @@ function createModalHelpers(globalStore) {
       }
 
       if (proceedWithExit) {
-        globalStore.flowState.value = globalStore.flowStateMachine.transition(
-          globalStore.flowState.value,
-          'EXIT',
-        )
+        globalStore.flowState.transition('EXIT')
 
-        trackEvent('Get Offer Modal Closed', globalStore)
+        trackingService.track('Get Offer Modal Closed')
       }
     },
-  })
-
-  // Add a reference to the new modalHelpers Alpine store to the global store
-  globalStore.modalHelpers = Alpine.store('modalHelpers')
+  }
 }
 
 /*
