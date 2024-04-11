@@ -1,5 +1,5 @@
-import { m as l, c as u, a as s, b as c, d as m, e as d, f as h, g as S, h as w, i as V } from "./bc-shared-_dUhes1h.js";
-function f() {
+import { m as n, c as s, a as c, b as m, d, e as h, f as S, g as w, h as f, i as V, j as p } from "./bc-shared-Y23lCOYd.js";
+function M() {
   return {
     homeValue: null,
     homeSize: null,
@@ -24,10 +24,10 @@ function f() {
       }).format(a), a = a !== "0" ? a : "", a;
     },
     calculateResult: function() {
-      const t = this.convertFieldValueToNumber(this.homeValue), r = this.convertFieldValueToNumber(this.homeSize), a = this.convertFieldValueToNumber(this.aduCost), n = this.convertFieldValueToNumber(this.aduSize);
-      if (!t || !r || !n)
+      const t = this.convertFieldValueToNumber(this.homeValue), r = this.convertFieldValueToNumber(this.homeSize), a = this.convertFieldValueToNumber(this.aduCost), u = this.convertFieldValueToNumber(this.aduSize);
+      if (!t || !r || !u)
         return "--";
-      let i = t / r * n - a - 5e4;
+      let i = t / r * u - a - 5e4;
       return i = i < 1e4 ? 1e4 : Math.ceil(i / 1e4) * 1e4, i = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
@@ -40,37 +40,37 @@ function f() {
     }
   };
 }
-window.Alpine = l;
-const o = V(l), e = {};
-M();
-l.start();
-function M() {
-  e.addressViewModel = o.createStore(
+window.Alpine = n;
+const o = f(n), e = {}, l = p(window.FS, e);
+F();
+n.start();
+function F() {
+  e.flowState = o.createStore(
+    "flowState",
+    s(
+      V(e, l),
+      l
+    )
+  ), e.addressViewModel = o.createStore(
     "addressViewModel",
-    u(e)
+    c(e, l)
   ), e.contactViewModel = o.createStore(
     "contactViewModel",
-    s(e)
+    m(e.flowState)
   ), e.estimateViewModel = o.createStore(
     "estimateViewModel",
-    c(e)
+    d(e.flowState)
   ), e.personalizationViewModel = o.createStore(
     "personalizationViewModel",
-    m()
+    h()
   ), e.experimentationViewModel = o.createStore(
     "experimentationViewModel",
-    d()
+    S()
   ), e.aduCalculatorViewModel = o.createStore(
     "aduCalculatorViewModel",
-    f()
-  ), e.flowStateMachine = o.createStore(
-    "flowStateMachine",
-    h(e)
-  ), e.flowState = o.createStore(
-    "flowState",
-    S(e)
+    M()
   ), e.modalHelpers = o.createStore(
     "modalHelpers",
-    w(e)
+    w(e, l)
   );
 }
