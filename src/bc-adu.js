@@ -72,7 +72,7 @@ function initStores() {
   )
   $store.contactViewModel = $storeFactory.createStore(
     'contactViewModel',
-    createContactViewModel($store, $trackingService),
+    createContactViewModel($store.flowState),
   )
   $store.estimateViewModel = $storeFactory.createStore(
     'estimateViewModel',

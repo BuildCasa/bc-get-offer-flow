@@ -29,9 +29,33 @@ async function fetchEstimateResults(payload) {
   return await response.json()
 }
 
+/**
+ * Submits request to our Make.com Create Lead endpoint with the provided contact info.
+ * Endpoint is integrated with our Hubspot account to create/update Contacts in that system.
+ * @param {Object} payload - Object with contact info fields needed to create lead.
+ * @returns {Promise<Object>} Promise that resolves with succesful submission.
+ */
+async function createLead(payload) {
+  const request = new Request(
+    'https://hook.us1.make.com/7pyo51sq4xxjbpz14t03uomufndj45ut',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    },
+  )
+
+  const response = await fetch(request)
+  if (!response.ok) {
+    throw new Error('Network response was not OK')
+  }
+}
+
 /*
  * ----------------------------------------------------------------
  * Exports
  * ----------------------------------------------------------------
  */
-export { fetchEstimateResults }
+export { fetchEstimateResults, createLead }
