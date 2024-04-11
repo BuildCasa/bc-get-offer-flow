@@ -3,7 +3,7 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import { loadScript } from './ExternalScripts'
+import { loadScript } from './utils/ExternalScripts'
 
 /*
  * ----------------------------------------------------------------
