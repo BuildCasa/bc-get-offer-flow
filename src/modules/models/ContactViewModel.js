@@ -3,7 +3,7 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import { formatPhoneNumber } from './utils/PhoneUtils'
+import { formatPhoneNumber } from '../utils/PhoneUtils'
 
 // TODO: Create JSDoc interface for a ContactViewModel.
 

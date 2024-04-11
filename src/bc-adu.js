@@ -14,16 +14,20 @@
  * ----------------------------------------------------------------
  */
 import Alpine from 'alpinejs'
-import { createAlpineStoreFactory } from './modules/AlpineStoreFactory'
+import { createAlpineStoreFactory } from './modules/services/AlpineStoreService'
+
 import { createFullStoryTrackingService } from './modules/services/FullStoryTrackingService'
-import { createAddressViewModel } from './modules/AddressViewModel'
-import { createContactViewModel } from './modules/ContactViewModel'
-import { createEstimateViewModel } from './modules/EstimateViewModel'
-import { createPersonalizationViewModel } from './modules/PersonalizationViewModel'
-import { createExperimentationViewModel } from './modules/ExperimentationViewModel'
-import { createAduCalculatorViewModel } from './modules/AduCalculatorViewModel'
-import { createFlowState } from './modules/FlowState'
-import { createDefaultGetOfferFlowStateMachine } from './modules/DefaultGetOfferFlowStateMachine'
+
+import { createFlowState } from './modules/flows/FlowState'
+import { createDefaultGetOfferFlowStateMachine } from './modules/flows/DefaultGetOfferFlowStateMachine'
+
+import { createAddressViewModel } from './modules/models/AddressViewModel'
+import { createContactViewModel } from './modules/models/ContactViewModel'
+import { createEstimateViewModel } from './modules/models/EstimateViewModel'
+import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
+import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
+import { createAduCalculatorViewModel } from './modules/models/AduCalculatorViewModel'
+
 import { createModalHelpers } from './modules/ModalHelpers'
 
 /*

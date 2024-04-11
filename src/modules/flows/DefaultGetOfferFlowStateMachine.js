@@ -3,13 +3,13 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import { fetchParcelDetails } from './services/RegridAddressService.js'
-import { fetchEstimateResults } from './services/MakeBCBackendService.js'
-import { createLead } from './services/MakeBCBackendService'
+import { fetchParcelDetails } from '../services/RegridAddressService.js'
+import { fetchEstimateResults } from '../services/MakeBCBackendService.js'
+import { createLead } from '../services/MakeBCBackendService.js'
 
-import { validateEmailAddress } from './utils/EmailUtils'
-import { validatePhoneNumber } from './utils/PhoneUtils'
-import { loadScript } from './utils/ExternalScriptsUtils'
+import { validateEmailAddress } from '../utils/EmailUtils.js'
+import { validatePhoneNumber } from '../utils/PhoneUtils.js'
+import { loadScript } from '../utils/ExternalScriptsUtils.js'
 
 /*
  * ----------------------------------------------------------------
