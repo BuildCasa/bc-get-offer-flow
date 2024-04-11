@@ -3,7 +3,7 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import { fetchAddressMatches } from './RegridAddressService.js'
+import { fetchAddressMatches } from './services/RegridAddressService.js'
 
 // TODO: Create JSDoc interface for an AddressViewModel.
 

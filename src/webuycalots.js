@@ -15,7 +15,7 @@
  */
 import Alpine from 'alpinejs'
 import { createAlpineStoreFactory } from './modules/AlpineStoreFactory'
-import { createFullStoryTrackingService } from './modules/FullStoryTrackingService'
+import { createFullStoryTrackingService } from './modules/services/FullStoryTrackingService'
 import { createAddressViewModel } from './modules/AddressViewModel'
 import { createContactViewModel } from './modules/ContactViewModel'
 import { createEstimateViewModel } from './modules/EstimateViewModel'

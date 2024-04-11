@@ -3,8 +3,8 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import { fetchParcelDetails } from './RegridAddressService.js'
-import { fetchEstimateResults } from './MakeBuildCasaBackendService.js'
+import { fetchParcelDetails } from './services/RegridAddressService.js'
+import { fetchEstimateResults } from './services/MakeBuildCasaBackendService.js'
 
 /*
  * ----------------------------------------------------------------
