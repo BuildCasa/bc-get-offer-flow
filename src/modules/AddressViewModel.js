@@ -21,6 +21,7 @@ import { fetchAddressMatches } from './RegridAddressService.js'
  */
 function createAddressViewModel(globalStore, trackingService) {
   return {
+    // Instance properties
     inputValue: '',
     matches: [],
     keyboardNavIndex: -1,
@@ -124,6 +125,7 @@ function createAddressViewModel(globalStore, trackingService) {
         this.errorMessage =
           'There was an error finding your address. Please try again, or contact us for help.'
 
+        // Transition state according to desired logic for address errors
         globalStore.flowState.transition('ERROR')
       }
     },
@@ -210,7 +212,7 @@ function createAddressViewModel(globalStore, trackingService) {
       // Set options for address submission
       this.options = options
 
-      // Transition state according to desired logic for address submission
+      // Transition state according to desired logic for address submissions
       globalStore.flowState.transition('SUBMIT_ADDRESS')
     },
   }

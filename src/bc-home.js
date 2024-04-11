@@ -55,6 +55,15 @@ Alpine.start()
  * ----------------------------------------------------------------
  */
 function initStores() {
+  // Create flow state store
+  $store.flowState = $storeFactory.createStore(
+    'flowState',
+    createFlowState(
+      createDefaultGetOfferFlowStateMachine($store, $trackingService),
+      $trackingService,
+    ),
+  )
+
   // Create viewModel stores
   $store.addressViewModel = $storeFactory.createStore(
     'addressViewModel',
@@ -66,7 +75,7 @@ function initStores() {
   )
   $store.estimateViewModel = $storeFactory.createStore(
     'estimateViewModel',
-    createEstimateViewModel($store, $trackingService),
+    createEstimateViewModel($store.flowState),
   )
   $store.personalizationViewModel = $storeFactory.createStore(
     'personalizationViewModel',
@@ -75,15 +84,6 @@ function initStores() {
   $store.experimentationViewModel = $storeFactory.createStore(
     'experimentationViewModel',
     createExperimentationViewModel(),
-  )
-
-  // Create flow state store
-  $store.flowState = $storeFactory.createStore(
-    'flowState',
-    createFlowState(
-      createDefaultGetOfferFlowStateMachine($store, $trackingService),
-      $trackingService,
-    ),
   )
 
   // Create UI helper stores

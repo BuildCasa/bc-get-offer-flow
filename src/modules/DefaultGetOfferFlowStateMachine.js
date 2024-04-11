@@ -138,7 +138,7 @@ function createDefaultGetOfferFlowStateMachine(globalStore, trackingService) {
         globalStore.flowState.transition('SUCCESS')
       }
     } catch (error) {
-      // Transition state according to desired logic for non-blocking error
+      // Transition state according to desired logic for non-blocking errors
       globalStore.flowState.transition('NON_BLOCKING_ERROR')
     }
   }
@@ -259,9 +259,23 @@ function createDefaultGetOfferFlowStateMachine(globalStore, trackingService) {
         transitions: {
           SCHEDULE: {
             target: 'scheduleConsultation',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Schedule Consultation Clicked')
+                },
+              ],
+            },
           },
           REQUEST_COMMUNITY: {
             target: 'requestedCommunity',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Community Requested')
+                },
+              ],
+            },
           },
           ...exitTransition,
         },
