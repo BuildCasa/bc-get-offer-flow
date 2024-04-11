@@ -35,7 +35,7 @@ function createAddressViewModel(globalStore, trackingService) {
     errorMessage: '',
 
     /**
-     * Initializes the address view model properties.
+     * Initializes the AddressViewModel instance properties.
      * Run automatically by Alpine, but can also be called manually to reset the view model state.
      * Need to call this manually on store creation if we stop using Alpine as our UI library.
      * @returns {void}

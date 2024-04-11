@@ -111,8 +111,9 @@ function createFullStoryTrackingService(FS, globalStore) {
       }
 
       // Include active experiment variations
-      eventProperties.active_experiment_variations_strs =
-        globalStore.experimentationViewModel.getFullStoryActiveExperimentVariationsEventPropertyValue()
+      eventProperties.active_experiment_variations_strs = Object.entries(
+        globalStore.experimentationViewModel.activeExperimentVariations,
+      ).map(([experiment, variation]) => `${experiment}:${variation}`)
 
       return eventProperties
     },
