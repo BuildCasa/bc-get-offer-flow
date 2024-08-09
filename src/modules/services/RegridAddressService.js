@@ -1,5 +1,15 @@
 /*
  * ----------------------------------------------------------------
+ * Constants
+ * ----------------------------------------------------------------
+ */
+const REGRID_TYPEAHEAD_API_URL = 'https://app.regrid.com/api/v1/typeahead.json'
+const REGRID_PARCEL_API_URL = 'https://app.regrid.com/api/v1/parcel/'
+const REGRID_API_TOKEN =
+  'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8'
+
+/*
+ * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
@@ -12,9 +22,8 @@
  */
 async function fetchAddressMatches(query) {
   // Prepare request to the Regrid Typeahead API
-  const url = 'https://app.regrid.com/api/v1/typeahead.json'
-  const token =
-    '1SnpL7AQekjA4mH2vqUmkGm9AAfQxi_6mxwdm4qDzo_C-xSTx9z3pd9rTsRWDWV4'
+  const url = REGRID_TYPEAHEAD_API_URL
+  const token = REGRID_API_TOKEN
 
   const request = new Request(`${url}/?token=${token}&query=${query}`, {
     method: 'GET',
@@ -107,9 +116,8 @@ function compareMatchesScores(a, b) {
  * @returns {Object} Object with parcel details needed for estimate generation.
  */
 async function fetchParcelDetails(id) {
-  const parcelLookupUrl = 'https://app.regrid.com/api/v1/parcel/'
-  const parcelLookupToken =
-    '1SnpL7AQekjA4mH2vqUmkGm9AAfQxi_6mxwdm4qDzo_C-xSTx9z3pd9rTsRWDWV4'
+  const parcelLookupUrl = REGRID_PARCEL_API_URL
+  const parcelLookupToken = REGRID_API_TOKEN
   const parcelLookupRequest = new Request(
     `${parcelLookupUrl}${id}.json?token=${parcelLookupToken}&return_custom=false`,
     {
