@@ -19,7 +19,7 @@ import { createAlpineStoreFactory } from './modules/services/AlpineStoreService'
 import { createFullStoryTrackingService } from './modules/services/FullStoryTrackingService'
 
 import { createFlowState } from './modules/flows/FlowState'
-import { createDefaultGetOfferFlowStateMachine } from './modules/flows/DefaultGetOfferFlowStateMachine'
+import { createFlowStateMachine } from './modules/flows/DefaultGetOfferFlowStateMachine'
 
 import { createAddressViewModel } from './modules/models/AddressViewModel'
 import { createContactViewModel } from './modules/models/ContactViewModel'
@@ -63,7 +63,7 @@ function initStores() {
   $store.flowState = $storeFactory.createStore(
     'flowState',
     createFlowState(
-      createDefaultGetOfferFlowStateMachine($store, $trackingService),
+      createFlowStateMachine($store, $trackingService),
       $trackingService,
     ),
   )

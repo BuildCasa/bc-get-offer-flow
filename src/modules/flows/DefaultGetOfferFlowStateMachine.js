@@ -17,7 +17,7 @@ import { loadScript } from '../utils/ExternalScriptsUtils.js'
  * ----------------------------------------------------------------
  */
 
-function createDefaultGetOfferFlowStateMachine(globalStore, trackingService) {
+function createFlowStateMachine(globalStore, trackingService) {
   // Create transition definition objects for *shared* transition events / paths
   const submitAddressTransition = {
     SUBMIT_ADDRESS: {
@@ -523,4 +523,4 @@ function createDefaultGetOfferFlowStateMachine(globalStore, trackingService) {
  * Exports
  * ----------------------------------------------------------------
  */
-export { createDefaultGetOfferFlowStateMachine }
+export { createFlowStateMachine }
