@@ -16,7 +16,7 @@
 import Alpine from 'alpinejs'
 import { createAlpineStoreFactory } from './modules/services/AlpineStoreService'
 
-import { createFullStoryTrackingService } from './modules/services/FullStoryTrackingService'
+import { createTrackingService } from './modules/services/FullStoryTrackingService'
 
 import { createFlowState } from './modules/flows/FlowState'
 import { createFlowStateMachine } from './modules/flows/DefaultGetOfferFlowStateMachine'
@@ -45,7 +45,7 @@ const $storeFactory = createAlpineStoreFactory(Alpine)
 const $store = {}
 
 // Create global variable to hold reference to the TrackingService for event tracking and analytics
-const $trackingService = createFullStoryTrackingService(window.FS, $store)
+const $trackingService = createTrackingService(window.FS, $store)
 
 // Initialize the stores with custom state and business logic that powers the site interactivity
 initStores()
