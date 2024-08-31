@@ -36,7 +36,7 @@
       >
       <button
         class="px-4 py-2 rounded bg-emerald-500 text-white font-semibold"
-        @click="$store.modalHelpers.handleModalFlowStart()"
+        @click="$store.flowUIHelpers.modal.handleModalFlowStart()"
       >
         Get Offer
       </button>
@@ -112,10 +112,10 @@
     <div
       class="flex flex-col items-stretch justify-start fixed top-0 left-0 right-0 bottom-0 z-10 h-screen overflow-y-scroll bg-black bg-opacity-80"
       x-data=""
-      x-show="$store.modalHelpers.isOpen"
+      x-show="$store.flowUIHelpers.modal.isOpen"
       x-transition
       x-cloak
-      @click="$store.modalHelpers.handleModalClose()"
+      @click="$store.flowUIHelpers.modal.handleModalClose()"
     >
       <!-- Modal Address Form -->
       <div
@@ -129,7 +129,7 @@
         >
           <button
             class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700"
-            @click="$store.modalHelpers.handleModalClose()"
+            @click="$store.flowUIHelpers.modal.handleModalClose()"
           >
             &#x2715;
           </button>
@@ -210,7 +210,7 @@
         >
           <button
             class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700"
-            @click="$store.modalHelpers.handleModalClose()"
+            @click="$store.flowUIHelpers.modal.handleModalClose()"
           >
             &#x2715;
           </button>
@@ -319,7 +319,7 @@
         >
           <button
             class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700"
-            @click="$store.modalHelpers.handleModalClose()"
+            @click="$store.flowUIHelpers.modal.handleModalClose()"
           >
             &#x2715;
           </button>
@@ -366,7 +366,7 @@
         >
           <button
             class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700"
-            @click="$store.modalHelpers.handleModalClose()"
+            @click="$store.flowUIHelpers.modal.handleModalClose()"
           >
             &#x2715;
           </button>
@@ -390,7 +390,7 @@
         >
           <button
             class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700"
-            @click="$store.modalHelpers.handleModalClose()"
+            @click="$store.flowUIHelpers.modal.handleModalClose()"
           >
             &#x2715;
           </button>
@@ -423,7 +423,7 @@
         >
           <button
             class="absolute top-0 left-0 w-12 h-12 flex items-center justify-center text-xl font-black text-slate-300 hover:text-slate-700 focus:text-slate-700"
-            @click="$store.modalHelpers.handleModalClose()"
+            @click="$store.flowUIHelpers.modal.handleModalClose()"
           >
             &#x2715;
           </button>

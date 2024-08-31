@@ -19,7 +19,10 @@ import { createStoreFactory } from './modules/services/AlpineStoreService'
 import { createTrackingService } from './modules/services/FullStoryTrackingService'
 
 import { createFlowState } from './modules/flows/FlowState'
-import { createFlowStateMachine } from './modules/flows/DefaultGetOfferFlowStateMachine'
+import {
+  createFlowStateMachine,
+  createFlowUIHelpers,
+} from './modules/flows/DefaultGetOfferFlow'
 
 import { createAddressViewModel } from './modules/models/AddressViewModel'
 import { createContactViewModel } from './modules/models/ContactViewModel'
@@ -27,8 +30,6 @@ import { createEstimateViewModel } from './modules/models/EstimateViewModel'
 import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
 import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
 import { createAduCalculatorViewModel } from './modules/models/AduCalculatorViewModel'
-
-import { createModalHelpers } from './modules/ModalHelpers'
 
 /*
  * ----------------------------------------------------------------
@@ -60,13 +61,17 @@ Alpine.start()
  * ----------------------------------------------------------------
  */
 function initStores() {
-  // Create flow state store
+  // Create flow state and UI helpers stores
   $store.flowState = $storeFactory.createStore(
     'flowState',
     createFlowState(
       createFlowStateMachine($store, $trackingService),
       $trackingService,
     ),
+  )
+  $store.flowUIHelpers = $storeFactory.createStore(
+    'flowUIHelpers',
+    createFlowUIHelpers($store, $trackingService),
   )
 
   // Create viewModel stores
@@ -93,11 +98,5 @@ function initStores() {
   $store.aduCalculatorViewModel = $storeFactory.createStore(
     'aduCalculatorViewModel',
     createAduCalculatorViewModel(),
-  )
-
-  // Create UI helper stores
-  $store.modalHelpers = $storeFactory.createStore(
-    'modalHelpers',
-    createModalHelpers($store, $trackingService),
   )
 }
