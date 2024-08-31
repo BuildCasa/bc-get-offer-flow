@@ -2391,6 +2391,28 @@ function qi(e, t) {
 }
 function Ui(e, t) {
   return {
+    modal: {
+      get isOpen() {
+        return e.flowState.value == "modalAddressForm" || e.flowState.value == "modalAddressFormProcessing" || e.flowState.value == "modalAddressFormError" || e.flowState.value == "contactForm" || e.flowState.value == "contactFormProcessing" || e.flowState.value == "contactFormError" || e.flowState.value == "estimateResults" || e.flowState.value == "scheduleConsultation" || e.flowState.value == "requestedCommunity";
+      },
+      handleModalFlowStart(n = null) {
+        e.flowState.transition("START_MODAL_FLOW");
+        let r = {};
+        n && (r = {
+          cta_str: n
+        }), t.track("Modal Get Offer Flow Opened", r);
+      },
+      handleModalClose() {
+        let n = !0;
+        e.flowState.value == "contactForm" && e.contactViewModel.hasAnyContactDetails && (n = confirm(
+          "Are you sure you want to stop before you've seen how much your extra lot space could be worth?"
+        )), e.flowState.value == "contactFormProcessing" && (n = !1), n && (e.flowState.transition("EXIT"), t.track("Get Offer Modal Closed"));
+      }
+    }
+  };
+}
+function Ji(e, t) {
+  return {
     // Instance properties
     inputValue: "",
     matches: [],
@@ -2480,7 +2502,7 @@ function Ui(e, t) {
     }
   };
 }
-function Ji(e) {
+function Yi(e) {
   return {
     // Instance properties
     firstName: "",
@@ -2533,7 +2555,7 @@ function Ji(e) {
     }
   };
 }
-function Yi(e) {
+function Qi(e) {
   return {
     // Instance properties
     jurisdiction: {
@@ -2620,7 +2642,7 @@ function Yi(e) {
     }
   };
 }
-function Qi() {
+function Zi() {
   return {
     userGeo: {},
     marketsData: {},
@@ -3567,7 +3589,7 @@ function Wi(e, t) {
       return t[n].bcPhoneNumber ?? null;
   return null;
 }
-function Zi() {
+function Xi() {
   return {
     // Instance properties
     activeExperimentVariations: {},
@@ -3604,26 +3626,6 @@ function Zi() {
      */
     clearActiveExperiment(e) {
       this.activeExperimentVariations[e] && delete this.activeExperimentVariations[e];
-    }
-  };
-}
-function Xi(e, t) {
-  return {
-    get isOpen() {
-      return e.flowState.value == "modalAddressForm" || e.flowState.value == "modalAddressFormProcessing" || e.flowState.value == "modalAddressFormError" || e.flowState.value == "contactForm" || e.flowState.value == "contactFormProcessing" || e.flowState.value == "contactFormError" || e.flowState.value == "estimateResults" || e.flowState.value == "scheduleConsultation" || e.flowState.value == "requestedCommunity";
-    },
-    handleModalFlowStart(n = null) {
-      e.flowState.transition("START_MODAL_FLOW");
-      let r = {};
-      n && (r = {
-        cta_str: n
-      }), t.track("Modal Get Offer Flow Opened", r);
-    },
-    handleModalClose() {
-      let n = !0;
-      e.flowState.value == "contactForm" && e.contactViewModel.hasAnyContactDetails && (n = confirm(
-        "Are you sure you want to stop before you've seen how much your extra lot space could be worth?"
-      )), e.flowState.value == "contactFormProcessing" && (n = !1), n && (e.flowState.transition("EXIT"), t.track("Get Offer Modal Closed"));
     }
   };
 }
