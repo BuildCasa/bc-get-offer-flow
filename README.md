@@ -13,6 +13,7 @@ Each web property should have an entry script file located in the `src` director
 │   ├── bc-adu.js
 │   ├── bc-home.js
 │   ├── bc-nestegg.js
+│   ├── th-home.js
 │   ├── webuycalots.js
 ```
 
@@ -42,6 +43,10 @@ const ENTRY_FILES = [
     inputPath: './src/webuycalots.js',
     outputName: 'webuycalots',
   },
+  {
+    inputPath: './src/th-home.js',
+    outputName: 'th-home',
+  },
 ]
 ```
 
@@ -56,7 +61,8 @@ npm run build
 │   ├── bc-adu.js
 │   ├── bc-home.js
 │   ├── bc-nestegg.js
-│   ├── bc-shared-1bUUMsGq.js
+│   ├── th-home.js
+│   ├── shared-1bUUMsGq.js
 │   └── webuycalots.js
 ```
 
@@ -74,7 +80,7 @@ That new scripts can then be imported directly into their BuildCasa sites (in We
 
 ## Webflow / HTML Integration
 
-### AplineJS
+### AlpineJS
 
 [AlpineJS](https://alpinejs.dev/start-here) is the only external code / development dependency, and the lightweight frontend framework that makes this possible.
 
