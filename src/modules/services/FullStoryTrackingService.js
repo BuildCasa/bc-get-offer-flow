@@ -50,7 +50,10 @@ function createTrackingService(FS, globalStore) {
       // Include address-related properties
       // If parcel details are available, use them to populate address properties
       // Else, if selected match is available, use it to populate address properties
-      if (globalStore.addressViewModel.hasParcelDetails) {
+      if (
+        globalStore.addressViewModel &&
+        globalStore.addressViewModel.hasParcelDetails
+      ) {
         const parcelDetailsProperties = {
           address_str: globalStore.addressViewModel.parcelDetails.address,
           address_city_str: globalStore.addressViewModel.parcelDetails.city,
@@ -64,7 +67,10 @@ function createTrackingService(FS, globalStore) {
           ...eventProperties,
           ...parcelDetailsProperties,
         }
-      } else if (globalStore.addressViewModel.selectedMatch) {
+      } else if (
+        globalStore.addressViewModel &&
+        globalStore.addressViewModel.selectedMatch
+      ) {
         const selectedMatchProperties = {
           address_str: globalStore.addressViewModel.selectedMatch.address,
           address_context_str:
@@ -80,7 +86,10 @@ function createTrackingService(FS, globalStore) {
 
       // Include estimate-related properties
       // If estimate results are available, use them to populate estimate properties
-      if (globalStore.estimateViewModel.hasEstimateResults) {
+      if (
+        globalStore.estimateViewModel &&
+        globalStore.estimateViewModel.hasEstimateResults
+      ) {
         const estimateProperties = {
           jurisdiction_status_str:
             globalStore.estimateViewModel.jurisdiction.status,
@@ -95,7 +104,10 @@ function createTrackingService(FS, globalStore) {
 
       // Include contact-related properties
       // If contact details are available, use them to populate contact properties
-      if (globalStore.contactViewModel.hasAnyContactDetails) {
+      if (
+        globalStore.contactViewModel &&
+        globalStore.contactViewModel.hasAnyContactDetails
+      ) {
         const contactProperties = {
           contact_first_name_str: globalStore.contactViewModel.firstName,
           contact_last_name_str: globalStore.contactViewModel.lastName,
@@ -111,9 +123,14 @@ function createTrackingService(FS, globalStore) {
       }
 
       // Include active experiment variations
-      eventProperties.active_experiment_variations_strs = Object.entries(
-        globalStore.experimentationViewModel.activeExperimentVariations,
-      ).map(([experiment, variation]) => `${experiment}:${variation}`)
+      if (
+        globalStore.experimentationViewModel &&
+        globalStore.experimentationViewModel.activeExperimentVariations
+      ) {
+        eventProperties.active_experiment_variations_strs = Object.entries(
+          globalStore.experimentationViewModel.activeExperimentVariations,
+        ).map(([experiment, variation]) => `${experiment}:${variation}`)
+      }
 
       return eventProperties
     },
