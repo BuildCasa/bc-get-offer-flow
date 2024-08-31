@@ -14,12 +14,12 @@
  * ----------------------------------------------------------------
  */
 import Alpine from 'alpinejs'
-import { createAlpineStoreFactory } from './modules/services/AlpineStoreService'
+import { createStoreFactory } from './modules/services/AlpineStoreService'
 
-import { createFullStoryTrackingService } from './modules/services/FullStoryTrackingService'
+import { createTrackingService } from './modules/services/FullStoryTrackingService'
 
 import { createFlowState } from './modules/flows/FlowState'
-import { createDefaultGetOfferFlowStateMachine } from './modules/flows/DefaultGetOfferFlowStateMachine'
+import { createFlowStateMachine } from './modules/flows/DefaultGetOfferFlowStateMachine'
 
 import { createAddressViewModel } from './modules/models/AddressViewModel'
 import { createContactViewModel } from './modules/models/ContactViewModel'
@@ -40,13 +40,13 @@ import { createModalHelpers } from './modules/ModalHelpers'
 window.Alpine = Alpine
 
 // Create Alpine store factory to simplify the creation of Alpine stores for state management
-const $storeFactory = createAlpineStoreFactory(Alpine)
+const $storeFactory = createStoreFactory(Alpine)
 
 // Create global variable to hold references to the stores
 const $store = {}
 
 // Create global variable to hold reference to the TrackingService for event tracking and analytics
-const $trackingService = createFullStoryTrackingService(window.FS, $store)
+const $trackingService = createTrackingService(window.FS, $store)
 
 // Initialize the stores with custom state and business logic that powers the site interactivity
 initStores()
@@ -64,7 +64,7 @@ function initStores() {
   $store.flowState = $storeFactory.createStore(
     'flowState',
     createFlowState(
-      createDefaultGetOfferFlowStateMachine($store, $trackingService),
+      createFlowStateMachine($store, $trackingService),
       $trackingService,
     ),
   )

@@ -1,4 +1,4 @@
-// TODO: Create JSDoc interfaces for FS, an abstract TrackingService, and FullStoryTrackingService.
+// TODO: Create JSDoc interfaces for FS, an abstract TrackingService.
 
 /*
  * ----------------------------------------------------------------
@@ -7,11 +7,11 @@
  */
 
 /**
- * Factory function for creating an FullStoryTrackingService instance.
+ * Factory function for creating an FullStory TrackingService instance.
  * @param {unknown} FS - Current FullStory instance.
- * @returns {FullStoryTrackingService} New FullStoryTrackingService instance.
+ * @returns {TrackingService} New FullStory TrackingService instance.
  */
-function createFullStoryTrackingService(FS, globalStore) {
+function createTrackingService(FS, globalStore) {
   return {
     /**
      * Tracks an event with FullStory.
@@ -125,4 +125,4 @@ function createFullStoryTrackingService(FS, globalStore) {
  * Exports
  * ----------------------------------------------------------------
  */
-export { createFullStoryTrackingService }
+export { createTrackingService }
