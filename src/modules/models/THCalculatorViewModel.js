@@ -20,7 +20,7 @@ function createTHCalculatorViewModel() {
     },
 
     get formattedCashBack() {
-      return getFormattedCurrencyValue(this.purchasePrice)
+      return getFormattedCurrencyValue(this.cashBack)
     },
   }
 }
