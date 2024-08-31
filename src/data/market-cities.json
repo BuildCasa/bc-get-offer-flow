@@ -1,6 +1,5 @@
 {
   "Sacramento": {
-    "bcPhoneNumber": "(916) 619-1442",
     "cities": [
       "Alta",
       "Auburn",
@@ -79,7 +78,6 @@
     ]
   },
   "Bay Area": {
-    "bcPhoneNumber": "(415) 941-5861",
     "cities": [
       "Alameda",
       "Albany",
@@ -360,7 +358,6 @@
     ]
   },
   "SoCal": {
-    "bcPhoneNumber": "(213) 322-1360",
     "cities": [
       "Auberry",
       "Big Creek",
