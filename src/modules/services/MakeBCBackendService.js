@@ -1,5 +1,15 @@
 /*
  * ----------------------------------------------------------------
+ * Constants
+ * ----------------------------------------------------------------
+ */
+const FETCH_ESTIMATE_API_URL =
+  'https://hook.us1.make.com/t9mrl5xiqcub1netw5sk7l1vjgoz3gt9'
+const CREATE_LEAD_API_URL =
+  'https://hook.us1.make.com/7pyo51sq4xxjbpz14t03uomufndj45ut'
+
+/*
+ * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
@@ -11,16 +21,13 @@
  * @returns {Promise<Object>} Promise that resolves to an object with jurisdiction status and estimate values.
  */
 async function fetchEstimateResults(payload) {
-  const request = new Request(
-    'https://hook.us1.make.com/t9mrl5xiqcub1netw5sk7l1vjgoz3gt9',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+  const request = new Request(FETCH_ESTIMATE_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  )
+    body: JSON.stringify(payload),
+  })
 
   const response = await fetch(request)
   if (!response.ok) {
@@ -36,16 +43,13 @@ async function fetchEstimateResults(payload) {
  * @returns {Promise<Object>} Promise that resolves with succesful submission.
  */
 async function createLead(payload) {
-  const request = new Request(
-    'https://hook.us1.make.com/7pyo51sq4xxjbpz14t03uomufndj45ut',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+  const request = new Request(CREATE_LEAD_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  )
+    body: JSON.stringify(payload),
+  })
 
   const response = await fetch(request)
   if (!response.ok) {
