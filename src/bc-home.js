@@ -14,7 +14,7 @@
  * ----------------------------------------------------------------
  */
 import Alpine from 'alpinejs'
-import { createAlpineStoreFactory } from './modules/services/AlpineStoreService'
+import { createStoreFactory } from './modules/services/AlpineStoreService'
 
 import { createTrackingService } from './modules/services/FullStoryTrackingService'
 
@@ -39,7 +39,7 @@ import { createModalHelpers } from './modules/ModalHelpers'
 window.Alpine = Alpine
 
 // Create Alpine store factory to simplify the creation of Alpine stores for state management
-const $storeFactory = createAlpineStoreFactory(Alpine)
+const $storeFactory = createStoreFactory(Alpine)
 
 // Create global variable to hold references to the stores
 const $store = {}

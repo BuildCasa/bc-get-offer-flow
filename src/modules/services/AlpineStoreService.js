@@ -1,4 +1,4 @@
-// TODO: Create JSDoc interfaces for an abstract StoreFactory, and AlpineStoreFactory.
+// TODO: Create JSDoc interfaces for an abstract StoreFactory.
 
 /*
  * ----------------------------------------------------------------
@@ -7,11 +7,11 @@
  */
 
 /**
- * Factory function for creating an AlpineStoreFactory instance.
+ * Factory function for creating an Alpine StoreFactory instance.
  * @param {import("alpinejs").Alpine} Alpine - Current Alpine.js instance.
- * @returns {AlpineStoreFactory} New AlpineStoreFactory instance.
+ * @returns {StoreFactory} New Alpine StoreFactory instance.
  */
-function createAlpineStoreFactory(Alpine) {
+function createStoreFactory(Alpine) {
   return {
     /**
      * Create, register, and return a reference to a global Alpine.Store.
@@ -31,4 +31,4 @@ function createAlpineStoreFactory(Alpine) {
  * Exports
  * ----------------------------------------------------------------
  */
-export { createAlpineStoreFactory }
+export { createStoreFactory }
