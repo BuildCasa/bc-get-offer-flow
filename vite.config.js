@@ -19,6 +19,10 @@ const ENTRY_FILES = [
     inputPath: './src/webuycalots.js',
     outputName: 'webuycalots',
   },
+  {
+    inputPath: './src/th-home.js',
+    outputName: 'th-home',
+  },
 ]
 
 export default defineConfig({
@@ -32,7 +36,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        chunkFileNames: 'bc-shared-[hash].js',
+        chunkFileNames: 'shared-[hash].js',
       },
     },
   },
