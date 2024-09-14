@@ -5,12 +5,6 @@
  */
 
 function createFlowStateMachine() {
-  const exitTransition = {
-    EXIT: {
-      target: 'default',
-    },
-  }
-
   // Create state machine store
   const stateMachineDefinition = {
     defaultState: 'default',
@@ -25,14 +19,35 @@ function createFlowStateMachine() {
           },
         },
       },
+      getStartedComplete: {
+        transitions: {
+          GET_STARTED: {
+            target: 'modalGetStartedComplete',
+          },
+          GET_DEMO: {
+            target: 'modalGetDemoForm',
+          },
+        },
+      },
       modalGetStartedForm: {
         transitions: {
-          ...exitTransition,
+          EXIT: {
+            target: 'default',
+          },
+        },
+      },
+      modalGetStartedComplete: {
+        transitions: {
+          EXIT: {
+            target: 'getStartedComplete',
+          },
         },
       },
       modalGetDemoForm: {
         transitions: {
-          ...exitTransition,
+          EXIT: {
+            target: 'default',
+          },
         },
       },
     },
@@ -47,6 +62,7 @@ function createFlowUIHelpers(globalStore, trackingService) {
       get isOpen() {
         return (
           globalStore.flowState.value == 'modalGetStartedForm' ||
+          globalStore.flowState.value == 'modalGetStartedComplete' ||
           globalStore.flowState.value == 'modalGetDemoForm'
         )
       },
