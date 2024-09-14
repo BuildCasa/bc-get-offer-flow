@@ -56,15 +56,29 @@ Alpine.start()
  * ----------------------------------------------------------------
  */
 function initStores() {
+  // Get the session URL and extract the flow_state query parameter
+  const sessionURL = new URL(window.location.href)
+  const getStartedURLParam = sessionURL.searchParams.get('get_started')
+  const getStartedFlowState =
+    getStartedURLParam && getStartedURLParam === 'complete'
+      ? 'modalGetStartedComplete'
+      : 'default'
+
   // Create flow state and UI helpers stores
   $store.flowState = $storeFactory.createStore(
     'flowState',
-    createFlowState(createFlowStateMachine(), $trackingService),
+    createFlowState(
+      createFlowStateMachine(),
+      $trackingService,
+      getStartedFlowState,
+    ),
   )
   $store.flowUIHelpers = $storeFactory.createStore(
     'flowUIHelpers',
     createFlowUIHelpers($store, $trackingService),
   )
+
+  console.log('Flow State:', $store.flowState.value)
 
   // Create viewModel stores
   $store.thCalculatorViewModel = $storeFactory.createStore(
