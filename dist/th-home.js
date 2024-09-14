@@ -1,10 +1,5 @@
-import { m as o, c as d, a as m, b as f } from "./shared-RMpFEyWF.js";
-function S() {
-  const t = {
-    EXIT: {
-      target: "default"
-    }
-  };
+import { m as n, c as m, a as u, b as S } from "./shared-RMpFEyWF.js";
+function f() {
   return {
     defaultState: "default",
     states: {
@@ -18,79 +13,105 @@ function S() {
           }
         }
       },
+      getStartedComplete: {
+        transitions: {
+          GET_STARTED: {
+            target: "modalGetStartedComplete"
+          },
+          GET_DEMO: {
+            target: "modalGetDemoForm"
+          }
+        }
+      },
       modalGetStartedForm: {
         transitions: {
-          ...t
+          EXIT: {
+            target: "default"
+          }
+        }
+      },
+      modalGetStartedComplete: {
+        transitions: {
+          EXIT: {
+            target: "getStartedComplete"
+          }
         }
       },
       modalGetDemoForm: {
         transitions: {
-          ...t
+          EXIT: {
+            target: "default"
+          }
         }
       }
     }
   };
 }
-function h(t, r) {
+function w(t, e) {
   return {
     modal: {
       get isOpen() {
-        return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetDemoForm";
+        return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetStartedComplete" || t.flowState.value == "modalGetDemoForm";
       },
-      handleModalFlowStart(n = "GET_STARTED", i = null) {
-        t.flowState.transition(n);
-        const c = {
+      handleModalFlowStart(r = "GET_STARTED", l = null) {
+        t.flowState.transition(r);
+        const s = {
           GET_STARTED: "Get Started Clicked",
           GET_DEMO: "Get Demo Clicked"
-        }[n];
-        let s = {};
-        i && (s = {
-          cta_str: i
-        }), c && r.track(c, s);
+        }[r];
+        let i = {};
+        l && (i = {
+          cta_str: l
+        }), s && e.track(s, i);
       },
       handleModalClose() {
-        t.flowState.transition("EXIT"), r.track("Modal Closed");
+        t.flowState.transition("EXIT"), e.track("Modal Closed");
       }
     }
   };
 }
-function w() {
+function h() {
   return {
     purchasePrice: null,
     init: function() {
       this.purchasePrice = 1e6;
     },
     get formattedPurchasePrice() {
-      return l(this.purchasePrice);
+      return c(this.purchasePrice);
     },
     get cashBack() {
       return Math.round(this.purchasePrice * 0.03 - 5e3);
     },
     get formattedCashBack() {
-      return l(this.cashBack);
+      return c(this.cashBack);
     }
   };
 }
-function l(t) {
+function c(t) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0
   }).format(t);
 }
-window.Alpine = o;
-const a = m(o), e = {}, u = f(window.FS, e);
-F();
-o.start();
-function F() {
-  e.flowState = a.createStore(
+window.Alpine = n;
+const o = u(n), a = {}, d = S(window.FS, a);
+E();
+n.start();
+function E() {
+  const e = new URL(window.location.href).searchParams.get("get_started"), r = e && e === "complete" ? "modalGetStartedComplete" : "default";
+  a.flowState = o.createStore(
     "flowState",
-    d(S(), u)
-  ), e.flowUIHelpers = a.createStore(
+    m(
+      f(),
+      d,
+      r
+    )
+  ), a.flowUIHelpers = o.createStore(
     "flowUIHelpers",
-    h(e, u)
-  ), e.thCalculatorViewModel = a.createStore(
+    w(a, d)
+  ), console.log("Flow State:", a.flowState.value), a.thCalculatorViewModel = o.createStore(
     "thCalculatorViewModel",
-    w()
+    h()
   );
 }
