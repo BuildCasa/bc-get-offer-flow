@@ -78,8 +78,6 @@ function initStores() {
     createFlowUIHelpers($store, $trackingService),
   )
 
-  console.log('Flow State:', $store.flowState.value)
-
   // Create viewModel stores
   $store.thCalculatorViewModel = $storeFactory.createStore(
     'thCalculatorViewModel',

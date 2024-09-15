@@ -80,6 +80,7 @@ function createFlowUIHelpers(globalStore, trackingService) {
         return (
           globalStore.flowState.value == 'modalGetStartedForm' ||
           globalStore.flowState.value == 'modalGetStartedComplete' ||
+          globalStore.flowState.value == 'modalBookIntroForm' ||
           globalStore.flowState.value == 'modalGetDemoForm'
         )
       },

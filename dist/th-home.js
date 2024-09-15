@@ -1,4 +1,4 @@
-import { m as l, c as m, a as u, b as f } from "./shared-RMpFEyWF.js";
+import { m as i, c as m, a as u, b as f } from "./shared-RMpFEyWF.js";
 function S(t) {
   return {
     defaultState: "default",
@@ -68,17 +68,17 @@ function w(t, e) {
   return {
     modal: {
       get isOpen() {
-        return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetStartedComplete" || t.flowState.value == "modalGetDemoForm";
+        return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetStartedComplete" || t.flowState.value == "modalBookIntroForm" || t.flowState.value == "modalGetDemoForm";
       },
-      handleModalFlowStart(o = "GET_STARTED", i = null) {
-        t.flowState.transition(o);
+      handleModalFlowStart(r = "GET_STARTED", l = null) {
+        t.flowState.transition(r);
         const s = {
           GET_STARTED: "Get Started Clicked",
           GET_DEMO: "Get Demo Clicked"
-        }[o];
+        }[r];
         let c = {};
-        i && (c = {
-          cta_str: i
+        l && (c = {
+          cta_str: l
         }), s && e.track(s, c);
       },
       handleModalClose() {
@@ -111,23 +111,23 @@ function d(t) {
     maximumFractionDigits: 0
   }).format(t);
 }
-window.Alpine = l;
-const r = u(l), a = {}, n = f(window.FS, a);
+window.Alpine = i;
+const o = u(i), a = {}, n = f(window.FS, a);
 h();
-l.start();
+i.start();
 function h() {
-  const e = new URL(window.location.href).searchParams.get("get_started"), o = e && e === "complete" ? "modalGetStartedComplete" : "default";
-  a.flowState = r.createStore(
+  const e = new URL(window.location.href).searchParams.get("get_started"), r = e && e === "complete" ? "modalGetStartedComplete" : "default";
+  a.flowState = o.createStore(
     "flowState",
     m(
       S(n),
       n,
-      o
+      r
     )
-  ), a.flowUIHelpers = r.createStore(
+  ), a.flowUIHelpers = o.createStore(
     "flowUIHelpers",
     w(a, n)
-  ), console.log("Flow State:", a.flowState.value), a.thCalculatorViewModel = r.createStore(
+  ), a.thCalculatorViewModel = o.createStore(
     "thCalculatorViewModel",
     T()
   );
