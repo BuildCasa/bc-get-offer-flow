@@ -1,5 +1,5 @@
-import { m as n, c as m, a as u, b as S } from "./shared-RMpFEyWF.js";
-function f() {
+import { m as l, c as m, a as u, b as f } from "./shared-RMpFEyWF.js";
+function S(t) {
   return {
     defaultState: "default",
     states: {
@@ -32,6 +32,23 @@ function f() {
       },
       modalGetStartedComplete: {
         transitions: {
+          BOOK_INTRO: {
+            target: "modalBookIntroForm",
+            effects: {
+              onTransition: [
+                () => {
+                  t.track("Book Intro Call Clicked");
+                }
+              ]
+            }
+          },
+          EXIT: {
+            target: "getStartedComplete"
+          }
+        }
+      },
+      modalBookIntroForm: {
+        transitions: {
           EXIT: {
             target: "getStartedComplete"
           }
@@ -53,16 +70,16 @@ function w(t, e) {
       get isOpen() {
         return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetStartedComplete" || t.flowState.value == "modalGetDemoForm";
       },
-      handleModalFlowStart(r = "GET_STARTED", l = null) {
-        t.flowState.transition(r);
+      handleModalFlowStart(o = "GET_STARTED", i = null) {
+        t.flowState.transition(o);
         const s = {
           GET_STARTED: "Get Started Clicked",
           GET_DEMO: "Get Demo Clicked"
-        }[r];
-        let i = {};
-        l && (i = {
-          cta_str: l
-        }), s && e.track(s, i);
+        }[o];
+        let c = {};
+        i && (c = {
+          cta_str: i
+        }), s && e.track(s, c);
       },
       handleModalClose() {
         t.flowState.transition("EXIT"), e.track("Modal Closed");
@@ -70,48 +87,48 @@ function w(t, e) {
     }
   };
 }
-function h() {
+function T() {
   return {
     purchasePrice: null,
     init: function() {
       this.purchasePrice = 1e6;
     },
     get formattedPurchasePrice() {
-      return c(this.purchasePrice);
+      return d(this.purchasePrice);
     },
     get cashBack() {
       return Math.round(this.purchasePrice * 0.03 - 5e3);
     },
     get formattedCashBack() {
-      return c(this.cashBack);
+      return d(this.cashBack);
     }
   };
 }
-function c(t) {
+function d(t) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0
   }).format(t);
 }
-window.Alpine = n;
-const o = u(n), a = {}, d = S(window.FS, a);
-E();
-n.start();
-function E() {
-  const e = new URL(window.location.href).searchParams.get("get_started"), r = e && e === "complete" ? "modalGetStartedComplete" : "default";
-  a.flowState = o.createStore(
+window.Alpine = l;
+const r = u(l), a = {}, n = f(window.FS, a);
+h();
+l.start();
+function h() {
+  const e = new URL(window.location.href).searchParams.get("get_started"), o = e && e === "complete" ? "modalGetStartedComplete" : "default";
+  a.flowState = r.createStore(
     "flowState",
     m(
-      f(),
-      d,
-      r
+      S(n),
+      n,
+      o
     )
-  ), a.flowUIHelpers = o.createStore(
+  ), a.flowUIHelpers = r.createStore(
     "flowUIHelpers",
-    w(a, d)
-  ), console.log("Flow State:", a.flowState.value), a.thCalculatorViewModel = o.createStore(
+    w(a, n)
+  ), console.log("Flow State:", a.flowState.value), a.thCalculatorViewModel = r.createStore(
     "thCalculatorViewModel",
-    h()
+    T()
   );
 }
