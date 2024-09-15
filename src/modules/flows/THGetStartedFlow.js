@@ -4,7 +4,7 @@
  * ----------------------------------------------------------------
  */
 
-function createFlowStateMachine() {
+function createFlowStateMachine(trackingService) {
   // Create state machine store
   const stateMachineDefinition = {
     defaultState: 'default',
@@ -37,6 +37,23 @@ function createFlowStateMachine() {
         },
       },
       modalGetStartedComplete: {
+        transitions: {
+          BOOK_INTRO: {
+            target: 'modalBookIntroForm',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Book Intro Call Clicked')
+                },
+              ],
+            },
+          },
+          EXIT: {
+            target: 'getStartedComplete',
+          },
+        },
+      },
+      modalBookIntroForm: {
         transitions: {
           EXIT: {
             target: 'getStartedComplete',

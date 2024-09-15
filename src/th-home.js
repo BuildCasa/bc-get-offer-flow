@@ -68,7 +68,7 @@ function initStores() {
   $store.flowState = $storeFactory.createStore(
     'flowState',
     createFlowState(
-      createFlowStateMachine(),
+      createFlowStateMachine($trackingService),
       $trackingService,
       getStartedFlowState,
     ),
