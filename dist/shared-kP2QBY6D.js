@@ -1,31 +1,32 @@
-const g = "https://app.regrid.com/api/v1/typeahead.json", E = "https://app.regrid.com/api/v1/parcel/", C = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
-async function A(e) {
-  const t = g, a = C, n = new Request(`${t}/?token=${a}&query=${e}`, {
+import { f as k, v as E, d as A } from "./shared-GJeaBnAl.js";
+const P = "https://app.regrid.com/api/v1/typeahead.json", R = "https://app.regrid.com/api/v1/parcel/", C = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
+async function L(e) {
+  const a = P, t = C, n = new Request(`${a}/?token=${t}&query=${e}`, {
     method: "GET"
   }), s = await fetch(n);
   if (!s.ok)
     throw new Error("Network response was not OK");
   const o = await s.json();
-  return P(o);
+  return B(o);
 }
-function P(e) {
+function B(e) {
   return e.filter((n) => n.ll_uuid && n.address && n.address.match(/^[0-9].*[^0-9]$/)).sort((n, s) => {
-    const o = R(n, s);
-    return o != 0 ? o : L(n, s);
+    const o = D(n, s);
+    return o != 0 ? o : F(n, s);
   }).slice(0, 10);
 }
-function R(e, t) {
-  return c(e) && !c(t) ? -1 : !c(e) && c(t) ? 1 : 0;
+function D(e, a) {
+  return c(e) && !c(a) ? -1 : !c(e) && c(a) ? 1 : 0;
 }
 function c(e) {
   return e.context.endsWith("CA");
 }
-function L(e, t) {
-  return e.score > t.score ? -1 : e.score < t.score ? 1 : 0;
+function F(e, a) {
+  return e.score > a.score ? -1 : e.score < a.score ? 1 : 0;
 }
-async function B(e) {
-  const t = E, a = C, n = new Request(
-    `${t}${e}.json?token=${a}&return_custom=false`,
+async function v(e) {
+  const a = R, t = C, n = new Request(
+    `${a}${e}.json?token=${t}&return_custom=false`,
     {
       method: "GET"
     }
@@ -33,70 +34,43 @@ async function B(e) {
   if (!s.ok)
     throw new Error("Network response was not OK");
   const o = await s.json();
-  return D(o);
+  return T(o);
 }
-function D(e) {
-  const t = e.results[0].properties.fields;
+function T(e) {
+  const a = e.results[0].properties.fields;
   return {
-    apn: t.parcelnumb,
-    jurisdiction: t.county,
-    zip: t.szip
+    apn: a.parcelnumb,
+    jurisdiction: a.county,
+    zip: a.szip
   };
 }
-const F = "https://hook.us1.make.com/t9mrl5xiqcub1netw5sk7l1vjgoz3gt9", T = "https://hook.us1.make.com/7pyo51sq4xxjbpz14t03uomufndj45ut";
-async function v(e) {
-  const t = new Request(F, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(e)
-  }), a = await fetch(t);
-  if (!a.ok)
-    throw new Error("Network response was not OK");
-  return await a.json();
-}
-async function H(e) {
-  const t = new Request(T, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(e)
-  });
-  if (!(await fetch(t)).ok)
-    throw new Error("Network response was not OK");
-}
-function N(e) {
-  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(e);
-}
-function I(e) {
-  const t = e.replace(/\D/g, ""), a = t.startsWith("1"), o = (a ? t.slice(1) : t).slice(0, 10).match(
+function H(e) {
+  const a = e.replace(/\D/g, ""), t = a.startsWith("1"), o = (t ? a.slice(1) : a).slice(0, 10).match(
     /^(\d{0,3})(\d{0,3})(\d{0,4})$/
-  ), u = a ? "1" : "", d = o[1] ? (a ? " " : "") + ("(" + o[1]) : "", m = o[2] ? ") " + o[2] : "", h = o[3] ? "-" + o[3] : "";
+  ), u = t ? "1" : "", d = o[1] ? (t ? " " : "") + ("(" + o[1]) : "", m = o[2] ? ") " + o[2] : "", h = o[3] ? "-" + o[3] : "";
   return u + d + m + h;
 }
-function O(e) {
+function N(e) {
   return /^\+?1?\s?(\()?\d{3}(\))?[-.\s]?\d{3}[-.\s]?\d{4}$|^\d{10}$/.test(e);
 }
-async function p(e, t = {}) {
-  return new Promise(function(a, n) {
+async function M(e, a = {}) {
+  return new Promise(function(t, n) {
     const s = document.createElement("script");
-    s.src = e, t.defer ? s.defer = !0 : t.async && (s.async = !0), s.addEventListener("load", function() {
-      a();
+    s.src = e, a.defer ? s.defer = !0 : a.async && (s.async = !0), s.addEventListener("load", function() {
+      t();
     }), s.addEventListener("error", function(o) {
       n(o);
     }), document.body.appendChild(s);
   });
 }
-function K(e, t) {
-  const a = {
+function z(e, a) {
+  const t = {
     SUBMIT_ADDRESS: {
       target: "addressFormProcessing",
       effects: {
         onTransition: [
           () => {
-            t == null || t.track("Address Submitted");
+            a == null || a.track("Address Submitted");
           }
         ]
       }
@@ -107,7 +81,7 @@ function K(e, t) {
       effects: {
         onTransition: [
           () => {
-            t == null || t.track("Address Submitted");
+            a == null || a.track("Address Submitted");
           }
         ]
       }
@@ -118,7 +92,7 @@ function K(e, t) {
       effects: {
         onTransition: [
           () => {
-            t.track("Address Submission Succeeded");
+            a.track("Address Submission Succeeded");
           }
         ]
       }
@@ -128,7 +102,7 @@ function K(e, t) {
       effects: {
         onTransition: [
           () => {
-            t.track(
+            a.track(
               "Address Submission Completed with Non-Blocking Error"
             );
           }
@@ -140,7 +114,7 @@ function K(e, t) {
       effects: {
         onTransition: [
           () => {
-            t.track(
+            a.track(
               "Address Submission Completed with Contact Form Skipped"
             );
           }
@@ -156,7 +130,7 @@ function K(e, t) {
         e.flowState.transition("SKIP_CONTACT");
       else {
         if (e.addressViewModel.hasParcelDetails || (e.addressViewModel.parcelDetails = {
-          ...await B(
+          ...await v(
             e.addressViewModel.selectedMatch.ll_uuid
           ),
           address: e.addressViewModel.selectedMatch.address,
@@ -177,7 +151,7 @@ function K(e, t) {
               state: e.addressViewModel.parcelDetails.state,
               zip: e.addressViewModel.parcelDetails.zip
             }
-          }, l = await v(i);
+          }, l = await k(i);
           e.estimateViewModel.jurisdiction = l.jurisdiction, e.estimateViewModel.estimate = l.estimate;
         }
         e.flowState.transition("SUCCESS");
@@ -192,7 +166,7 @@ function K(e, t) {
       effects: {
         onTransition: [
           () => {
-            t == null || t.track("Contact Submitted");
+            a == null || a.track("Contact Submitted");
           }
         ]
       }
@@ -216,11 +190,11 @@ function K(e, t) {
         phone: e.contactViewModel.phone.trim(),
         desiredTimeline: e.contactViewModel.desiredTimeline.trim()
       };
-      if (!N(i.email))
+      if (!E(i.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
-      if (!O(i.phone))
+      if (!N(i.phone))
         throw new Error(
           "Please enter a valid phone number, including area code, and try again.",
           { cause: "INVALID_PHONE" }
@@ -242,7 +216,7 @@ function K(e, t) {
       };
       await Promise.all([
         y(e.contactViewModel),
-        H(l)
+        A(l)
       ]), e.contactViewModel.isSubmitted = !0, e.flowState.transition("SUCCESS");
     } catch (i) {
       console.log("Error submitting contact:", i), i && i.cause && (i.cause === "INVALID_EMAIL" || i.cause === "INVALID_PHONE") ? e.contactViewModel.errorMessage = i.message : e.contactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", e.flowState.transition("ERROR");
@@ -256,16 +230,16 @@ function K(e, t) {
       "Checking lot shape & size..."
     ];
     for (const S of l)
-      i.lotAnalysisStep = S, await new Promise((k) => {
-        setTimeout(k, 1500);
+      i.lotAnalysisStep = S, await new Promise((g) => {
+        setTimeout(g, 1500);
       });
   }
-  const M = {
+  const w = {
     onEntry: [V]
   };
   async function V() {
     if (e.estimateViewModel.hasActiveJurisdiction && e.estimateViewModel.hasEstimate) {
-      await p(
+      await M(
         "https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.11.0/tsparticles.confetti.bundle.min.js",
         { async: !0 }
       );
@@ -287,7 +261,7 @@ function K(e, t) {
         });
       }, 500);
     }
-    (!e.estimateViewModel.hasResults || e.estimateViewModel.hasActiveJurisdiction) && p("https://assets.calendly.com/assets/external/widget.js", {
+    (!e.estimateViewModel.hasResults || e.estimateViewModel.hasActiveJurisdiction) && M("https://assets.calendly.com/assets/external/widget.js", {
       async: !0
     });
   }
@@ -301,7 +275,7 @@ function K(e, t) {
     states: {
       default: {
         transitions: {
-          ...a,
+          ...t,
           START_MODAL_FLOW: {
             target: "modalAddressForm"
           }
@@ -315,7 +289,7 @@ function K(e, t) {
             effects: {
               onTransition: [
                 () => {
-                  t.track("Address Form Error (Blocking)");
+                  a.track("Address Form Error (Blocking)");
                 }
               ]
             }
@@ -325,7 +299,7 @@ function K(e, t) {
       },
       addressFormError: {
         transitions: {
-          ...a
+          ...t
         },
         effects: {
           onExit: [
@@ -349,7 +323,7 @@ function K(e, t) {
             effects: {
               onTransition: [
                 () => {
-                  t.track("Address Form Error (Blocking)");
+                  a.track("Address Form Error (Blocking)");
                 }
               ]
             }
@@ -384,7 +358,7 @@ function K(e, t) {
             effects: {
               onTransition: [
                 () => {
-                  t.track("Contact Submission Succeeded");
+                  a.track("Contact Submission Succeeded");
                 }
               ]
             }
@@ -394,7 +368,7 @@ function K(e, t) {
             effects: {
               onTransition: [
                 () => {
-                  t.track("Contact Submission Failed", {
+                  a.track("Contact Submission Failed", {
                     error_str: e.contactViewModel.errorMessage
                   });
                 }
@@ -425,7 +399,7 @@ function K(e, t) {
             effects: {
               onTransition: [
                 () => {
-                  t.track("Schedule Consultation Clicked");
+                  a.track("Schedule Consultation Clicked");
                 }
               ]
             }
@@ -435,14 +409,14 @@ function K(e, t) {
             effects: {
               onTransition: [
                 () => {
-                  t.track("Community Requested");
+                  a.track("Community Requested");
                 }
               ]
             }
           },
           ...r
         },
-        effects: M
+        effects: w
       },
       scheduleConsultation: {
         transitions: {
@@ -457,29 +431,29 @@ function K(e, t) {
     }
   };
 }
-function J(e, t) {
+function K(e, a) {
   return {
     modal: {
       get isOpen() {
         return e.flowState.value == "modalAddressForm" || e.flowState.value == "modalAddressFormProcessing" || e.flowState.value == "modalAddressFormError" || e.flowState.value == "contactForm" || e.flowState.value == "contactFormProcessing" || e.flowState.value == "contactFormError" || e.flowState.value == "estimateResults" || e.flowState.value == "scheduleConsultation" || e.flowState.value == "requestedCommunity";
       },
-      handleModalFlowStart(a = null) {
+      handleModalFlowStart(t = null) {
         e.flowState.transition("START_MODAL_FLOW");
         let n = {};
-        a && (n = {
-          cta_str: a
-        }), t.track("Modal Get Offer Flow Opened", n);
+        t && (n = {
+          cta_str: t
+        }), a.track("Modal Get Offer Flow Opened", n);
       },
       handleModalClose() {
-        let a = !0;
-        e.flowState.value == "contactForm" && e.contactViewModel.hasAnyContactDetails && (a = confirm(
+        let t = !0;
+        e.flowState.value == "contactForm" && e.contactViewModel.hasAnyContactDetails && (t = confirm(
           "Are you sure you want to stop before you've seen how much your extra lot space could be worth?"
-        )), e.flowState.value == "contactFormProcessing" && (a = !1), a && (e.flowState.transition("EXIT"), t.track("Get Offer Modal Closed"));
+        )), e.flowState.value == "contactFormProcessing" && (t = !1), t && (e.flowState.transition("EXIT"), a.track("Get Offer Modal Closed"));
       }
     }
   };
 }
-function q(e, t) {
+function J(e, a) {
   return {
     // Instance properties
     inputValue: "",
@@ -501,12 +475,12 @@ function q(e, t) {
      */
     init() {
       this.inputValue = "", this.matches = [], this.keyboardNavIndex = -1, this.selectedMatch = {}, this.parcelDetails = {}, this.options = {}, this.errorMessage = "";
-      const a = document.getElementById(
+      const t = document.getElementById(
         "address-form-submit-button"
       );
       this.submitButtonText = {
-        normal: a.value,
-        processing: a.dataset.wait
+        normal: t.value,
+        processing: t.dataset.wait
       };
     },
     /**
@@ -535,7 +509,7 @@ function q(e, t) {
         "windfall-estimate-or-eligibility-2023-07"
       );
       try {
-        this.matches = await A(this.inputValue);
+        this.matches = await L(this.inputValue);
       } catch {
         this.errorMessage = "There was an error finding your address. Please try again, or contact us for help.", e.flowState.transition("ERROR");
       }
@@ -547,8 +521,8 @@ function q(e, t) {
      * @param {KeyboardEvent} event - Keyboard event object.
      * @returns {void}
      */
-    handleKeydown(a) {
-      a.key != "Enter" && a.key != "ArrowUp" && a.key != "ArrowDown" || this.isSelected || this.matches.length === 0 || (a.preventDefault(), a.stopPropagation(), a.key === "Enter" && this.keyboardNavIndex != -1 ? this.handleMatchSelection(this.matches[this.keyboardNavIndex]) : a.key === "ArrowUp" ? this.keyboardNavIndex = this.keyboardNavIndex <= -1 ? this.matches.length - 1 : this.keyboardNavIndex - 1 : a.key === "ArrowDown" && (this.keyboardNavIndex = this.keyboardNavIndex >= this.matches.length - 1 ? -1 : this.keyboardNavIndex + 1));
+    handleKeydown(t) {
+      t.key != "Enter" && t.key != "ArrowUp" && t.key != "ArrowDown" || this.isSelected || this.matches.length === 0 || (t.preventDefault(), t.stopPropagation(), t.key === "Enter" && this.keyboardNavIndex != -1 ? this.handleMatchSelection(this.matches[this.keyboardNavIndex]) : t.key === "ArrowUp" ? this.keyboardNavIndex = this.keyboardNavIndex <= -1 ? this.matches.length - 1 : this.keyboardNavIndex - 1 : t.key === "ArrowDown" && (this.keyboardNavIndex = this.keyboardNavIndex >= this.matches.length - 1 ? -1 : this.keyboardNavIndex + 1));
     },
     /**
      * Handles the selection of an address match from the list of available matches.
@@ -556,8 +530,8 @@ function q(e, t) {
      * Clears the matches list and keyboard navigation index.
      * @param {unknown} match
      */
-    handleMatchSelection(a) {
-      this.selectedMatch = a, this.inputValue = a.address + ", " + a.context, this.matches = [], this.keyboardNavIndex = -1, t.track("Address Selected");
+    handleMatchSelection(t) {
+      this.selectedMatch = t, this.inputValue = t.address + ", " + t.context, this.matches = [], this.keyboardNavIndex = -1, a.track("Address Selected");
     },
     /**
      * Handles the submission event for the address typeahead form.
@@ -565,12 +539,12 @@ function q(e, t) {
      * @param {object} options - Additional options for the submission.
      * @returns {void}
      */
-    handleSubmit(a, n = {}) {
-      a.preventDefault(), a.stopPropagation(), this.options = n, e.flowState.transition("SUBMIT_ADDRESS");
+    handleSubmit(t, n = {}) {
+      t.preventDefault(), t.stopPropagation(), this.options = n, e.flowState.transition("SUBMIT_ADDRESS");
     }
   };
 }
-function Y(e) {
+function q(e) {
   return {
     // Instance properties
     firstName: "",
@@ -594,12 +568,12 @@ function Y(e) {
      */
     init() {
       this.firstName = "", this.lastName = "", this.email = "", this.phone = "", this.desiredTimeline = "", this.options = {}, this.isSubmitted = !1, this.lotAnalysisStep = "Checking...", this.errorMessage = "";
-      const t = document.getElementById(
+      const a = document.getElementById(
         "contact-form-submit-button"
       );
       this.submitButtonText = {
-        normal: t.value,
-        processing: t.dataset.wait
+        normal: a.value,
+        processing: a.dataset.wait
       };
     },
     /**
@@ -609,8 +583,8 @@ function Y(e) {
     get hasAnyContactDetails() {
       return !!this.firstName.trim() || !!this.lastName.trim() || !!this.email.trim() || !!this.phone.trim();
     },
-    formatPhoneInput(t) {
-      return I(t);
+    formatPhoneInput(a) {
+      return H(a);
     },
     /**
      * Handles the submission event for the contact form.
@@ -618,12 +592,12 @@ function Y(e) {
      * @param {object} options - Additional options for the submission.
      * @returns {void}
      */
-    handleSubmit(t, a = {}) {
-      t.preventDefault(), t.stopPropagation(), this.options = a, e.transition("SUBMIT_CONTACT");
+    handleSubmit(a, t = {}) {
+      a.preventDefault(), a.stopPropagation(), this.options = t, e.transition("SUBMIT_CONTACT");
     }
   };
 }
-function $(e) {
+function Y(e) {
   return {
     // Instance properties
     jurisdiction: {
@@ -696,8 +670,8 @@ function $(e) {
      * @param {MouseEvent} event - Mouse event (click) object.
      * @returns {void}
      */
-    handleScheduleConsultationClick(t) {
-      t.preventDefault(), t.stopPropagation(), e.transition("SCHEDULE");
+    handleScheduleConsultationClick(a) {
+      a.preventDefault(), a.stopPropagation(), e.transition("SCHEDULE");
     },
     /**
      * Handles click events for the Request Community button.
@@ -705,12 +679,12 @@ function $(e) {
      * @param {MouseEvent} event - Mouse event (click) object.
      * @returns {void}
      */
-    handleRequestCommunityClick(t) {
-      t.preventDefault(), t.stopPropagation(), e.transition("REQUEST_COMMUNITY");
+    handleRequestCommunityClick(a) {
+      a.preventDefault(), a.stopPropagation(), e.transition("REQUEST_COMMUNITY");
     }
   };
 }
-const G = {
+const I = {
   cities: [
     "Alta",
     "Auburn",
@@ -787,7 +761,7 @@ const G = {
     "Woodland",
     "Yolo"
   ]
-}, x = {
+}, G = {
   cities: [
     "Auberry",
     "Big Creek",
@@ -1323,8 +1297,8 @@ const G = {
     "Somis",
     "Thousand Oaks"
   ]
-}, b = {
-  Sacramento: G,
+}, O = {
+  Sacramento: I,
   "Bay Area": {
     cities: [
       "Alameda",
@@ -1605,10 +1579,10 @@ const G = {
       "Windsor"
     ]
   },
-  SoCal: x
-}, W = "https://get.geojs.io/v1/ip/geo.json";
-async function _() {
-  return await (await fetch(W)).json();
+  SoCal: G
+}, x = "https://get.geojs.io/v1/ip/geo.json";
+async function b() {
+  return await (await fetch(x)).json();
 }
 const f = {
   DEFAULT: "(415) 941-5861",
@@ -1616,50 +1590,50 @@ const f = {
   "Bay Area": "(415) 941-5861",
   SoCal: "(213) 322-1360"
 };
-function Q() {
+function $() {
   return {
     userGeo: {},
     marketsData: {},
     get market() {
-      return w(this.userGeo.city, this.marketsData);
+      return p(this.userGeo.city, this.marketsData);
     },
     get bcPhoneNumber() {
-      return j(this.userGeo.city, this.marketsData);
+      return W(this.userGeo.city, this.marketsData);
     },
     get bcPhoneNumberHref() {
       return `tel:+1${this.bcPhoneNumber.replace(/\D/g, "")}`;
     },
     async init() {
-      this.marketsData = b, this.userGeo = await _();
+      this.marketsData = O, this.userGeo = await b();
     }
   };
 }
-function j(e, t) {
-  const a = f.DEFAULT;
+function W(e, a) {
+  const t = f.DEFAULT;
   if (!e || typeof e != "string")
-    return a;
-  const n = w(e, t);
-  return U(n) ?? a;
+    return t;
+  const n = p(e, a);
+  return _(n) ?? t;
 }
-function w(e, t) {
+function p(e, a) {
   if (!e || typeof e != "string")
     return null;
-  for (const a of Object.keys(t))
-    if (t[a].cities.filter(
+  for (const t of Object.keys(a))
+    if (a[t].cities.filter(
       (n) => n.toLowerCase().trim() === e.toLowerCase().trim()
     ).length > 0)
-      return a;
+      return t;
   return null;
 }
-function U(e) {
+function _(e) {
   if (!e || typeof e != "string")
     return null;
-  for (const t of Object.keys(f))
-    if (t.toLowerCase().trim() === e.toLowerCase().trim())
-      return f[t] ?? null;
+  for (const a of Object.keys(f))
+    if (a.toLowerCase().trim() === e.toLowerCase().trim())
+      return f[a] ?? null;
   return null;
 }
-function X() {
+function Q() {
   return {
     // Instance properties
     activeExperimentVariations: {},
@@ -1678,8 +1652,8 @@ function X() {
      * @param {string} variation - The name of the variation.
      * @returns {void}
      */
-    setActiveExperimentVariation(e, t) {
-      this.activeExperimentVariations[e] = t;
+    setActiveExperimentVariation(e, a) {
+      this.activeExperimentVariations[e] = a;
     },
     /**
      * Gets the active variation for a given experiment.
@@ -1700,11 +1674,11 @@ function X() {
   };
 }
 export {
-  q as a,
-  Y as b,
-  J as c,
-  $ as d,
-  Q as e,
-  X as f,
-  K as g
+  J as a,
+  q as b,
+  K as c,
+  Y as d,
+  $ as e,
+  Q as f,
+  z as g
 };
