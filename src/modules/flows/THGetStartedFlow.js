@@ -1,10 +1,83 @@
 /*
  * ----------------------------------------------------------------
+ * Imports
+ * ----------------------------------------------------------------
+ */
+import { createLead } from '../services/MakeBCBackendService.js'
+
+import { validateEmailAddress } from '../utils/EmailUtils.js'
+
+/*
+ * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
 
-function createFlowStateMachine(trackingService) {
+function createFlowStateMachine(globalStore, trackingService) {
+  const submitGuidesContactTransition = {
+    SUBMIT_CONTACT: {
+      target: 'modalGuidesContactFormProcessing',
+      effects: {
+        onTransition: [
+          () => {
+            trackingService?.track('Guides Contact Submitted')
+          },
+        ],
+      },
+    },
+  }
+
+  const guidesContactProcessingStateEffects = {
+    onEntry: [processGuidesContactSubmission],
+  }
+
+  async function processGuidesContactSubmission() {
+    try {
+      // Process the submitted contact info, and transition the state accordingly
+
+      // Create contact object for the create lead payload
+      let contact = {
+        firstName: globalStore.thGuidesContactViewModel.firstName.trim(),
+        lastName: globalStore.thGuidesContactViewModel.lastName.trim(),
+        email: globalStore.thGuidesContactViewModel.email.trim(),
+      }
+
+      // Validate email address
+      if (!validateEmailAddress(contact.email)) {
+        throw new Error('Please enter a valid email address, and try again.', {
+          cause: 'INVALID_EMAIL',
+        })
+      }
+
+      // Put together the create lead payload
+      const createLeadPayload = {
+        ...globalStore.thGuidesContactViewModel.options,
+        contact: contact,
+      }
+
+      // Start sequencing through the lot analysis steps, and the create lead request in parallel
+      await Promise.all([createLead(createLeadPayload)])
+
+      globalStore.thGuidesContactViewModel.isSubmitted = true
+
+      // Transition state according to desired logic for successful contact submissions
+      globalStore.flowState.transition('SUCCESS')
+    } catch (error) {
+      console.log('Error submitting contact:', error)
+      // If error is thrown due to invalid email or phone number, show the specific error message
+      // Otherwise, show a generic error message
+      if (error && error.cause && error.cause === 'INVALID_EMAIL') {
+        globalStore.thGuidesContactViewModel.errorMessage = error.message
+      } else {
+        globalStore.thGuidesContactViewModel.errorMessage =
+          'There was an error processing your info. Please try again, or contact us for help.'
+      }
+
+      // Transition state according to desired logic for contact submission errors
+      globalStore.flowState.transition('ERROR')
+    }
+  }
+
   // Create state machine store
   const stateMachineDefinition = {
     defaultState: 'default',
@@ -17,6 +90,9 @@ function createFlowStateMachine(trackingService) {
           GET_DEMO: {
             target: 'modalGetDemoForm',
           },
+          GET_GUIDES: {
+            target: 'modalGuidesContactForm',
+          },
         },
       },
       getStartedComplete: {
@@ -26,6 +102,9 @@ function createFlowStateMachine(trackingService) {
           },
           GET_DEMO: {
             target: 'modalGetDemoForm',
+          },
+          GET_GUIDES: {
+            target: 'modalGuidesContactForm',
           },
         },
       },
@@ -67,6 +146,75 @@ function createFlowStateMachine(trackingService) {
           },
         },
       },
+      modalGuidesContactForm: {
+        transitions: {
+          ...submitGuidesContactTransition,
+          EXIT: {
+            target: 'default',
+          },
+        },
+      },
+      modalGuidesContactFormProcessing: {
+        transitions: {
+          SUCCESS: {
+            target: 'modalGuidesContactFormSuccess',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Guides Contact Submission Succeeded')
+                },
+              ],
+            },
+          },
+          ERROR: {
+            target: 'modalGuidesContactFormError',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Guides Contact Submission Failed', {
+                    error_str:
+                      globalStore.thGuidesContactViewModel.errorMessage,
+                  })
+                },
+              ],
+            },
+          },
+          EXIT: {
+            target: 'default',
+          },
+        },
+        effects: guidesContactProcessingStateEffects,
+      },
+      modalGuidesContactFormError: {
+        transitions: {
+          ...submitGuidesContactTransition,
+          EXIT: {
+            target: 'default',
+          },
+        },
+        effects: {
+          onExit: [
+            () => {
+              // Clear out any existing error message
+              globalStore.thGuidesContactViewModel.errorMessage = ''
+            },
+          ],
+        },
+      },
+      modalGuidesContactFormSuccess: {
+        transitions: {
+          EXIT: {
+            target: 'default',
+          },
+        },
+        effects: {
+          onEntry: [
+            () => {
+              globalStore.thGuidesDownloadViewModel.downloadButtonElement.click()
+            },
+          ],
+        },
+      },
     },
   }
 
@@ -81,7 +229,11 @@ function createFlowUIHelpers(globalStore, trackingService) {
           globalStore.flowState.value == 'modalGetStartedForm' ||
           globalStore.flowState.value == 'modalGetStartedComplete' ||
           globalStore.flowState.value == 'modalBookIntroForm' ||
-          globalStore.flowState.value == 'modalGetDemoForm'
+          globalStore.flowState.value == 'modalGetDemoForm' ||
+          globalStore.flowState.value == 'modalGuidesContactForm' ||
+          globalStore.flowState.value == 'modalGuidesContactFormProcessing' ||
+          globalStore.flowState.value == 'modalGuidesContactFormError' ||
+          globalStore.flowState.value == 'modalGuidesContactFormSuccess'
         )
       },
       handleModalFlowStart(transition = 'GET_STARTED', cta = null) {
@@ -105,7 +257,11 @@ function createFlowUIHelpers(globalStore, trackingService) {
           trackingService.track(transitionEvent, eventProperties)
         }
       },
-      handleModalClose() {
+      handleModalClose(event) {
+        // Block default click event behavior
+        event.preventDefault()
+        event.stopPropagation()
+
         globalStore.flowState.transition('EXIT')
 
         trackingService.track('Modal Closed')

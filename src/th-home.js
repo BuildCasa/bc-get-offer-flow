@@ -24,6 +24,8 @@ import {
   createFlowUIHelpers,
 } from './modules/flows/THGetStartedFlow'
 
+import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
+import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
 import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
 
 /*
@@ -68,7 +70,7 @@ function initStores() {
   $store.flowState = $storeFactory.createStore(
     'flowState',
     createFlowState(
-      createFlowStateMachine($trackingService),
+      createFlowStateMachine($store, $trackingService),
       $trackingService,
       getStartedFlowState,
     ),
@@ -79,6 +81,14 @@ function initStores() {
   )
 
   // Create viewModel stores
+  $store.thGuidesContactViewModel = $storeFactory.createStore(
+    'thGuidesContactViewModel',
+    createTHGuidesContactViewModel($store.flowState),
+  )
+  $store.thGuidesDownloadViewModel = $storeFactory.createStore(
+    'thGuidesDownloadViewModel',
+    createTHGuidesDownloadViewModel($store, $trackingService),
+  )
   $store.thCalculatorViewModel = $storeFactory.createStore(
     'thCalculatorViewModel',
     createTHCalculatorViewModel(),
