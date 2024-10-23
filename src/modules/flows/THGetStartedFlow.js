@@ -3,7 +3,7 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import { createLead } from '../services/MakeBCBackendService.js'
+import { thCreateLead } from '../services/MakeBCBackendService.js'
 
 import { validateEmailAddress } from '../utils/EmailUtils.js'
 
@@ -56,7 +56,7 @@ function createFlowStateMachine(globalStore, trackingService) {
       }
 
       // Start sequencing through the lot analysis steps, and the create lead request in parallel
-      await Promise.all([createLead(createLeadPayload)])
+      await Promise.all([thCreateLead(createLeadPayload)])
 
       globalStore.thGuidesContactViewModel.isSubmitted = true
 
