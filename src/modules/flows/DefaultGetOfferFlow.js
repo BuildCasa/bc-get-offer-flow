@@ -4,8 +4,8 @@
  * ----------------------------------------------------------------
  */
 import { fetchParcelDetails } from '../services/RegridAddressService.js'
-import { fetchEstimateResults } from '../services/MakeBCBackendService.js'
-import { createLead } from '../services/MakeBCBackendService.js'
+import { bcFetchEstimateResults } from '../services/MakeBCBackendService.js'
+import { bcCreateLead } from '../services/MakeBCBackendService.js'
 
 import { validateEmailAddress } from '../utils/EmailUtils.js'
 import { validatePhoneNumber } from '../utils/PhoneUtils.js'
@@ -132,7 +132,7 @@ function createFlowStateMachine(globalStore, trackingService) {
           }
 
           const estimateResults =
-            await fetchEstimateResults(fetchEstimatePayload)
+            await bcFetchEstimateResults(fetchEstimatePayload)
 
           globalStore.estimateViewModel.jurisdiction =
             estimateResults.jurisdiction
@@ -239,7 +239,7 @@ function createFlowStateMachine(globalStore, trackingService) {
       // Start sequencing through the lot analysis steps, and the create lead request in parallel
       await Promise.all([
         sequenceLotAnalysisSteps(globalStore.contactViewModel),
-        createLead(createLeadPayload),
+        bcCreateLead(createLeadPayload),
       ])
 
       globalStore.contactViewModel.isSubmitted = true
