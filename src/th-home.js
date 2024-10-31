@@ -27,6 +27,7 @@ import {
 import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
 import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
 import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
+import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
 
 /*
  * ----------------------------------------------------------------
@@ -79,6 +80,44 @@ function initStores() {
     'flowUIHelpers',
     createFlowUIHelpers($store, $trackingService),
   )
+
+  // Create experimentation view model store
+  $store.experimentationViewModel = $storeFactory.createStore(
+    'experimentationViewModel',
+    createExperimentationViewModel(),
+  )
+
+  // Determine whether or not to include in the Interruptor Popups experiment
+  // If the user has already completed the Get Started flow, then they should not see the Interruptor Popups
+  const includeInterruptorPopupExperiment = getStartedFlowState === 'default'
+
+  // If including in the Interruptor Popups experiment
+  if (includeInterruptorPopupExperiment) {
+    // TODO: Remove before production
+    console.log('Included in Interruptor Popups experiment')
+
+    // Set the experiment id slug, and determine the experiment variant
+    const experiment = 'interruptor-popups-2024-11'
+    const variation = Math.random() < 0.5 ? 'guides' : 'discount-plus-1500'
+    $store.experimentationViewModel.setActiveExperimentVariation(
+      experiment,
+      variation,
+    )
+
+    // TODO: Remove before production
+    console.log('Experiment:', experiment)
+    console.log('Variation:', variation)
+    console.log('Start Interruptor Popup Timer:', new Date())
+
+    // Set the popup to appear after a 30 second delay
+    setTimeout(() => {
+      // Send Show Interruptor Popup flow transition event
+      console.log('Show Interruptor Popup:', new Date())
+    }, 30000)
+  } else {
+    // TODO: Remove before production
+    console.log('NOT included in Interruptor Popups experiment')
+  }
 
   // Create viewModel stores
   $store.thGuidesContactViewModel = $storeFactory.createStore(
