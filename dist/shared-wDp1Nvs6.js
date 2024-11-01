@@ -1,31 +1,31 @@
-import { d as k, v as E, e as A } from "./shared-2KfH2FLj.js";
-const P = "https://app.regrid.com/api/v1/typeahead.json", R = "https://app.regrid.com/api/v1/parcel/", C = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
-async function L(e) {
-  const a = P, t = C, n = new Request(`${a}/?token=${t}&query=${e}`, {
+import { d as S, v as g, e as k } from "./shared-2KfH2FLj.js";
+const A = "https://app.regrid.com/api/v1/typeahead.json", E = "https://app.regrid.com/api/v1/parcel/", M = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
+async function R(e) {
+  const a = A, t = M, n = new Request(`${a}/?token=${t}&query=${e}`, {
     method: "GET"
   }), s = await fetch(n);
   if (!s.ok)
     throw new Error("Network response was not OK");
   const o = await s.json();
-  return B(o);
+  return P(o);
 }
-function B(e) {
+function P(e) {
   return e.filter((n) => n.ll_uuid && n.address && n.address.match(/^[0-9].*[^0-9]$/)).sort((n, s) => {
-    const o = D(n, s);
-    return o != 0 ? o : F(n, s);
+    const o = L(n, s);
+    return o != 0 ? o : B(n, s);
   }).slice(0, 10);
 }
-function D(e, a) {
+function L(e, a) {
   return c(e) && !c(a) ? -1 : !c(e) && c(a) ? 1 : 0;
 }
 function c(e) {
   return e.context.endsWith("CA");
 }
-function F(e, a) {
+function B(e, a) {
   return e.score > a.score ? -1 : e.score < a.score ? 1 : 0;
 }
-async function v(e) {
-  const a = R, t = C, n = new Request(
+async function D(e) {
+  const a = E, t = M, n = new Request(
     `${a}${e}.json?token=${t}&return_custom=false`,
     {
       method: "GET"
@@ -34,9 +34,9 @@ async function v(e) {
   if (!s.ok)
     throw new Error("Network response was not OK");
   const o = await s.json();
-  return T(o);
+  return F(o);
 }
-function T(e) {
+function F(e) {
   const a = e.results[0].properties.fields;
   return {
     apn: a.parcelnumb,
@@ -44,16 +44,16 @@ function T(e) {
     zip: a.szip
   };
 }
-function H(e) {
+function v(e) {
   const a = e.replace(/\D/g, ""), t = a.startsWith("1"), o = (t ? a.slice(1) : a).slice(0, 10).match(
     /^(\d{0,3})(\d{0,3})(\d{0,4})$/
   ), u = t ? "1" : "", d = o[1] ? (t ? " " : "") + ("(" + o[1]) : "", m = o[2] ? ") " + o[2] : "", h = o[3] ? "-" + o[3] : "";
   return u + d + m + h;
 }
-function N(e) {
+function T(e) {
   return /^\+?1?\s?(\()?\d{3}(\))?[-.\s]?\d{3}[-.\s]?\d{4}$|^\d{10}$/.test(e);
 }
-async function M(e, a = {}) {
+async function y(e, a = {}) {
   return new Promise(function(t, n) {
     const s = document.createElement("script");
     s.src = e, a.defer ? s.defer = !0 : a.async && (s.async = !0), s.addEventListener("load", function() {
@@ -63,7 +63,7 @@ async function M(e, a = {}) {
     }), document.body.appendChild(s);
   });
 }
-function z(e, a) {
+function j(e, a) {
   const t = {
     SUBMIT_ADDRESS: {
       target: "addressFormProcessing",
@@ -130,7 +130,7 @@ function z(e, a) {
         e.flowState.transition("SKIP_CONTACT");
       else {
         if (e.addressViewModel.hasParcelDetails || (e.addressViewModel.parcelDetails = {
-          ...await v(
+          ...await D(
             e.addressViewModel.selectedMatch.ll_uuid
           ),
           address: e.addressViewModel.selectedMatch.address,
@@ -151,7 +151,7 @@ function z(e, a) {
               state: e.addressViewModel.parcelDetails.state,
               zip: e.addressViewModel.parcelDetails.zip
             }
-          }, l = await k(i);
+          }, l = await S(i);
           e.estimateViewModel.jurisdiction = l.jurisdiction, e.estimateViewModel.estimate = l.estimate;
         }
         e.flowState.transition("SUCCESS");
@@ -190,11 +190,11 @@ function z(e, a) {
         phone: e.contactViewModel.phone.trim(),
         desiredTimeline: e.contactViewModel.desiredTimeline.trim()
       };
-      if (!E(i.email))
+      if (!g(i.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
-      if (!N(i.phone))
+      if (!T(i.phone))
         throw new Error(
           "Please enter a valid phone number, including area code, and try again.",
           { cause: "INVALID_PHONE" }
@@ -215,31 +215,31 @@ function z(e, a) {
         activeExperimentVariations: e.experimentationViewModel.activeExperimentVariations
       };
       await Promise.all([
-        y(e.contactViewModel),
-        A(l)
+        f(e.contactViewModel),
+        k(l)
       ]), e.contactViewModel.isSubmitted = !0, e.flowState.transition("SUCCESS");
     } catch (i) {
       console.log("Error submitting contact:", i), i && i.cause && (i.cause === "INVALID_EMAIL" || i.cause === "INVALID_PHONE") ? e.contactViewModel.errorMessage = i.message : e.contactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", e.flowState.transition("ERROR");
     }
   }
-  async function y(i) {
+  async function f(i) {
     const l = [
       "Checking flood zones...",
       "Checking fire hazard zones...",
       "Checking zoning district...",
       "Checking lot shape & size..."
     ];
-    for (const S of l)
-      i.lotAnalysisStep = S, await new Promise((g) => {
-        setTimeout(g, 1500);
+    for (const w of l)
+      i.lotAnalysisStep = w, await new Promise((V) => {
+        setTimeout(V, 1500);
       });
   }
-  const w = {
-    onEntry: [V]
+  const C = {
+    onEntry: [p]
   };
-  async function V() {
+  async function p() {
     if (e.estimateViewModel.hasActiveJurisdiction && e.estimateViewModel.hasEstimate) {
-      await M(
+      await y(
         "https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.11.0/tsparticles.confetti.bundle.min.js",
         { async: !0 }
       );
@@ -261,7 +261,7 @@ function z(e, a) {
         });
       }, 500);
     }
-    (!e.estimateViewModel.hasResults || e.estimateViewModel.hasActiveJurisdiction) && M("https://assets.calendly.com/assets/external/widget.js", {
+    (!e.estimateViewModel.hasResults || e.estimateViewModel.hasActiveJurisdiction) && y("https://assets.calendly.com/assets/external/widget.js", {
       async: !0
     });
   }
@@ -416,7 +416,7 @@ function z(e, a) {
           },
           ...r
         },
-        effects: w
+        effects: C
       },
       scheduleConsultation: {
         transitions: {
@@ -431,7 +431,7 @@ function z(e, a) {
     }
   };
 }
-function K(e, a) {
+function _(e, a) {
   return {
     modal: {
       get isOpen() {
@@ -453,7 +453,7 @@ function K(e, a) {
     }
   };
 }
-function J(e, a) {
+function U(e, a) {
   return {
     // Instance properties
     inputValue: "",
@@ -509,7 +509,7 @@ function J(e, a) {
         "windfall-estimate-or-eligibility-2023-07"
       );
       try {
-        this.matches = await L(this.inputValue);
+        this.matches = await R(this.inputValue);
       } catch {
         this.errorMessage = "There was an error finding your address. Please try again, or contact us for help.", e.flowState.transition("ERROR");
       }
@@ -544,7 +544,7 @@ function J(e, a) {
     }
   };
 }
-function q(e) {
+function z(e) {
   return {
     // Instance properties
     firstName: "",
@@ -584,7 +584,7 @@ function q(e) {
       return !!this.firstName.trim() || !!this.lastName.trim() || !!this.email.trim() || !!this.phone.trim();
     },
     formatPhoneInput(a) {
-      return H(a);
+      return v(a);
     },
     /**
      * Handles the submission event for the contact form.
@@ -597,7 +597,7 @@ function q(e) {
     }
   };
 }
-function Y(e) {
+function J(e) {
   return {
     // Instance properties
     jurisdiction: {
@@ -684,7 +684,7 @@ function Y(e) {
     }
   };
 }
-const I = {
+const H = {
   cities: [
     "Alta",
     "Auburn",
@@ -761,7 +761,7 @@ const I = {
     "Woodland",
     "Yolo"
   ]
-}, G = {
+}, N = {
   cities: [
     "Auberry",
     "Big Creek",
@@ -1297,8 +1297,8 @@ const I = {
     "Somis",
     "Thousand Oaks"
   ]
-}, O = {
-  Sacramento: I,
+}, I = {
+  Sacramento: H,
   "Bay Area": {
     cities: [
       "Alameda",
@@ -1579,43 +1579,24 @@ const I = {
       "Windsor"
     ]
   },
-  SoCal: G
-}, x = "https://get.geojs.io/v1/ip/geo.json";
-async function b() {
-  return await (await fetch(x)).json();
+  SoCal: N
+}, G = "https://get.geojs.io/v1/ip/geo.json";
+async function O() {
+  return await (await fetch(G)).json();
 }
-const f = {
-  DEFAULT: "(415) 941-5861",
-  Sacramento: "(916) 619-1442",
-  "Bay Area": "(415) 941-5861",
-  SoCal: "(213) 322-1360"
-};
-function $() {
+function K() {
   return {
     userGeo: {},
     marketsData: {},
     get market() {
-      return p(this.userGeo.city, this.marketsData);
-    },
-    get bcPhoneNumber() {
-      return W(this.userGeo.city, this.marketsData);
-    },
-    get bcPhoneNumberHref() {
-      return `tel:+1${this.bcPhoneNumber.replace(/\D/g, "")}`;
+      return x(this.userGeo.city, this.marketsData);
     },
     async init() {
-      this.marketsData = O, this.userGeo = await b();
+      this.marketsData = I, this.userGeo = await O();
     }
   };
 }
-function W(e, a) {
-  const t = f.DEFAULT;
-  if (!e || typeof e != "string")
-    return t;
-  const n = p(e, a);
-  return _(n) ?? t;
-}
-function p(e, a) {
+function x(e, a) {
   if (!e || typeof e != "string")
     return null;
   for (const t of Object.keys(a))
@@ -1625,15 +1606,7 @@ function p(e, a) {
       return t;
   return null;
 }
-function _(e) {
-  if (!e || typeof e != "string")
-    return null;
-  for (const a of Object.keys(f))
-    if (a.toLowerCase().trim() === e.toLowerCase().trim())
-      return f[a] ?? null;
-  return null;
-}
-function Q() {
+function q() {
   return {
     // Instance properties
     activeExperimentVariations: {},
@@ -1674,11 +1647,11 @@ function Q() {
   };
 }
 export {
-  J as a,
-  q as b,
-  K as c,
-  Y as d,
-  $ as e,
-  Q as f,
-  z as g
+  U as a,
+  z as b,
+  _ as c,
+  J as d,
+  K as e,
+  q as f,
+  j as g
 };
