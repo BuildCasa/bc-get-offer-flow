@@ -109,11 +109,15 @@ function initStores() {
     console.log('Variation:', variation)
     console.log('Start Interruptor Popup Timer:', new Date())
 
-    // Set the popup to appear after a 30 second delay
+    // Set the popup to appear after a 10 second delay
     setTimeout(() => {
       // Send Show Interruptor Popup flow transition event
+      // State machine logic will ensure that it is only transitioned to from a valid state
+      $store.flowState.transition('SHOW_INTERRUPTOR_POPUP')
+
+      // TODO: Remove before production
       console.log('Show Interruptor Popup:', new Date())
-    }, 30000)
+    }, 10000)
   } else {
     // TODO: Remove before production
     console.log('NOT included in Interruptor Popups experiment')

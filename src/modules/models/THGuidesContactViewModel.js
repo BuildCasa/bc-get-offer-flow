@@ -25,8 +25,8 @@ function createTHGuidesContactViewModel(flowState) {
     email: '',
     options: {},
     submitButtonText: {
-      normal: 'Get Download',
-      processing: 'Getting Download...',
+      normal: 'Submit',
+      processing: 'Submitting...',
     },
     isSubmitted: false,
     errorMessage: '',
