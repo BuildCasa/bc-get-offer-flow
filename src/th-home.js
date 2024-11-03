@@ -123,10 +123,12 @@ function initExperiments() {
       variation,
     )
 
+    // Track the experiment set event
+    $trackingService.track('Interruptor Popup Experiment Set')
+
     // TODO: Remove before production
     console.log('Experiment:', experiment)
     console.log('Variation:', variation)
-    console.log('Start Interruptor Popup Timer:', new Date())
 
     // Set the popup to appear after a 10 second delay
     setTimeout(() => {
@@ -137,6 +139,12 @@ function initExperiments() {
       // TODO: Remove before production
       console.log('Show Interruptor Popup:', new Date())
     }, 10000)
+
+    // Track the scheduled popup event
+    $trackingService.track('Interruptor Popup Scheduled')
+
+    // TODO: Remove before production
+    console.log('Start Interruptor Popup Timer:', new Date())
   } else {
     // TODO: Remove before production
     console.log('NOT included in Interruptor Popups experiment')

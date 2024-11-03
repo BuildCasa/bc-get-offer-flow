@@ -108,6 +108,13 @@ function createFlowStateMachine(globalStore, trackingService) {
           },
           SHOW_INTERRUPTOR_POPUP: {
             target: 'modalInterruptorPopupForm',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Interruptor Popup Shown')
+                },
+              ],
+            },
           },
         },
       },
