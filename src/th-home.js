@@ -112,9 +112,6 @@ function initExperiments() {
 
   // If including in the Interruptor Popups experiment
   if (includeInterruptorPopupExperiment) {
-    // TODO: Remove before production
-    console.log('Included in Interruptor Popups experiment')
-
     // Set the experiment id slug, and determine the experiment variant
     const experiment = 'interruptor-popups-2024-11'
     const variation = Math.random() < 0.5 ? 'guides' : 'discount-plus-1500'
@@ -126,27 +123,14 @@ function initExperiments() {
     // Track the experiment set event
     $trackingService.track('Interruptor Popup Experiment Set')
 
-    // TODO: Remove before production
-    console.log('Experiment:', experiment)
-    console.log('Variation:', variation)
-
     // Set the popup to appear after a 10 second delay
     setTimeout(() => {
       // Send Show Interruptor Popup flow transition event
       // State machine logic will ensure that it is only transitioned to from a valid state
       $store.flowState.transition('SHOW_INTERRUPTOR_POPUP')
-
-      // TODO: Remove before production
-      console.log('Show Interruptor Popup:', new Date())
     }, 10000)
 
     // Track the scheduled popup event
     $trackingService.track('Interruptor Popup Scheduled')
-
-    // TODO: Remove before production
-    console.log('Start Interruptor Popup Timer:', new Date())
-  } else {
-    // TODO: Remove before production
-    console.log('NOT included in Interruptor Popups experiment')
   }
 }
