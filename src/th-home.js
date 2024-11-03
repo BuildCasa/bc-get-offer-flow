@@ -50,6 +50,9 @@ const $trackingService = createTrackingService(window.FS, $store)
 // Initialize the stores with custom state and business logic that powers the site interactivity
 initStores()
 
+// Initialize experiments and determine each experiment variant
+initExperiments()
+
 // Start Alpine.js to enable the site interactivity
 Alpine.start()
 
@@ -87,9 +90,25 @@ function initStores() {
     createExperimentationViewModel(),
   )
 
+  // Create view model stores
+  $store.thGuidesContactViewModel = $storeFactory.createStore(
+    'thGuidesContactViewModel',
+    createTHGuidesContactViewModel($store.flowState),
+  )
+  $store.thGuidesDownloadViewModel = $storeFactory.createStore(
+    'thGuidesDownloadViewModel',
+    createTHGuidesDownloadViewModel($store, $trackingService),
+  )
+  $store.thCalculatorViewModel = $storeFactory.createStore(
+    'thCalculatorViewModel',
+    createTHCalculatorViewModel(),
+  )
+}
+
+function initExperiments() {
   // Determine whether or not to include in the Interruptor Popups experiment
   // If the user has already completed the Get Started flow, then they should not see the Interruptor Popups
-  const includeInterruptorPopupExperiment = getStartedFlowState === 'default'
+  const includeInterruptorPopupExperiment = $store.flowState.value === 'default'
 
   // If including in the Interruptor Popups experiment
   if (includeInterruptorPopupExperiment) {
@@ -122,18 +141,4 @@ function initStores() {
     // TODO: Remove before production
     console.log('NOT included in Interruptor Popups experiment')
   }
-
-  // Create viewModel stores
-  $store.thGuidesContactViewModel = $storeFactory.createStore(
-    'thGuidesContactViewModel',
-    createTHGuidesContactViewModel($store.flowState),
-  )
-  $store.thGuidesDownloadViewModel = $storeFactory.createStore(
-    'thGuidesDownloadViewModel',
-    createTHGuidesDownloadViewModel($store, $trackingService),
-  )
-  $store.thCalculatorViewModel = $storeFactory.createStore(
-    'thCalculatorViewModel',
-    createTHCalculatorViewModel(),
-  )
 }
