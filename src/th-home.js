@@ -27,6 +27,7 @@ import {
 import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
 import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
 import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
+import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
 
 /*
  * ----------------------------------------------------------------
@@ -48,6 +49,9 @@ const $trackingService = createTrackingService(window.FS, $store)
 
 // Initialize the stores with custom state and business logic that powers the site interactivity
 initStores()
+
+// Initialize experiments and determine each experiment variant
+initExperiments()
 
 // Start Alpine.js to enable the site interactivity
 Alpine.start()
@@ -80,7 +84,13 @@ function initStores() {
     createFlowUIHelpers($store, $trackingService),
   )
 
-  // Create viewModel stores
+  // Create experimentation view model store
+  $store.experimentationViewModel = $storeFactory.createStore(
+    'experimentationViewModel',
+    createExperimentationViewModel(),
+  )
+
+  // Create view model stores
   $store.thGuidesContactViewModel = $storeFactory.createStore(
     'thGuidesContactViewModel',
     createTHGuidesContactViewModel($store.flowState),
@@ -93,4 +103,34 @@ function initStores() {
     'thCalculatorViewModel',
     createTHCalculatorViewModel(),
   )
+}
+
+function initExperiments() {
+  // Determine whether or not to include in the Interruptor Popups experiment
+  // If the user has already completed the Get Started flow, then they should not see the Interruptor Popups
+  const includeInterruptorPopupExperiment = $store.flowState.value === 'default'
+
+  // If including in the Interruptor Popups experiment
+  if (includeInterruptorPopupExperiment) {
+    // Set the experiment id slug, and determine the experiment variant
+    const experiment = 'interruptor-popups-2024-11'
+    const variation = Math.random() < 0.5 ? 'guides' : 'discount-plus-1500'
+    $store.experimentationViewModel.setActiveExperimentVariation(
+      experiment,
+      variation,
+    )
+
+    // Track the experiment set event
+    $trackingService.track('Interruptor Popup Experiment Set')
+
+    // Set the popup to appear after a 10 second delay
+    setTimeout(() => {
+      // Send Show Interruptor Popup flow transition event
+      // State machine logic will ensure that it is only transitioned to from a valid state
+      $store.flowState.transition('SHOW_INTERRUPTOR_POPUP')
+    }, 10000)
+
+    // Track the scheduled popup event
+    $trackingService.track('Interruptor Popup Scheduled')
+  }
 }

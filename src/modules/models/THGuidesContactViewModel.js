@@ -24,10 +24,6 @@ function createTHGuidesContactViewModel(flowState) {
     lastName: '',
     email: '',
     options: {},
-    submitButtonText: {
-      normal: 'Get Download',
-      processing: 'Getting Download...',
-    },
     isSubmitted: false,
     errorMessage: '',
 
@@ -44,19 +40,6 @@ function createTHGuidesContactViewModel(flowState) {
       this.options = {}
       this.isSubmitted = false
       this.errorMessage = ''
-
-      // Pre-fill submit button text values based on Webflow settings
-      // Preserves Webflow DX for editing button values through the UI (`button` and `waiting` settings)
-      // But allows dynamically controlling displayed text in site, based on current UI state, via Alpine
-      const contactFormSubmitButton = document.getElementById(
-        'guides-contact-form-submit-button',
-      )
-      if (contactFormSubmitButton) {
-        this.submitButtonText = {
-          normal: contactFormSubmitButton.value,
-          processing: contactFormSubmitButton.dataset.wait,
-        }
-      }
 
       // FUTURE DEV: Add logic to pre-fill data based on other sources (link params, etc.) here
     },

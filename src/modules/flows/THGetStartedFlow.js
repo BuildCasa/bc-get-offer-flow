@@ -27,11 +27,24 @@ function createFlowStateMachine(globalStore, trackingService) {
     },
   }
 
-  const guidesContactProcessingStateEffects = {
-    onEntry: [processGuidesContactSubmission],
+  const submitInterruptorPopupContactTransition = {
+    SUBMIT_CONTACT: {
+      target: 'modalInterruptorPopupFormProcessing',
+      effects: {
+        onTransition: [
+          () => {
+            trackingService?.track('Interruptor Popup Contact Submitted')
+          },
+        ],
+      },
+    },
   }
 
-  async function processGuidesContactSubmission() {
+  const contactProcessingStateEffects = {
+    onEntry: [processContactSubmission],
+  }
+
+  async function processContactSubmission() {
     try {
       // Process the submitted contact info, and transition the state accordingly
 
@@ -92,6 +105,16 @@ function createFlowStateMachine(globalStore, trackingService) {
           },
           GET_GUIDES: {
             target: 'modalGuidesContactForm',
+          },
+          SHOW_INTERRUPTOR_POPUP: {
+            target: 'modalInterruptorPopupForm',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Interruptor Popup Shown')
+                },
+              ],
+            },
           },
         },
       },
@@ -183,7 +206,7 @@ function createFlowStateMachine(globalStore, trackingService) {
             target: 'default',
           },
         },
-        effects: guidesContactProcessingStateEffects,
+        effects: contactProcessingStateEffects,
       },
       modalGuidesContactFormError: {
         transitions: {
@@ -215,6 +238,70 @@ function createFlowStateMachine(globalStore, trackingService) {
           ],
         },
       },
+      modalInterruptorPopupForm: {
+        transitions: {
+          ...submitInterruptorPopupContactTransition,
+          EXIT: {
+            target: 'default',
+          },
+        },
+      },
+      modalInterruptorPopupFormProcessing: {
+        transitions: {
+          SUCCESS: {
+            target: 'modalInterruptorPopupFormSuccess',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track(
+                    'Interruptor Popup Submission Succeeded',
+                  )
+                },
+              ],
+            },
+          },
+          ERROR: {
+            target: 'modalInterruptorPopupFormError',
+            effects: {
+              onTransition: [
+                () => {
+                  trackingService.track('Interruptor Popup Submission Failed', {
+                    error_str:
+                      globalStore.thGuidesContactViewModel.errorMessage,
+                  })
+                },
+              ],
+            },
+          },
+          EXIT: {
+            target: 'default',
+          },
+        },
+        effects: contactProcessingStateEffects,
+      },
+      modalInterruptorPopupFormError: {
+        transitions: {
+          ...submitInterruptorPopupContactTransition,
+          EXIT: {
+            target: 'default',
+          },
+        },
+        effects: {
+          onExit: [
+            () => {
+              // Clear out any existing error message
+              globalStore.thGuidesContactViewModel.errorMessage = ''
+            },
+          ],
+        },
+      },
+      modalInterruptorPopupFormSuccess: {
+        transitions: {
+          EXIT: {
+            target: 'default',
+          },
+        },
+      },
     },
   }
 
@@ -233,7 +320,12 @@ function createFlowUIHelpers(globalStore, trackingService) {
           globalStore.flowState.value == 'modalGuidesContactForm' ||
           globalStore.flowState.value == 'modalGuidesContactFormProcessing' ||
           globalStore.flowState.value == 'modalGuidesContactFormError' ||
-          globalStore.flowState.value == 'modalGuidesContactFormSuccess'
+          globalStore.flowState.value == 'modalGuidesContactFormSuccess' ||
+          globalStore.flowState.value == 'modalInterruptorPopupForm' ||
+          globalStore.flowState.value ==
+            'modalInterruptorPopupFormProcessing' ||
+          globalStore.flowState.value == 'modalInterruptorPopupFormError' ||
+          globalStore.flowState.value == 'modalInterruptorPopupFormSuccess'
         )
       },
       handleModalFlowStart(transition = 'GET_STARTED', cta = null) {
