@@ -1,6 +1,6 @@
-import { d as S, v as g, e as k } from "./shared-2KfH2FLj.js";
-const A = "https://app.regrid.com/api/v1/typeahead.json", E = "https://app.regrid.com/api/v1/parcel/", M = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
-async function R(e) {
+import { e as S, v as k, f as g } from "./shared-JXB_n1Zn.js";
+const A = "https://app.regrid.com/api/v1/typeahead.json", R = "https://app.regrid.com/api/v1/parcel/", M = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
+async function E(e) {
   const a = A, t = M, n = new Request(`${a}/?token=${t}&query=${e}`, {
     method: "GET"
   }), s = await fetch(n);
@@ -25,7 +25,7 @@ function B(e, a) {
   return e.score > a.score ? -1 : e.score < a.score ? 1 : 0;
 }
 async function D(e) {
-  const a = E, t = M, n = new Request(
+  const a = R, t = M, n = new Request(
     `${a}${e}.json?token=${t}&return_custom=false`,
     {
       method: "GET"
@@ -44,13 +44,13 @@ function F(e) {
     zip: a.szip
   };
 }
-function v(e) {
+function T(e) {
   const a = e.replace(/\D/g, ""), t = a.startsWith("1"), o = (t ? a.slice(1) : a).slice(0, 10).match(
     /^(\d{0,3})(\d{0,3})(\d{0,4})$/
   ), u = t ? "1" : "", d = o[1] ? (t ? " " : "") + ("(" + o[1]) : "", m = o[2] ? ") " + o[2] : "", h = o[3] ? "-" + o[3] : "";
   return u + d + m + h;
 }
-function T(e) {
+function v(e) {
   return /^\+?1?\s?(\()?\d{3}(\))?[-.\s]?\d{3}[-.\s]?\d{4}$|^\d{10}$/.test(e);
 }
 async function y(e, a = {}) {
@@ -190,11 +190,11 @@ function j(e, a) {
         phone: e.contactViewModel.phone.trim(),
         desiredTimeline: e.contactViewModel.desiredTimeline.trim()
       };
-      if (!g(i.email))
+      if (!k(i.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
-      if (!T(i.phone))
+      if (!v(i.phone))
         throw new Error(
           "Please enter a valid phone number, including area code, and try again.",
           { cause: "INVALID_PHONE" }
@@ -216,7 +216,7 @@ function j(e, a) {
       };
       await Promise.all([
         f(e.contactViewModel),
-        k(l)
+        g(l)
       ]), e.contactViewModel.isSubmitted = !0, e.flowState.transition("SUCCESS");
     } catch (i) {
       console.log("Error submitting contact:", i), i && i.cause && (i.cause === "INVALID_EMAIL" || i.cause === "INVALID_PHONE") ? e.contactViewModel.errorMessage = i.message : e.contactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", e.flowState.transition("ERROR");
@@ -229,15 +229,15 @@ function j(e, a) {
       "Checking zoning district...",
       "Checking lot shape & size..."
     ];
-    for (const w of l)
-      i.lotAnalysisStep = w, await new Promise((V) => {
+    for (const p of l)
+      i.lotAnalysisStep = p, await new Promise((V) => {
         setTimeout(V, 1500);
       });
   }
   const C = {
-    onEntry: [p]
+    onEntry: [w]
   };
-  async function p() {
+  async function w() {
     if (e.estimateViewModel.hasActiveJurisdiction && e.estimateViewModel.hasEstimate) {
       await y(
         "https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.11.0/tsparticles.confetti.bundle.min.js",
@@ -509,7 +509,7 @@ function U(e, a) {
         "windfall-estimate-or-eligibility-2023-07"
       );
       try {
-        this.matches = await R(this.inputValue);
+        this.matches = await E(this.inputValue);
       } catch {
         this.errorMessage = "There was an error finding your address. Please try again, or contact us for help.", e.flowState.transition("ERROR");
       }
@@ -584,7 +584,7 @@ function z(e) {
       return !!this.firstName.trim() || !!this.lastName.trim() || !!this.email.trim() || !!this.phone.trim();
     },
     formatPhoneInput(a) {
-      return v(a);
+      return T(a);
     },
     /**
      * Handles the submission event for the contact form.
@@ -1589,14 +1589,14 @@ function K() {
     userGeo: {},
     marketsData: {},
     get market() {
-      return x(this.userGeo.city, this.marketsData);
+      return W(this.userGeo.city, this.marketsData);
     },
     async init() {
       this.marketsData = I, this.userGeo = await O();
     }
   };
 }
-function x(e, a) {
+function W(e, a) {
   if (!e || typeof e != "string")
     return null;
   for (const t of Object.keys(a))
@@ -1606,52 +1606,11 @@ function x(e, a) {
       return t;
   return null;
 }
-function q() {
-  return {
-    // Instance properties
-    activeExperimentVariations: {},
-    /**
-     * Initializes the ExperimentationViewModel instance properties.
-     * Run automatically by Alpine, but can also be called manually to reset the view model state.
-     * Need to call this manually on store creation if we stop using Alpine as our UI library.
-     * @returns {void}
-     */
-    init() {
-      this.activeExperimentVariations = {};
-    },
-    /**
-     * Sets the active variation for a given experiment.
-     * @param {string} experiment - The name of the experiment.
-     * @param {string} variation - The name of the variation.
-     * @returns {void}
-     */
-    setActiveExperimentVariation(e, a) {
-      this.activeExperimentVariations[e] = a;
-    },
-    /**
-     * Gets the active variation for a given experiment.
-     * @param {string} experiment - The name of the experiment.
-     * @returns {string} The name of the active variation.
-     */
-    getActiveExperimentVariation(e) {
-      return this.activeExperimentVariations[e];
-    },
-    /**
-     * Clears the active variation for a given experiment.
-     * @param {string} experiment - The name of the experiment.
-     * @returns {void}
-     */
-    clearActiveExperiment(e) {
-      this.activeExperimentVariations[e] && delete this.activeExperimentVariations[e];
-    }
-  };
-}
 export {
   U as a,
   z as b,
   _ as c,
   J as d,
   K as e,
-  q as f,
-  j as g
+  j as f
 };

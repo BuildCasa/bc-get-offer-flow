@@ -1,6 +1,6 @@
-import { v as f, t as w, m as l, c as G, a as C, b as h } from "./shared-2KfH2FLj.js";
-function E(t, e) {
-  const a = {
+import { v as f, t as w, m as l, c as E, a as C, b as h, d as G } from "./shared-JXB_n1Zn.js";
+function I(t, e) {
+  const o = {
     SUBMIT_CONTACT: {
       target: "modalGuidesContactFormProcessing",
       effects: {
@@ -11,27 +11,38 @@ function E(t, e) {
         ]
       }
     }
-  }, i = {
-    onEntry: [r]
+  }, n = {
+    SUBMIT_CONTACT: {
+      target: "modalInterruptorPopupFormProcessing",
+      effects: {
+        onTransition: [
+          () => {
+            e == null || e.track("Interruptor Popup Contact Submitted");
+          }
+        ]
+      }
+    }
+  }, s = {
+    onEntry: [u]
   };
-  async function r() {
+  async function u() {
     try {
-      let o = {
+      let r = {
         firstName: t.thGuidesContactViewModel.firstName.trim(),
         lastName: t.thGuidesContactViewModel.lastName.trim(),
         email: t.thGuidesContactViewModel.email.trim()
       };
-      if (!f(o.email))
+      if (!f(r.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
-      const m = {
+      const p = {
         ...t.thGuidesContactViewModel.options,
-        contact: o
+        contact: r
       };
-      await Promise.all([w(m)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
-    } catch (o) {
-      console.log("Error submitting contact:", o), o && o.cause && o.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = o.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition("ERROR");
+      await Promise.all([w(p)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
+    } catch (r) {
+      console.log("Error submitting contact:", r), r && r.cause && r.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = r.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition("ERROR");
     }
   }
   return {
@@ -47,6 +58,16 @@ function E(t, e) {
           },
           GET_GUIDES: {
             target: "modalGuidesContactForm"
+          },
+          SHOW_INTERRUPTOR_POPUP: {
+            target: "modalInterruptorPopupForm",
+            effects: {
+              onTransition: [
+                () => {
+                  e.track("Interruptor Popup Shown");
+                }
+              ]
+            }
           }
         }
       },
@@ -103,7 +124,7 @@ function E(t, e) {
       },
       modalGuidesContactForm: {
         transitions: {
-          ...a,
+          ...o,
           EXIT: {
             target: "default"
           }
@@ -137,11 +158,11 @@ function E(t, e) {
             target: "default"
           }
         },
-        effects: i
+        effects: s
       },
       modalGuidesContactFormError: {
         transitions: {
-          ...a,
+          ...o,
           EXIT: {
             target: "default"
           }
@@ -167,34 +188,96 @@ function E(t, e) {
             }
           ]
         }
-      }
-    }
-  };
-}
-function S(t, e) {
-  return {
-    modal: {
-      get isOpen() {
-        return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetStartedComplete" || t.flowState.value == "modalBookIntroForm" || t.flowState.value == "modalGetDemoForm" || t.flowState.value == "modalGuidesContactForm" || t.flowState.value == "modalGuidesContactFormProcessing" || t.flowState.value == "modalGuidesContactFormError" || t.flowState.value == "modalGuidesContactFormSuccess";
       },
-      handleModalFlowStart(a = "GET_STARTED", i = null) {
-        t.flowState.transition(a);
-        const c = {
-          GET_STARTED: "Get Started Clicked",
-          GET_DEMO: "Get Demo Clicked"
-        }[a];
-        let o = {};
-        i && (o = {
-          cta_str: i
-        }), c && e.track(c, o);
+      modalInterruptorPopupForm: {
+        transitions: {
+          ...n,
+          EXIT: {
+            target: "default"
+          }
+        }
       },
-      handleModalClose(a) {
-        a.preventDefault(), a.stopPropagation(), t.flowState.transition("EXIT"), e.track("Modal Closed");
+      modalInterruptorPopupFormProcessing: {
+        transitions: {
+          SUCCESS: {
+            target: "modalInterruptorPopupFormSuccess",
+            effects: {
+              onTransition: [
+                () => {
+                  e.track(
+                    "Interruptor Popup Submission Succeeded"
+                  );
+                }
+              ]
+            }
+          },
+          ERROR: {
+            target: "modalInterruptorPopupFormError",
+            effects: {
+              onTransition: [
+                () => {
+                  e.track("Interruptor Popup Submission Failed", {
+                    error_str: t.thGuidesContactViewModel.errorMessage
+                  });
+                }
+              ]
+            }
+          },
+          EXIT: {
+            target: "default"
+          }
+        },
+        effects: s
+      },
+      modalInterruptorPopupFormError: {
+        transitions: {
+          ...n,
+          EXIT: {
+            target: "default"
+          }
+        },
+        effects: {
+          onExit: [
+            () => {
+              t.thGuidesContactViewModel.errorMessage = "";
+            }
+          ]
+        }
+      },
+      modalInterruptorPopupFormSuccess: {
+        transitions: {
+          EXIT: {
+            target: "default"
+          }
+        }
       }
     }
   };
 }
 function T(t, e) {
+  return {
+    modal: {
+      get isOpen() {
+        return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetStartedComplete" || t.flowState.value == "modalBookIntroForm" || t.flowState.value == "modalGetDemoForm" || t.flowState.value == "modalGuidesContactForm" || t.flowState.value == "modalGuidesContactFormProcessing" || t.flowState.value == "modalGuidesContactFormError" || t.flowState.value == "modalGuidesContactFormSuccess" || t.flowState.value == "modalInterruptorPopupForm" || t.flowState.value == "modalInterruptorPopupFormProcessing" || t.flowState.value == "modalInterruptorPopupFormError" || t.flowState.value == "modalInterruptorPopupFormSuccess";
+      },
+      handleModalFlowStart(o = "GET_STARTED", n = null) {
+        t.flowState.transition(o);
+        const u = {
+          GET_STARTED: "Get Started Clicked",
+          GET_DEMO: "Get Demo Clicked"
+        }[o];
+        let c = {};
+        n && (c = {
+          cta_str: n
+        }), u && e.track(u, c);
+      },
+      handleModalClose(o) {
+        o.preventDefault(), o.stopPropagation(), t.flowState.transition("EXIT"), e.track("Modal Closed");
+      }
+    }
+  };
+}
+function S(t, e) {
   return {
     // Instance properties
     GUIDES: {
@@ -218,12 +301,12 @@ function T(t, e) {
      * @param {MouseEvent} event - Mouse event object.
      * @returns {void}
      */
-    handleDownloadClick(a, i) {
-      this.guide = i, this.downloadButtonElement = a.target;
-      const r = t.thGuidesContactViewModel.isSubmitted;
-      r || (a.preventDefault(), t.flowState.transition("GET_GUIDES")), e.track("Guide Download Clicked", {
+    handleDownloadClick(o, n) {
+      this.guide = n, this.downloadButtonElement = o.target;
+      const s = t.thGuidesContactViewModel.isSubmitted;
+      s || (o.preventDefault(), t.flowState.transition("GET_GUIDES")), e.track("Guide Download Clicked", {
         guide_str: this.guide,
-        contact_submitted_str: r
+        contact_submitted_str: s
       });
     }
   };
@@ -235,10 +318,6 @@ function M(t) {
     lastName: "",
     email: "",
     options: {},
-    submitButtonText: {
-      normal: "Get Download",
-      processing: "Getting Download..."
-    },
     isSubmitted: !1,
     errorMessage: "",
     /**
@@ -249,13 +328,6 @@ function M(t) {
      */
     init() {
       this.firstName = "", this.lastName = "", this.email = "", this.options = {}, this.isSubmitted = !1, this.errorMessage = "";
-      const e = document.getElementById(
-        "guides-contact-form-submit-button"
-      );
-      e && (this.submitButtonText = {
-        normal: e.value,
-        processing: e.dataset.wait
-      });
     },
     /**
      * Whether or not any contact details have been added.
@@ -270,29 +342,29 @@ function M(t) {
      * @param {object} options - Additional options for the submission.
      * @returns {void}
      */
-    handleSubmit(e, a = {}) {
-      e.preventDefault(), e.stopPropagation(), this.options = a, t.transition("SUBMIT_CONTACT");
+    handleSubmit(e, o = {}) {
+      e.preventDefault(), e.stopPropagation(), this.options = o, t.transition("SUBMIT_CONTACT");
     }
   };
 }
-function F() {
+function P() {
   return {
     purchasePrice: null,
     init: function() {
       this.purchasePrice = 1e6;
     },
     get formattedPurchasePrice() {
-      return u(this.purchasePrice);
+      return m(this.purchasePrice);
     },
     get cashBack() {
       return Math.round(this.purchasePrice * 0.03 - 5e3);
     },
     get formattedCashBack() {
-      return u(this.cashBack);
+      return m(this.cashBack);
     }
   };
 }
-function u(t) {
+function m(t) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -300,29 +372,44 @@ function u(t) {
   }).format(t);
 }
 window.Alpine = l;
-const n = C(l), s = {}, d = h(window.FS, s);
-g();
+const i = h(l), a = {}, d = G(window.FS, a);
+F();
+D();
 l.start();
-function g() {
-  const e = new URL(window.location.href).searchParams.get("get_started"), a = e && e === "complete" ? "modalGetStartedComplete" : "default";
-  s.flowState = n.createStore(
+function F() {
+  const e = new URL(window.location.href).searchParams.get("get_started"), o = e && e === "complete" ? "modalGetStartedComplete" : "default";
+  a.flowState = i.createStore(
     "flowState",
-    G(
-      E(s, d),
+    E(
+      I(a, d),
       d,
-      a
+      o
     )
-  ), s.flowUIHelpers = n.createStore(
+  ), a.flowUIHelpers = i.createStore(
     "flowUIHelpers",
-    S(s, d)
-  ), s.thGuidesContactViewModel = n.createStore(
+    T(a, d)
+  ), a.experimentationViewModel = i.createStore(
+    "experimentationViewModel",
+    C()
+  ), a.thGuidesContactViewModel = i.createStore(
     "thGuidesContactViewModel",
-    M(s.flowState)
-  ), s.thGuidesDownloadViewModel = n.createStore(
+    M(a.flowState)
+  ), a.thGuidesDownloadViewModel = i.createStore(
     "thGuidesDownloadViewModel",
-    T(s, d)
-  ), s.thCalculatorViewModel = n.createStore(
+    S(a, d)
+  ), a.thCalculatorViewModel = i.createStore(
     "thCalculatorViewModel",
-    F()
+    P()
   );
+}
+function D() {
+  if (a.flowState.value === "default") {
+    const e = "interruptor-popups-2024-11", o = Math.random() < 0.5 ? "guides" : "discount-plus-1500";
+    a.experimentationViewModel.setActiveExperimentVariation(
+      e,
+      o
+    ), d.track("Interruptor Popup Experiment Set"), setTimeout(() => {
+      a.flowState.transition("SHOW_INTERRUPTOR_POPUP");
+    }, 1e4), d.track("Interruptor Popup Scheduled");
+  }
 }

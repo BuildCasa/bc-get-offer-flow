@@ -51,10 +51,10 @@ function jr(e) {
 function xt(e, t) {
   typeof t == "function" ? (e._x_cleanups || (e._x_cleanups = []), e._x_cleanups.push(t)) : (t = e, gt.push(t));
 }
-function Lr(e) {
+function Vr(e) {
   ht.push(e);
 }
-function Fr(e, t, r) {
+function Lr(e, t, r) {
   e._x_attributeCleanups || (e._x_attributeCleanups = {}), e._x_attributeCleanups[t] || (e._x_attributeCleanups[t] = []), e._x_attributeCleanups[t].push(r);
 }
 function mt(e, t) {
@@ -66,22 +66,22 @@ var ze = new MutationObserver(He), Be = !1;
 function yt() {
   ze.observe(document, { subtree: !0, childList: !0, attributes: !0, attributeOldValue: !0 }), Be = !0;
 }
-function Nr() {
-  kr(), ze.disconnect(), Be = !1;
+function Fr() {
+  Nr(), ze.disconnect(), Be = !1;
 }
 var W = [], we = !1;
-function kr() {
+function Nr() {
   W = W.concat(ze.takeRecords()), W.length && !we && (we = !0, queueMicrotask(() => {
-    Vr(), we = !1;
+    kr(), we = !1;
   }));
 }
-function Vr() {
+function kr() {
   He(W), W.length = 0;
 }
 function x(e) {
   if (!Be)
     return e();
-  Nr();
+  Fr();
   let t = e();
   return yt(), t;
 }
@@ -126,10 +126,10 @@ function He(e) {
   }), t = null, r = null, n = null, i = null;
 }
 function wt(e) {
-  return Q(k(e));
+  return Q(N(e));
 }
 function Z(e, t, r) {
-  return e._x_dataStack = [t, ...k(r || e)], () => {
+  return e._x_dataStack = [t, ...N(r || e)], () => {
     e._x_dataStack = e._x_dataStack.filter((n) => n !== t);
   };
 }
@@ -139,8 +139,8 @@ function ot(e, t) {
     r[n] = i;
   });
 }
-function k(e) {
-  return e._x_dataStack ? e._x_dataStack : typeof ShadowRoot == "function" && e instanceof ShadowRoot ? k(e.host) : e.parentNode ? k(e.parentNode) : [];
+function N(e) {
+  return e._x_dataStack ? e._x_dataStack : typeof ShadowRoot == "function" && e instanceof ShadowRoot ? N(e.host) : e.parentNode ? N(e.parentNode) : [];
 }
 function Q(e) {
   let t = new Proxy({}, {
@@ -250,7 +250,7 @@ function qr(e) {
   let t = ne;
   ne = !1, e(), ne = t;
 }
-function N(e, t, r = {}) {
+function F(e, t, r = {}) {
   let n;
   return y(e, t)((i) => n = i, r), n;
 }
@@ -264,7 +264,7 @@ function Hr(e) {
 function Ot(e, t) {
   let r = {};
   Pe(r, e);
-  let n = [r, ...k(e)];
+  let n = [r, ...N(e)];
   if (typeof t == "function")
     return Wr(n, t);
   let i = Gr(n, t, e);
@@ -332,10 +332,10 @@ function Ue(e, t, r) {
     } : o), t = t.concat(s);
   }
   let n = {};
-  return t.map(It((s, a) => n[s] = a)).filter(Lt).map(Qr(n, r)).sort(Xr).map((s) => Zr(e, s));
+  return t.map(It((s, a) => n[s] = a)).filter(Vt).map(Qr(n, r)).sort(Xr).map((s) => Zr(e, s));
 }
 function Ct(e) {
-  return Array.from(e).map(It()).filter((t) => !Lt(t));
+  return Array.from(e).map(It()).filter((t) => !Vt(t));
 }
 var Re = !1, H = /* @__PURE__ */ new Map(), Tt = Symbol();
 function Yr(e) {
@@ -358,13 +358,13 @@ function Pt(e) {
     effect: n,
     cleanup: r,
     evaluateLater: y.bind(y, e),
-    evaluate: N.bind(N, e)
+    evaluate: F.bind(F, e)
   }, () => t.forEach((o) => o())];
 }
 function Zr(e, t) {
   let r = () => {
   }, n = Mt[t.type] || r, [i, s] = Pt(e);
-  Fr(e, t.original, s);
+  Lr(e, t.original, s);
   let a = () => {
     e._x_ignore || e._x_ignoreSelf || (n.inline && n.inline(e, t, i), n = n.bind(n, e, t, i), Re ? H.get(Tt).push(n) : n());
   };
@@ -382,13 +382,13 @@ var jt = [];
 function Ge(e) {
   jt.push(e);
 }
-function Lt({ name: e }) {
-  return Ft().test(e);
+function Vt({ name: e }) {
+  return Lt().test(e);
 }
-var Ft = () => new RegExp(`^${We}([^:^.]+)\\b`);
+var Lt = () => new RegExp(`^${We}([^:^.]+)\\b`);
 function Qr(e, t) {
   return ({ name: r, value: n }) => {
-    let i = r.match(Ft()), s = r.match(/:([a-zA-Z0-9\-:]+)/), a = r.match(/\.[^.\]]+(?=[^\]]*$)/g) || [], o = t || e[r] || r;
+    let i = r.match(Lt()), s = r.match(/:([a-zA-Z0-9\-:]+)/), a = r.match(/\.[^.\]]+(?=[^\]]*$)/g) || [], o = t || e[r] || r;
     return {
       type: i ? i[1] : null,
       value: s ? s[1] : null,
@@ -437,7 +437,7 @@ function U(e, t, r = {}) {
   }));
 }
 var Ie = [], Je = !1;
-function Nt(e = () => {
+function Ft(e = () => {
 }) {
   return queueMicrotask(() => {
     Je || setTimeout(() => {
@@ -456,9 +456,9 @@ function je() {
 function en() {
   Je = !0;
 }
-function L(e, t) {
+function V(e, t) {
   if (typeof ShadowRoot == "function" && e instanceof ShadowRoot) {
-    Array.from(e.children).forEach((i) => L(i, t));
+    Array.from(e.children).forEach((i) => V(i, t));
     return;
   }
   let r = !1;
@@ -466,13 +466,13 @@ function L(e, t) {
     return;
   let n = e.firstElementChild;
   for (; n; )
-    L(n, t), n = n.nextElementSibling;
+    V(n, t), n = n.nextElementSibling;
 }
-function V(e, ...t) {
+function k(e, ...t) {
   console.warn(`Alpine Warning: ${e}`, ...t);
 }
 function tn() {
-  document.body || V("Unable to initialize. Trying to load Alpine before `<body>` is available. Did you forget to add `defer` in Alpine's `<script>` tag?"), U(document, "alpine:init"), U(document, "alpine:initializing"), yt(), jr((t) => C(t, L)), xt((t) => nn(t)), Lr((t, r) => {
+  document.body || k("Unable to initialize. Trying to load Alpine before `<body>` is available. Did you forget to add `defer` in Alpine's `<script>` tag?"), U(document, "alpine:init"), U(document, "alpine:initializing"), yt(), jr((t) => C(t, V)), xt((t) => nn(t)), Vr((t, r) => {
     Ue(t, r).forEach((n) => n());
   });
   let e = (t) => !ce(t.parentElement, !0);
@@ -480,22 +480,22 @@ function tn() {
     C(t);
   }), U(document, "alpine:initialized");
 }
-var Ye = [], kt = [];
-function Vt() {
+var Ye = [], Nt = [];
+function kt() {
   return Ye.map((e) => e());
 }
 function Dt() {
-  return Ye.concat(kt).map((e) => e());
+  return Ye.concat(Nt).map((e) => e());
 }
 function Kt(e) {
   Ye.push(e);
 }
 function zt(e) {
-  kt.push(e);
+  Nt.push(e);
 }
 function ce(e, t = !1) {
   return ue(e, (r) => {
-    if ((t ? Dt() : Vt()).some((i) => r.matches(i)))
+    if ((t ? Dt() : kt()).some((i) => r.matches(i)))
       return !0;
   });
 }
@@ -508,9 +508,9 @@ function ue(e, t) {
   }
 }
 function rn(e) {
-  return Vt().some((t) => e.matches(t));
+  return kt().some((t) => e.matches(t));
 }
-function C(e, t = L) {
+function C(e, t = V) {
   Yr(() => {
     t(e, (r, n) => {
       Ue(r, r.attributes).forEach((i) => i()), r._x_ignore && n();
@@ -518,7 +518,7 @@ function C(e, t = L) {
   });
 }
 function nn(e) {
-  L(e, (t) => mt(t));
+  V(e, (t) => mt(t));
 }
 function Ze(e, t) {
   return Array.isArray(t) ? ct(e, t.join(" ")) : typeof t == "object" && t !== null ? sn(e, t) : typeof t == "function" ? Ze(e, t()) : ct(e, t);
@@ -561,7 +561,7 @@ function on(e, t) {
 function cn(e) {
   return e.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 }
-function Le(e, t = () => {
+function Ve(e, t = () => {
 }) {
   let r = !1;
   return function() {
@@ -631,7 +631,7 @@ function Bt(e, t, r = {}) {
     in(n = () => {
     }, i = () => {
     }) {
-      Fe(e, t, {
+      Le(e, t, {
         during: this.enter.during,
         start: this.enter.start,
         end: this.enter.end
@@ -640,7 +640,7 @@ function Bt(e, t, r = {}) {
     out(n = () => {
     }, i = () => {
     }) {
-      Fe(e, t, {
+      Le(e, t, {
         during: this.leave.during,
         start: this.leave.start,
         end: this.leave.end
@@ -680,7 +680,7 @@ function qt(e) {
   if (t)
     return t._x_hidePromise ? t : qt(t);
 }
-function Fe(e, t, { during: r, start: n, end: i } = {}, s = () => {
+function Le(e, t, { during: r, start: n, end: i } = {}, s = () => {
 }, a = () => {
 }) {
   if (e._x_transitioning && e._x_transitioning.cancel(), Object.keys(r).length === 0 && Object.keys(n).length === 0 && Object.keys(i).length === 0) {
@@ -706,7 +706,7 @@ function Fe(e, t, { during: r, start: n, end: i } = {}, s = () => {
   });
 }
 function fn(e, t) {
-  let r, n, i, s = Le(() => {
+  let r, n, i, s = Ve(() => {
     x(() => {
       r = !0, n || t.before(), i || (t.end(), je()), t.after(), e.isConnected && t.cleanup(), delete e._x_transitioning;
     });
@@ -716,7 +716,7 @@ function fn(e, t) {
     beforeCancel(a) {
       this.beforeCancels.push(a);
     },
-    cancel: Le(function() {
+    cancel: Ve(function() {
       for (; this.beforeCancels.length; )
         this.beforeCancels.shift()();
       s();
@@ -750,20 +750,20 @@ function B(e, t, r) {
   }
   return t === "origin" && ["top", "right", "left", "center", "bottom"].includes(e[e.indexOf(t) + 2]) ? [n, e[e.indexOf(t) + 2]].join(" ") : n;
 }
-var Ne = !1;
+var Fe = !1;
 function fe(e, t = () => {
 }) {
-  return (...r) => Ne ? t(...r) : e(...r);
+  return (...r) => Fe ? t(...r) : e(...r);
 }
 function dn(e, t) {
-  t._x_dataStack || (t._x_dataStack = e._x_dataStack), Ne = !0, _n(() => {
+  t._x_dataStack || (t._x_dataStack = e._x_dataStack), Fe = !0, _n(() => {
     pn(t);
-  }), Ne = !1;
+  }), Fe = !1;
 }
 function pn(e) {
   let t = !1;
   C(e, (n, i) => {
-    L(n, (s, a) => {
+    V(n, (s, a) => {
       if (t && rn(s))
         return a();
       t = !0, i(s, a);
@@ -955,7 +955,7 @@ var Rn = {
   dontAutoEvaluateFunctions: qr,
   disableEffectScheduling: Rr,
   setReactivityEngine: $r,
-  closestDataStack: k,
+  closestDataStack: N,
   skipDuringClone: fe,
   addRootSelector: Kt,
   addInitSelector: zt,
@@ -968,15 +968,15 @@ var Rn = {
   findClosest: ue,
   closestRoot: ce,
   interceptor: Et,
-  transition: Fe,
+  transition: Le,
   setStyles: le,
   mutateDom: x,
   directive: v,
   throttle: Gt,
   debounce: Ut,
-  evaluate: N,
+  evaluate: F,
   initTree: C,
-  nextTick: Nt,
+  nextTick: Ft,
   prefixed: z,
   prefix: Jr,
   plugin: An,
@@ -995,15 +995,15 @@ function $n(e, t) {
     r[n[i]] = !0;
   return t ? (i) => !!r[i.toLowerCase()] : (i) => !!r[i];
 }
-var In = Object.freeze({}), Qt = Object.assign, jn = Object.prototype.hasOwnProperty, de = (e, t) => jn.call(e, t), I = Array.isArray, G = (e) => Xt(e) === "[object Map]", Ln = (e) => typeof e == "string", Qe = (e) => typeof e == "symbol", pe = (e) => e !== null && typeof e == "object", Fn = Object.prototype.toString, Xt = (e) => Fn.call(e), er = (e) => Xt(e).slice(8, -1), Xe = (e) => Ln(e) && e !== "NaN" && e[0] !== "-" && "" + parseInt(e, 10) === e, Nn = (e) => {
+var In = Object.freeze({}), Qt = Object.assign, jn = Object.prototype.hasOwnProperty, de = (e, t) => jn.call(e, t), I = Array.isArray, G = (e) => Xt(e) === "[object Map]", Vn = (e) => typeof e == "string", Qe = (e) => typeof e == "symbol", pe = (e) => e !== null && typeof e == "object", Ln = Object.prototype.toString, Xt = (e) => Ln.call(e), er = (e) => Xt(e).slice(8, -1), Xe = (e) => Vn(e) && e !== "NaN" && e[0] !== "-" && "" + parseInt(e, 10) === e, Fn = (e) => {
   const t = /* @__PURE__ */ Object.create(null);
   return (r) => t[r] || (t[r] = e(r));
-}, kn = Nn((e) => e.charAt(0).toUpperCase() + e.slice(1)), tr = (e, t) => e !== t && (e === e || t === t), ke = /* @__PURE__ */ new WeakMap(), q = [], S, j = Symbol("iterate"), Ve = Symbol("Map key iterate");
-function Vn(e) {
+}, Nn = Fn((e) => e.charAt(0).toUpperCase() + e.slice(1)), tr = (e, t) => e !== t && (e === e || t === t), Ne = /* @__PURE__ */ new WeakMap(), q = [], S, j = Symbol("iterate"), ke = Symbol("Map key iterate");
+function kn(e) {
   return e && e._isEffect === !0;
 }
 function Dn(e, t = In) {
-  Vn(e) && (e = e.raw);
+  kn(e) && (e = e.raw);
   const r = Bn(e, t);
   return t.lazy || r(), r;
 }
@@ -1048,8 +1048,8 @@ function nr() {
 function E(e, t, r) {
   if (!D || S === void 0)
     return;
-  let n = ke.get(e);
-  n || ke.set(e, n = /* @__PURE__ */ new Map());
+  let n = Ne.get(e);
+  n || Ne.set(e, n = /* @__PURE__ */ new Map());
   let i = n.get(r);
   i || n.set(r, i = /* @__PURE__ */ new Set()), i.has(S) || (i.add(S), S.deps.push(i), S.options.onTrack && S.options.onTrack({
     effect: S,
@@ -1059,7 +1059,7 @@ function E(e, t, r) {
   }));
 }
 function T(e, t, r, n, i, s) {
-  const a = ke.get(e);
+  const a = Ne.get(e);
   if (!a)
     return;
   const o = /* @__PURE__ */ new Set(), c = (l) => {
@@ -1076,10 +1076,10 @@ function T(e, t, r, n, i, s) {
   else
     switch (r !== void 0 && c(a.get(r)), t) {
       case "add":
-        I(e) ? Xe(r) && c(a.get("length")) : (c(a.get(j)), G(e) && c(a.get(Ve)));
+        I(e) ? Xe(r) && c(a.get("length")) : (c(a.get(j)), G(e) && c(a.get(ke)));
         break;
       case "delete":
-        I(e) || (c(a.get(j)), G(e) && c(a.get(Ve)));
+        I(e) || (c(a.get(j)), G(e) && c(a.get(ke)));
         break;
       case "set":
         G(e) && c(a.get(j));
@@ -1227,7 +1227,7 @@ function me(e, t) {
 function re(e, t, r) {
   return function(...n) {
     const i = this.__v_raw, s = _(i), a = G(s), o = e === "entries" || e === Symbol.iterator && a, c = e === "keys" && a, u = i[e](...n), l = r ? nt : t ? rt : tt;
-    return !t && E(s, "iterate", c ? Ve : j), {
+    return !t && E(s, "iterate", c ? ke : j), {
       next() {
         const { value: d, done: h } = u.next();
         return h ? { value: d, done: h } : {
@@ -1245,7 +1245,7 @@ function M(e) {
   return function(...t) {
     {
       const r = t[0] ? `on key "${t[0]}" ` : "";
-      console.warn(`${kn(e)} operation ${r}failed: target is readonly.`, _(this));
+      console.warn(`${Nn(e)} operation ${r}failed: target is readonly.`, _(this));
     }
     return e === "delete" ? !1 : this;
   };
@@ -1370,7 +1370,7 @@ function _(e) {
 function De(e) {
   return !!(e && e.__v_isRef === !0);
 }
-A("nextTick", () => Nt);
+A("nextTick", () => Ft);
 A("dispatch", (e) => U.bind(U, e));
 A("watch", (e, { evaluateLater: t, effect: r }) => (n, i) => {
   let s = t(n), a = !0, o, c = r(() => s((u) => {
@@ -1411,7 +1411,7 @@ A("el", (e) => e);
 Er("Focus", "focus", "focus");
 Er("Persist", "persist", "persist");
 function Er(e, t, r) {
-  A(t, (n) => V(`You can't use [$${directiveName}] without first installing the "${e}" plugin here: https://alpinejs.dev/plugins/${r}`, n));
+  A(t, (n) => k(`You can't use [$${directiveName}] without first installing the "${e}" plugin here: https://alpinejs.dev/plugins/${r}`, n));
 }
 v("modelable", (e, { expression: t }, { effect: r, evaluateLater: n }) => {
   let i = n(t), s = () => {
@@ -1428,9 +1428,9 @@ v("modelable", (e, { expression: t }, { effect: r, evaluateLater: n }) => {
   });
 });
 v("teleport", (e, { expression: t }, { cleanup: r }) => {
-  e.tagName.toLowerCase() !== "template" && V("x-teleport can only be used on a <template> tag", e);
+  e.tagName.toLowerCase() !== "template" && k("x-teleport can only be used on a <template> tag", e);
   let n = document.querySelector(t);
-  n || V(`Cannot find x-teleport element for selector: "${t}"`);
+  n || k(`Cannot find x-teleport element for selector: "${t}"`);
   let i = e.content.cloneNode(!0).firstElementChild;
   e._x_teleport = i, i._x_teleportBack = e, e._x_forwardEvents && e._x_forwardEvents.forEach((s) => {
     i.addEventListener(s, (a) => {
@@ -1637,13 +1637,13 @@ v("data", fe((e, { expression: t }, { cleanup: r }) => {
   Pe(n, e);
   let i = {};
   Pn(i, n);
-  let s = N(e, t, { scope: i });
+  let s = F(e, t, { scope: i });
   s === void 0 && (s = {}), Pe(s, e);
   let a = K(s);
   bt(a);
   let o = Z(e, a);
-  a.init && N(e, a.init), r(() => {
-    a.destroy && N(e, a.destroy), o();
+  a.init && F(e, a.init), r(() => {
+    a.destroy && F(e, a.destroy), o();
   });
 }));
 v("show", (e, { modifiers: t, expression: r }, { effect: n }) => {
@@ -1661,7 +1661,7 @@ v("show", (e, { modifiers: t, expression: r }, { effect: n }) => {
     e._x_doHide(), e._x_isShown = !1;
   }, a = () => {
     e._x_doShow(), e._x_isShown = !0;
-  }, o = () => setTimeout(a), c = Le((d) => d ? a() : s(), (d) => {
+  }, o = () => setTimeout(a), c = Ve((d) => d ? a() : s(), (d) => {
     typeof e._x_toggleAndCascadeWithTransitions == "function" ? e._x_toggleAndCascadeWithTransitions(e, d, a, s) : d ? o() : s();
   }), u, l = !0;
   n(() => i((d) => {
@@ -1712,18 +1712,18 @@ function wi(e, t, r, n) {
       o[p]._x_effects && o[p]._x_effects.forEach(pt), o[p].remove(), o[p] = null, delete o[p];
     }
     for (let f = 0; f < h.length; f++) {
-      let [p, g] = h[f], m = o[p], b = o[g], F = document.createElement("div");
+      let [p, g] = h[f], m = o[p], b = o[g], L = document.createElement("div");
       x(() => {
-        b.after(F), m.after(b), b._x_currentIfEl && b.after(b._x_currentIfEl), F.before(m), m._x_currentIfEl && m.after(m._x_currentIfEl), F.remove();
+        b.after(L), m.after(b), b._x_currentIfEl && b.after(b._x_currentIfEl), L.before(m), m._x_currentIfEl && m.after(m._x_currentIfEl), L.remove();
       }), ot(b, u[l.indexOf(g)]);
     }
     for (let f = 0; f < d.length; f++) {
       let [p, g] = d[f], m = p === "template" ? s : o[p];
       m._x_currentIfEl && (m = m._x_currentIfEl);
-      let b = u[g], F = l[g], ee = document.importNode(s.content, !0).firstElementChild;
+      let b = u[g], L = l[g], ee = document.importNode(s.content, !0).firstElementChild;
       Z(ee, K(b), s), x(() => {
         m.after(ee), C(ee);
-      }), typeof F == "object" && V("x-for key cannot be an object, it must be a string or an integer", s), o[F] = ee;
+      }), typeof L == "object" && k("x-for key cannot be an object, it must be a string or an integer", s), o[L] = ee;
     }
     for (let f = 0; f < O.length; f++)
       ot(o[O[f]], u[l.indexOf(O[f])]);
@@ -1765,7 +1765,7 @@ v("if", (e, { expression: t }, { effect: r, cleanup: n }) => {
     return Z(o, {}, e), x(() => {
       e.after(o), C(o);
     }), e._x_currentIfEl = o, e._x_undoIf = () => {
-      L(o, (c) => {
+      V(o, (c) => {
         c._x_effects && c._x_effects.forEach(pt);
       }), o.remove(), delete e._x_currentIfEl;
     }, o;
@@ -1795,7 +1795,7 @@ ye("Intersect", "intersect", "intersect");
 ye("Focus", "trap", "focus");
 ye("Mask", "mask", "mask");
 function ye(e, t, r) {
-  v(t, (n) => V(`You can't use [x-${t}] without first installing the "${e}" plugin here: https://alpinejs.dev/plugins/${r}`, n));
+  v(t, (n) => k(`You can't use [x-${t}] without first installing the "${e}" plugin here: https://alpinejs.dev/plugins/${r}`, n));
 }
 X.setEvaluator(Ot);
 X.setReactivityEngine({ reactive: it, effect: Dn, release: Kn, raw: _ });
@@ -1948,16 +1948,57 @@ async function st(e, t, r = !1) {
   if (r)
     return await i.json();
 }
-function Li(e) {
+function Vi(e) {
   return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(e);
 }
+function Li() {
+  return {
+    // Instance properties
+    activeExperimentVariations: {},
+    /**
+     * Initializes the ExperimentationViewModel instance properties.
+     * Run automatically by Alpine, but can also be called manually to reset the view model state.
+     * Need to call this manually on store creation if we stop using Alpine as our UI library.
+     * @returns {void}
+     */
+    init() {
+      this.activeExperimentVariations = {};
+    },
+    /**
+     * Sets the active variation for a given experiment.
+     * @param {string} experiment - The name of the experiment.
+     * @param {string} variation - The name of the variation.
+     * @returns {void}
+     */
+    setActiveExperimentVariation(e, t) {
+      this.activeExperimentVariations[e] = t;
+    },
+    /**
+     * Gets the active variation for a given experiment.
+     * @param {string} experiment - The name of the experiment.
+     * @returns {string} The name of the active variation.
+     */
+    getActiveExperimentVariation(e) {
+      return this.activeExperimentVariations[e];
+    },
+    /**
+     * Clears the active variation for a given experiment.
+     * @param {string} experiment - The name of the experiment.
+     * @returns {void}
+     */
+    clearActiveExperiment(e) {
+      this.activeExperimentVariations[e] && delete this.activeExperimentVariations[e];
+    }
+  };
+}
 export {
-  Ti as a,
-  Pi as b,
+  Li as a,
+  Ti as b,
   Ri as c,
-  $i as d,
-  Ii as e,
+  Pi as d,
+  $i as e,
+  Ii as f,
   Ci as m,
   ji as t,
-  Li as v
+  Vi as v
 };
