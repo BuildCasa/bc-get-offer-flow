@@ -114,7 +114,10 @@ function initExperiments() {
   if (includeInterruptorPopupExperiment) {
     // Set the experiment id slug, and determine the experiment variant
     const experiment = 'interruptor-popups-2024-11'
-    const variation = Math.random() < 0.5 ? 'guides' : 'discount-plus-1500'
+    const possibleVariations = ['none', 'guides', 'discount-plus-1500']
+    const variation =
+      possibleVariations[Math.floor(Math.random() * possibleVariations.length)] // Randomly select a variation with equal probability
+
     $store.experimentationViewModel.setActiveExperimentVariation(
       experiment,
       variation,
@@ -123,14 +126,16 @@ function initExperiments() {
     // Track the experiment set event
     $trackingService.track('Interruptor Popup Experiment Set')
 
-    // Set the popup to appear after a 10 second delay
-    setTimeout(() => {
-      // Send Show Interruptor Popup flow transition event
-      // State machine logic will ensure that it is only transitioned to from a valid state
-      $store.flowState.transition('SHOW_INTERRUPTOR_POPUP')
-    }, 10000)
+    // If the variation is not 'none', schedule the interruptor popup to appear after a 15 second delay
+    if (variation !== 'none') {
+      setTimeout(() => {
+        // Send Show Interruptor Popup flow transition event
+        // State machine logic will ensure that it is only transitioned to from a valid state
+        $store.flowState.transition('SHOW_INTERRUPTOR_POPUP')
+      }, 15000)
 
-    // Track the scheduled popup event
-    $trackingService.track('Interruptor Popup Scheduled')
+      // Track the scheduled popup event
+      $trackingService.track('Interruptor Popup Scheduled')
+    }
   }
 }
