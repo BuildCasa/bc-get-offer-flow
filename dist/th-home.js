@@ -357,7 +357,7 @@ function P() {
       return m(this.purchasePrice);
     },
     get cashBack() {
-      return Math.round(this.purchasePrice * 0.03 - 5e3);
+      return Math.round(this.purchasePrice * 0.03 - 8e3);
     },
     get formattedCashBack() {
       return m(this.cashBack);
