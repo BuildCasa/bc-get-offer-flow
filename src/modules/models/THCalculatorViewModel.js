@@ -16,7 +16,7 @@ function createTHCalculatorViewModel() {
     },
 
     get cashBack() {
-      return Math.round(this.purchasePrice * 0.03 - 5000)
+      return Math.round(this.purchasePrice * 0.03 - 8000)
     },
 
     get formattedCashBack() {
