@@ -24,10 +24,14 @@ import {
   createFlowUIHelpers,
 } from './modules/flows/THGetStartedFlow'
 
+import personalizationData from './data/th-personalization-data.json'
+import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
+
+import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
+
 import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
 import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
 import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
-import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
 
 /*
  * ----------------------------------------------------------------
@@ -88,6 +92,12 @@ function initStores() {
   $store.experimentationViewModel = $storeFactory.createStore(
     'experimentationViewModel',
     createExperimentationViewModel(),
+  )
+
+  // Create personalization view model store
+  $store.personalizationViewModel = $storeFactory.createStore(
+    'personalizationViewModel',
+    createPersonalizationViewModel(personalizationData),
   )
 
   // Create view model stores
