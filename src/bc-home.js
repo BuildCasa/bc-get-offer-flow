@@ -22,7 +22,7 @@ import { createFlowState } from './modules/flows/FlowState'
 import {
   createFlowStateMachine,
   createFlowUIHelpers,
-} from './modules/flows/DefaultGetOfferFlow'
+} from './modules/flows/BCTypeformGetStartedFlow'
 
 import { createAddressViewModel } from './modules/models/AddressViewModel'
 import { createContactViewModel } from './modules/models/ContactViewModel'
