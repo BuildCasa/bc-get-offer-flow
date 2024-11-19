@@ -111,7 +111,7 @@ function initStores() {
   )
   $store.thCalculatorViewModel = $storeFactory.createStore(
     'thCalculatorViewModel',
-    createTHCalculatorViewModel(),
+    createTHCalculatorViewModel($store.personalizationViewModel),
   )
 }
 

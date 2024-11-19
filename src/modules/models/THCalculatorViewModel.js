@@ -3,12 +3,27 @@
  * Functions
  * ----------------------------------------------------------------
  */
-function createTHCalculatorViewModel() {
+function createTHCalculatorViewModel(personalizationViewModel) {
   return {
     purchasePrice: null,
+    maxPurchasePrice: null,
+    minPurchasePrice: null,
+    inputStep: null,
+    commissionRate: 0.025,
+    flatFee: null,
 
     init: function () {
-      this.purchasePrice = 1000000
+      this.purchasePrice = personalizationViewModel.getContent(
+        'calcDefaultPurchasePrice',
+      )
+      this.maxPurchasePrice = personalizationViewModel.getContent(
+        'calcMaxPurchasePrice',
+      )
+      this.minPurchasePrice = personalizationViewModel.getContent(
+        'calcMinPurchasePrice',
+      )
+      this.inputStep = personalizationViewModel.getContent('calcInputStep')
+      this.flatFee = personalizationViewModel.getContent('calcFlatFee')
     },
 
     get formattedPurchasePrice() {
@@ -16,7 +31,7 @@ function createTHCalculatorViewModel() {
     },
 
     get cashBack() {
-      return Math.round(this.purchasePrice * 0.03 - 8000)
+      return Math.round(this.purchasePrice * this.commissionRate - this.flatFee)
     },
 
     get formattedCashBack() {
