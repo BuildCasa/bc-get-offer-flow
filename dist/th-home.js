@@ -1,4 +1,5 @@
-import { v as f, t as w, m as c, c as E, a as C, b as h, d as G } from "./shared-JXB_n1Zn.js";
+import { m as c, c as f, a as w, b as E } from "./shared-RMpFEyWF.js";
+import { v as C, t as h, c as G } from "./shared-nZgaNMS3.js";
 function I(t, e) {
   const o = {
     SUBMIT_CONTACT: {
@@ -32,7 +33,7 @@ function I(t, e) {
         lastName: t.thGuidesContactViewModel.lastName.trim(),
         email: t.thGuidesContactViewModel.email.trim()
       };
-      if (!f(n.email))
+      if (!C(n.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
@@ -40,7 +41,7 @@ function I(t, e) {
         ...t.thGuidesContactViewModel.options,
         contact: n
       };
-      await Promise.all([w(p)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
+      await Promise.all([h(p)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
     } catch (n) {
       console.log("Error submitting contact:", n), n && n.cause && n.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = n.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition("ERROR");
     }
@@ -372,7 +373,7 @@ function m(t) {
   }).format(t);
 }
 window.Alpine = c;
-const i = h(c), a = {}, d = G(window.FS, a);
+const i = w(c), a = {}, d = E(window.FS, a);
 F();
 g();
 c.start();
@@ -380,7 +381,7 @@ function F() {
   const e = new URL(window.location.href).searchParams.get("get_started"), o = e && e === "complete" ? "modalGetStartedComplete" : "default";
   a.flowState = i.createStore(
     "flowState",
-    E(
+    f(
       I(a, d),
       d,
       o
@@ -390,7 +391,7 @@ function F() {
     T(a, d)
   ), a.experimentationViewModel = i.createStore(
     "experimentationViewModel",
-    C()
+    G()
   ), a.thGuidesContactViewModel = i.createStore(
     "thGuidesContactViewModel",
     M(a.flowState)
