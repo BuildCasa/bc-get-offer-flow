@@ -1,33 +1,64 @@
-import { m as o, c as r, a as i, b as c, d as l } from "./shared-JXB_n1Zn.js";
-import { c as s, a as w, b as d, d as n, e as S, f as M } from "./shared-rrmPjL7J.js";
-window.Alpine = o;
-const t = c(o), e = {}, a = l(window.FS, e);
-V();
-o.start();
-function V() {
-  e.flowState = t.createStore(
+import { m as r, c as d, a as f, b as S } from "./shared-RMpFEyWF.js";
+import { c as w } from "./shared-ZNbSfg_G.js";
+function u() {
+  return {
+    defaultState: "default",
+    states: {
+      default: {
+        transitions: {
+          GET_STARTED: {
+            target: "modalGetStartedForm"
+          }
+        }
+      },
+      modalGetStartedForm: {
+        transitions: {
+          EXIT: {
+            target: "default"
+          }
+        }
+      }
+    }
+  };
+}
+function m(a, n) {
+  return {
+    modal: {
+      get isOpen() {
+        return a.flowState.value == "modalGetStartedForm";
+      },
+      handleModalFlowStart(t = "GET_STARTED", i = null) {
+        a.flowState.transition(t);
+        const s = {
+          GET_STARTED: "Get Started Clicked"
+        }[t];
+        let l = {};
+        i && (l = {
+          cta_str: i
+        }), s && n.track(s, l);
+      },
+      handleModalClose(t) {
+        t.preventDefault(), t.stopPropagation(), a.flowState.transition("EXIT"), n.track("Modal Closed");
+      }
+    }
+  };
+}
+window.Alpine = r;
+const o = f(r), e = {}, c = S(window.FS, e);
+p();
+r.start();
+function p() {
+  e.flowState = o.createStore(
     "flowState",
-    r(
-      M(e, a),
-      a
+    d(
+      u(),
+      c
     )
-  ), e.flowUIHelpers = t.createStore(
+  ), e.flowUIHelpers = o.createStore(
     "flowUIHelpers",
-    s(e, a)
-  ), e.addressViewModel = t.createStore(
-    "addressViewModel",
-    w(e, a)
-  ), e.contactViewModel = t.createStore(
-    "contactViewModel",
-    d(e.flowState)
-  ), e.estimateViewModel = t.createStore(
-    "estimateViewModel",
-    n(e.flowState)
-  ), e.personalizationViewModel = t.createStore(
+    m(e, c)
+  ), e.personalizationViewModel = o.createStore(
     "personalizationViewModel",
-    S()
-  ), e.experimentationViewModel = t.createStore(
-    "experimentationViewModel",
-    i()
+    w()
   );
 }

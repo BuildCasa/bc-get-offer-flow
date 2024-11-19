@@ -8,14 +8,6 @@ const ENTRY_FILES = [
     outputName: 'bc-home',
   },
   {
-    inputPath: './src/bc-nestegg.js',
-    outputName: 'bc-nestegg',
-  },
-  {
-    inputPath: './src/bc-adu.js',
-    outputName: 'bc-adu',
-  },
-  {
     inputPath: './src/webuycalots.js',
     outputName: 'webuycalots',
   },
