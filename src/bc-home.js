@@ -24,11 +24,7 @@ import {
   createFlowUIHelpers,
 } from './modules/flows/BCTypeformGetStartedFlow'
 
-import { createAddressViewModel } from './modules/models/AddressViewModel'
-import { createContactViewModel } from './modules/models/ContactViewModel'
-import { createEstimateViewModel } from './modules/models/EstimateViewModel'
 import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
-import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
 
 /*
  * ----------------------------------------------------------------
@@ -74,24 +70,8 @@ function initStores() {
   )
 
   // Create viewModel stores
-  $store.addressViewModel = $storeFactory.createStore(
-    'addressViewModel',
-    createAddressViewModel($store, $trackingService),
-  )
-  $store.contactViewModel = $storeFactory.createStore(
-    'contactViewModel',
-    createContactViewModel($store.flowState),
-  )
-  $store.estimateViewModel = $storeFactory.createStore(
-    'estimateViewModel',
-    createEstimateViewModel($store.flowState),
-  )
   $store.personalizationViewModel = $storeFactory.createStore(
     'personalizationViewModel',
     createPersonalizationViewModel(),
-  )
-  $store.experimentationViewModel = $storeFactory.createStore(
-    'experimentationViewModel',
-    createExperimentationViewModel(),
   )
 }
