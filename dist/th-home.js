@@ -287,8 +287,8 @@ const E = {
     calcInputStep: 1e5,
     pricingDefaultPurchasePrice: "$1.2M",
     pricingFlatFee: "$8K",
-    pricingCashBack: "$22K",
-    pricingAgentFee: "$30K+"
+    pricingCashBack: "$28K",
+    pricingAgentFee: "$36K+"
   }
 }, y = {
   content: {
@@ -299,8 +299,8 @@ const E = {
     calcInputStep: 25e3,
     pricingDefaultPurchasePrice: "$500K",
     pricingFlatFee: "$5K",
-    pricingCashBack: "$7.5K",
-    pricingAgentFee: "$12.5K+"
+    pricingCashBack: "$10K",
+    pricingAgentFee: "$15K+"
   },
   cities: [
     "Alta",
@@ -387,8 +387,8 @@ const E = {
     calcInputStep: 5e4,
     pricingDefaultPurchasePrice: "$700K",
     pricingFlatFee: "$5K",
-    pricingCashBack: "$12.5K",
-    pricingAgentFee: "$17.5K+"
+    pricingCashBack: "$16K",
+    pricingAgentFee: "$21K+"
   },
   cities: [
     "Banning",
@@ -431,8 +431,8 @@ const E = {
       calcInputStep: 1e5,
       pricingDefaultPurchasePrice: "$1.2M",
       pricingFlatFee: "$8K",
-      pricingCashBack: "$22K",
-      pricingAgentFee: "$30K+"
+      pricingCashBack: "$28K",
+      pricingAgentFee: "$36K+"
     },
     cities: [
       "Alameda",
@@ -723,8 +723,8 @@ const E = {
       calcInputStep: 5e4,
       pricingDefaultPurchasePrice: "$1M",
       pricingFlatFee: "$8K",
-      pricingCashBack: "$17K",
-      pricingAgentFee: "$25K+"
+      pricingCashBack: "$22K",
+      pricingAgentFee: "$30K+"
     },
     cities: [
       "Agoura Hills",
@@ -826,8 +826,8 @@ const E = {
       calcInputStep: 5e4,
       pricingDefaultPurchasePrice: "$950K",
       pricingFlatFee: "$8K",
-      pricingCashBack: "$15.75K",
-      pricingAgentFee: "$23.75K+"
+      pricingCashBack: "$20.5K",
+      pricingAgentFee: "$28.5K+"
     },
     cities: [
       "Carlsbad",
@@ -925,7 +925,7 @@ function D(e) {
 function B(e) {
   return {
     purchasePrice: null,
-    commissionRate: 0.025,
+    commissionRate: 0.03,
     init: function() {
       this.purchasePrice = e.getContent(
         "calcDefaultPurchasePrice"
