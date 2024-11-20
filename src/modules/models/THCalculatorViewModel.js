@@ -6,7 +6,7 @@
 function createTHCalculatorViewModel(personalizationViewModel) {
   return {
     purchasePrice: null,
-    commissionRate: 0.025,
+    commissionRate: 0.03,
 
     init: function () {
       this.purchasePrice = personalizationViewModel.getContent(
