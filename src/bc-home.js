@@ -24,6 +24,7 @@ import {
   createFlowUIHelpers,
 } from './modules/flows/BCTypeformGetStartedFlow'
 
+import personalizationData from './data/bc-personalization-data.json'
 import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
 
 /*
@@ -72,6 +73,6 @@ function initStores() {
   // Create viewModel stores
   $store.personalizationViewModel = $storeFactory.createStore(
     'personalizationViewModel',
-    createPersonalizationViewModel(),
+    createPersonalizationViewModel(personalizationData),
   )
 }

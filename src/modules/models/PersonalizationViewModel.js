@@ -3,7 +3,6 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import marketCities from '../../data/market-cities.json'
 import { fetchUserGeo } from '../services/GeoJSGeolocationService'
 
 /*
@@ -17,38 +16,78 @@ import { fetchUserGeo } from '../services/GeoJSGeolocationService'
  * Functions
  * ----------------------------------------------------------------
  */
-function createPersonalizationViewModel() {
+function createPersonalizationViewModel(personalizationData) {
   return {
+    personalizationData: {},
     userGeo: {},
-    marketsData: {},
+    getContent(key) {
+      // If no key is provided, early return an empty string
+      if (!key) return ''
+
+      // If the key exists in the market content configuration or the default content configuration, return that value
+      // Otherwise, return an empty string
+      return (
+        this.marketContentConfig[key] ?? this.defaultContentConfig[key] ?? ''
+      )
+    },
     get market() {
-      return getMarketForCity(this.userGeo.city, this.marketsData)
+      const city = this.userGeo.city
+
+      // If there is no city in the userGeo data, early return null
+      if (!city || typeof city !== 'string') return null
+
+      // Iterate over the markets (excluding DEFAULT) configured in the personalization data
+      for (const marketKey of Object.keys(this.personalizationData).filter(
+        (key) => key !== 'DEFAULT',
+      )) {
+        // If the user's city is in the list of cities for the current market, return that market key
+        if (
+          this.personalizationData[marketKey].cities.filter(
+            (c) => c.toLowerCase().trim() === city.toLowerCase().trim(),
+          ).length > 0
+        ) {
+          return marketKey
+        }
+      }
+
+      // If no market is found for the user's city, return null
+      return null
+    },
+    get marketContentConfig() {
+      // Fallback to an empty object for the market content configuration
+      let marketContentConfig = {}
+
+      // If there is a market for the user's city, and a content configuration for that market in the personalization data,
+      // use that market-specific content configuration
+      if (
+        this.market &&
+        this.personalizationData[this.market] &&
+        this.personalizationData[this.market].content
+      ) {
+        marketContentConfig = this.personalizationData[this.market].content
+      }
+
+      return marketContentConfig
+    },
+    get defaultContentConfig() {
+      // Fallback to an empty object for the default content configuration
+      let defaultContentConfig = {}
+
+      // If there is a default content configuration in the personalization data, use that default content configuration
+      if (
+        this.personalizationData.DEFAULT &&
+        this.personalizationData.DEFAULT.content
+      ) {
+        defaultContentConfig = this.personalizationData.DEFAULT.content
+      }
+
+      return defaultContentConfig
     },
     async init() {
-      this.marketsData = marketCities
-
+      this.personalizationData = personalizationData
       this.userGeo = await fetchUserGeo()
     },
   }
-}
-
-/**
- * Given a city and marketsData definition object, returns a matching BuildCasa 'market', if found
- */
-function getMarketForCity(city, marketsData) {
-  if (!city || typeof city !== 'string') return null
-
-  for (const marketKey of Object.keys(marketsData)) {
-    if (
-      marketsData[marketKey].cities.filter(
-        (c) => c.toLowerCase().trim() === city.toLowerCase().trim(),
-      ).length > 0
-    ) {
-      return marketKey
-    }
-  }
-
-  return null
 }
 
 /*
