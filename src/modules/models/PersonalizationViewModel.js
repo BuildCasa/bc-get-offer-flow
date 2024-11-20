@@ -46,7 +46,6 @@ function createPersonalizationViewModel(personalizationData) {
             (c) => c.toLowerCase().trim() === city.toLowerCase().trim(),
           ).length > 0
         ) {
-          console.log('Market:', marketKey)
           return marketKey
         }
       }
@@ -87,8 +86,6 @@ function createPersonalizationViewModel(personalizationData) {
     async init() {
       this.personalizationData = personalizationData
       this.userGeo = await fetchUserGeo()
-
-      console.log('City:', this.userGeo.city)
     },
   }
 }
