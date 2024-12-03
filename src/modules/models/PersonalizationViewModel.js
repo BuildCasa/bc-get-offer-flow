@@ -31,22 +31,42 @@ function createPersonalizationViewModel(personalizationData) {
       )
     },
     get market() {
-      const city = this.userGeo.city
+      const { region: state, city } = this.userGeo
 
-      // If there is no city in the userGeo data, early return null
-      if (!city || typeof city !== 'string') return null
+      // If there is no region or city in the userGeo data, early return null
+      if (
+        !state ||
+        typeof state !== 'string' ||
+        !city ||
+        typeof city !== 'string'
+      ) {
+        return null
+      }
 
       // Iterate over the markets (excluding DEFAULT) configured in the personalization data
       for (const marketKey of Object.keys(this.personalizationData).filter(
         (key) => key !== 'DEFAULT',
       )) {
-        // If the user's city is in the list of cities for the current market, return that market key
+        const marketData = this.personalizationData[marketKey]
+
+        // If the user's state matches the state for the current market
         if (
-          this.personalizationData[marketKey].cities.filter(
-            (c) => c.toLowerCase().trim() === city.toLowerCase().trim(),
-          ).length > 0
+          marketData.state.toLowerCase().trim() === state.toLowerCase().trim()
         ) {
-          return marketKey
+          // If the market definition does not include cities, return the market key
+          if (!marketData.cities) {
+            return marketKey
+          }
+
+          // If the market definition includes cities, and the user's city matches one of the cities in the market definition, return the market key
+          // If the user's city is in the list of cities for the current market, return the market key
+          if (
+            marketData.cities.filter(
+              (c) => c.toLowerCase().trim() === city.toLowerCase().trim(),
+            ).length > 0
+          ) {
+            return marketKey
+          }
         }
       }
 
