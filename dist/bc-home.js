@@ -1,5 +1,5 @@
-import { m as n, c as d, a as u, b as S, d as m } from "./shared-S7gTYUPM.js";
-function F() {
+import { m as n, c as d, a as u, b as S, d as m } from "./shared-mfbOJKPH.js";
+function f() {
   return {
     defaultState: "default",
     states: {
@@ -20,7 +20,7 @@ function F() {
     }
   };
 }
-function f(a, r) {
+function F(a, r) {
   return {
     modal: {
       get isOpen() {
@@ -50,6 +50,7 @@ const h = {
   content: {
     potentialEarnings: "$250,000"
   },
+  state: "California",
   cities: [
     "Alta",
     "Auburn",
@@ -138,12 +139,12 @@ function T() {
   e.flowState = o.createStore(
     "flowState",
     d(
-      F(),
+      f(),
       c
     )
   ), e.flowUIHelpers = o.createStore(
     "flowUIHelpers",
-    f(e, c)
+    F(e, c)
   ), e.personalizationViewModel = o.createStore(
     "personalizationViewModel",
     u(E)

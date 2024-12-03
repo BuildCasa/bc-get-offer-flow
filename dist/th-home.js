@@ -1,4 +1,4 @@
-import { m as d, c as h, a as P, b as C, d as S } from "./shared-S7gTYUPM.js";
+import { m as d, c as h, a as P, b as C, d as S } from "./shared-mfbOJKPH.js";
 import { v as f, t as g, c as M } from "./shared-nZgaNMS3.js";
 function F(e, a) {
   const t = {
@@ -302,6 +302,7 @@ const E = {
     pricingCashBack: "$10K",
     pricingAgentFee: "$15K+"
   },
+  state: "California",
   cities: [
     "Alta",
     "Auburn",
@@ -390,6 +391,7 @@ const E = {
     pricingCashBack: "$16K",
     pricingAgentFee: "$21K+"
   },
+  state: "California",
   cities: [
     "Banning",
     "Beaumont",
@@ -421,6 +423,19 @@ const E = {
     "Wildomar"
   ]
 }, T = {
+  content: {
+    calcFlatFee: 5e3,
+    calcDefaultPurchasePrice: 5e5,
+    calcMaxPurchasePrice: 15e5,
+    calcMinPurchasePrice: 25e4,
+    calcInputStep: 25e3,
+    pricingDefaultPurchasePrice: "$500K",
+    pricingFlatFee: "$5K",
+    pricingCashBack: "$10K",
+    pricingAgentFee: "$15K+"
+  },
+  state: "Texas"
+}, D = {
   DEFAULT: E,
   "Bay Area": {
     content: {
@@ -434,6 +449,7 @@ const E = {
       pricingCashBack: "$28K",
       pricingAgentFee: "$36K+"
     },
+    state: "California",
     cities: [
       "Alameda",
       "Albany",
@@ -726,6 +742,7 @@ const E = {
       pricingCashBack: "$22K",
       pricingAgentFee: "$30K+"
     },
+    state: "California",
     cities: [
       "Agoura Hills",
       "Alhambra",
@@ -829,6 +846,7 @@ const E = {
       pricingCashBack: "$20.5K",
       pricingAgentFee: "$28.5K+"
     },
+    state: "California",
     cities: [
       "Carlsbad",
       "Chula Vista",
@@ -850,7 +868,8 @@ const E = {
       "Vista"
     ]
   },
-  Riverside: G
+  Riverside: G,
+  Texas: T
 };
 function I(e, a) {
   return {
@@ -886,7 +905,7 @@ function I(e, a) {
     }
   };
 }
-function D(e) {
+function B(e) {
   return {
     // Instance properties
     firstName: "",
@@ -922,7 +941,7 @@ function D(e) {
     }
   };
 }
-function B(e) {
+function R(e) {
   return {
     purchasePrice: null,
     commissionRate: 0.03,
@@ -1003,10 +1022,10 @@ function m(e) {
 }
 window.Alpine = d;
 const i = C(d), o = {}, s = S(window.FS, o);
-R();
 k();
+V();
 d.start();
-function R() {
+function k() {
   const a = new URL(window.location.href).searchParams.get("get_started"), t = a && a === "complete" ? "modalGetStartedComplete" : "default";
   o.flowState = i.createStore(
     "flowState",
@@ -1023,19 +1042,19 @@ function R() {
     M()
   ), o.personalizationViewModel = i.createStore(
     "personalizationViewModel",
-    P(T)
+    P(D)
   ), o.thGuidesContactViewModel = i.createStore(
     "thGuidesContactViewModel",
-    D(o.flowState)
+    B(o.flowState)
   ), o.thGuidesDownloadViewModel = i.createStore(
     "thGuidesDownloadViewModel",
     I(o, s)
   ), o.thCalculatorViewModel = i.createStore(
     "thCalculatorViewModel",
-    B(o.personalizationViewModel)
+    R(o.personalizationViewModel)
   );
 }
-function k() {
+function V() {
   if (o.flowState.value === "default") {
     const a = "interruptor-popups-2024-11", t = ["none", "guides", "discount-plus-1500"], r = t[Math.floor(Math.random() * t.length)];
     o.experimentationViewModel.setActiveExperimentVariation(
