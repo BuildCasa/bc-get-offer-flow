@@ -24,6 +24,7 @@
       "pricingCashBack": "$28K",
       "pricingAgentFee": "$36K+"
     },
+    "state": "California",
     "cities": [
       "Alameda",
       "Albany",
@@ -315,6 +316,7 @@
       "pricingCashBack": "$10K",
       "pricingAgentFee": "$15K+"
     },
+    "state": "California",
     "cities": [
       "Alta",
       "Auburn",
@@ -404,6 +406,7 @@
       "pricingCashBack": "$22K",
       "pricingAgentFee": "$30K+"
     },
+    "state": "California",
     "cities": [
       "Agoura Hills",
       "Alhambra",
@@ -507,6 +510,7 @@
       "pricingCashBack": "$20.5K",
       "pricingAgentFee": "$28.5K+"
     },
+    "state": "California",
     "cities": [
       "Carlsbad",
       "Chula Vista",
@@ -540,6 +544,7 @@
       "pricingCashBack": "$16K",
       "pricingAgentFee": "$21K+"
     },
+    "state": "California",
     "cities": [
       "Banning",
       "Beaumont",
@@ -570,5 +575,19 @@
       "Temecula",
       "Wildomar"
     ]
+  },
+  "Texas": {
+    "content": {
+      "calcFlatFee": 5000,
+      "calcDefaultPurchasePrice": 500000,
+      "calcMaxPurchasePrice": 1500000,
+      "calcMinPurchasePrice": 250000,
+      "calcInputStep": 25000,
+      "pricingDefaultPurchasePrice": "$500K",
+      "pricingFlatFee": "$5K",
+      "pricingCashBack": "$10K",
+      "pricingAgentFee": "$15K+"
+    },
+    "state": "Texas"
   }
 }

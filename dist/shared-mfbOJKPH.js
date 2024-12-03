@@ -1937,16 +1937,18 @@ function Pi(e) {
       return t ? this.marketContentConfig[t] ?? this.defaultContentConfig[t] ?? "" : "";
     },
     get market() {
-      const t = this.userGeo.city;
-      if (!t || typeof t != "string")
+      const { region: t, city: r } = this.userGeo;
+      if (!t || typeof t != "string" || !r || typeof r != "string")
         return null;
-      for (const r of Object.keys(this.personalizationData).filter(
-        (n) => n !== "DEFAULT"
-      ))
-        if (this.personalizationData[r].cities.filter(
-          (n) => n.toLowerCase().trim() === t.toLowerCase().trim()
-        ).length > 0)
-          return r;
+      for (const n of Object.keys(this.personalizationData).filter(
+        (i) => i !== "DEFAULT"
+      )) {
+        const i = this.personalizationData[n];
+        if (i.state.toLowerCase().trim() === t.toLowerCase().trim() && (!i.cities || i.cities.filter(
+          (s) => s.toLowerCase().trim() === r.toLowerCase().trim()
+        ).length > 0))
+          return n;
+      }
       return null;
     },
     get marketContentConfig() {
