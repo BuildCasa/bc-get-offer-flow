@@ -575,5 +575,19 @@
       "Temecula",
       "Wildomar"
     ]
+  },
+  "Texas": {
+    "content": {
+      "calcFlatFee": 5000,
+      "calcDefaultPurchasePrice": 500000,
+      "calcMaxPurchasePrice": 1500000,
+      "calcMinPurchasePrice": 250000,
+      "calcInputStep": 25000,
+      "pricingDefaultPurchasePrice": "$500K",
+      "pricingFlatFee": "$5K",
+      "pricingCashBack": "$10K",
+      "pricingAgentFee": "$15K+"
+    },
+    "state": "Texas"
   }
 }
