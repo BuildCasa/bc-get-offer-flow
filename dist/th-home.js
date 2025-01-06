@@ -1056,7 +1056,7 @@ function k() {
 }
 function V() {
   if (o.flowState.value === "default") {
-    const a = "interruptor-popups-2024-11", t = ["none", "guides", "discount-plus-1500"], r = t[Math.floor(Math.random() * t.length)];
+    const a = "interruptor-popups-2024-11", t = ["none", "guides"], r = t[Math.floor(Math.random() * t.length)];
     o.experimentationViewModel.setActiveExperimentVariation(
       a,
       r
