@@ -124,7 +124,7 @@ function initExperiments() {
   if (includeInterruptorPopupExperiment) {
     // Set the experiment id slug, and determine the experiment variant
     const experiment = 'interruptor-popups-2024-11'
-    const possibleVariations = ['none', 'guides', 'discount-plus-1500']
+    const possibleVariations = ['none', 'guides']
     const variation =
       possibleVariations[Math.floor(Math.random() * possibleVariations.length)] // Randomly select a variation with equal probability
 
