@@ -1,13 +1,13 @@
-import { m as d, c as h, a as P, b as C, d as S } from "./shared-mfbOJKPH.js";
-import { v as f, t as g, c as M } from "./shared-nZgaNMS3.js";
-function F(e, a) {
-  const t = {
+import { m as c, c as C, a as h, b as w, d as E } from "./shared-mfbOJKPH.js";
+import { v as S, t as P, c as T } from "./shared-nZgaNMS3.js";
+function I(t, e) {
+  const a = {
     SUBMIT_CONTACT: {
       target: "modalGuidesContactFormProcessing",
       effects: {
         onTransition: [
           () => {
-            a == null || a.track("Guides Contact Submitted");
+            e == null || e.track("Guides Contact Submitted");
           }
         ]
       }
@@ -18,32 +18,32 @@ function F(e, a) {
       effects: {
         onTransition: [
           () => {
-            a == null || a.track("Interruptor Popup Contact Submitted");
+            e == null || e.track("Interruptor Popup Contact Submitted");
           }
         ]
       }
     }
-  }, l = {
-    onEntry: [c]
+  }, s = {
+    onEntry: [d]
   };
-  async function c() {
+  async function d() {
     try {
       let n = {
-        firstName: e.thGuidesContactViewModel.firstName.trim(),
-        lastName: e.thGuidesContactViewModel.lastName.trim(),
-        email: e.thGuidesContactViewModel.email.trim()
+        firstName: t.thGuidesContactViewModel.firstName.trim(),
+        lastName: t.thGuidesContactViewModel.lastName.trim(),
+        email: t.thGuidesContactViewModel.email.trim()
       };
-      if (!f(n.email))
+      if (!S(n.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
-      const p = {
-        ...e.thGuidesContactViewModel.options,
+      const f = {
+        ...t.thGuidesContactViewModel.options,
         contact: n
       };
-      await Promise.all([g(p)]), e.thGuidesContactViewModel.isSubmitted = !0, e.flowState.transition("SUCCESS");
+      await Promise.all([P(f)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
     } catch (n) {
-      console.log("Error submitting contact:", n), n && n.cause && n.cause === "INVALID_EMAIL" ? e.thGuidesContactViewModel.errorMessage = n.message : e.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", e.flowState.transition("ERROR");
+      console.log("Error submitting contact:", n), n && n.cause && n.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = n.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition("ERROR");
     }
   }
   return {
@@ -65,7 +65,7 @@ function F(e, a) {
             effects: {
               onTransition: [
                 () => {
-                  a.track("Interruptor Popup Shown");
+                  e.track("Interruptor Popup Shown");
                 }
               ]
             }
@@ -99,7 +99,7 @@ function F(e, a) {
             effects: {
               onTransition: [
                 () => {
-                  a.track("Book Intro Call Clicked");
+                  e.track("Book Intro Call Clicked");
                 }
               ]
             }
@@ -125,7 +125,7 @@ function F(e, a) {
       },
       modalGuidesContactForm: {
         transitions: {
-          ...t,
+          ...a,
           EXIT: {
             target: "default"
           }
@@ -138,7 +138,7 @@ function F(e, a) {
             effects: {
               onTransition: [
                 () => {
-                  a.track("Guides Contact Submission Succeeded");
+                  e.track("Guides Contact Submission Succeeded");
                 }
               ]
             }
@@ -148,8 +148,8 @@ function F(e, a) {
             effects: {
               onTransition: [
                 () => {
-                  a.track("Guides Contact Submission Failed", {
-                    error_str: e.thGuidesContactViewModel.errorMessage
+                  e.track("Guides Contact Submission Failed", {
+                    error_str: t.thGuidesContactViewModel.errorMessage
                   });
                 }
               ]
@@ -159,11 +159,11 @@ function F(e, a) {
             target: "default"
           }
         },
-        effects: l
+        effects: s
       },
       modalGuidesContactFormError: {
         transitions: {
-          ...t,
+          ...a,
           EXIT: {
             target: "default"
           }
@@ -171,7 +171,7 @@ function F(e, a) {
         effects: {
           onExit: [
             () => {
-              e.thGuidesContactViewModel.errorMessage = "";
+              t.thGuidesContactViewModel.errorMessage = "";
             }
           ]
         }
@@ -185,7 +185,7 @@ function F(e, a) {
         effects: {
           onEntry: [
             () => {
-              e.thGuidesDownloadViewModel.downloadButtonElement.click();
+              t.thGuidesDownloadViewModel.downloadButtonElement.click();
             }
           ]
         }
@@ -205,7 +205,7 @@ function F(e, a) {
             effects: {
               onTransition: [
                 () => {
-                  a.track(
+                  e.track(
                     "Interruptor Popup Submission Succeeded"
                   );
                 }
@@ -217,8 +217,8 @@ function F(e, a) {
             effects: {
               onTransition: [
                 () => {
-                  a.track("Interruptor Popup Submission Failed", {
-                    error_str: e.thGuidesContactViewModel.errorMessage
+                  e.track("Interruptor Popup Submission Failed", {
+                    error_str: t.thGuidesContactViewModel.errorMessage
                   });
                 }
               ]
@@ -228,7 +228,7 @@ function F(e, a) {
             target: "default"
           }
         },
-        effects: l
+        effects: s
       },
       modalInterruptorPopupFormError: {
         transitions: {
@@ -240,7 +240,7 @@ function F(e, a) {
         effects: {
           onExit: [
             () => {
-              e.thGuidesContactViewModel.errorMessage = "";
+              t.thGuidesContactViewModel.errorMessage = "";
             }
           ]
         }
@@ -255,141 +255,38 @@ function F(e, a) {
     }
   };
 }
-function w(e, a) {
+function M(t, e) {
   return {
     modal: {
       get isOpen() {
-        return e.flowState.value == "modalGetStartedForm" || e.flowState.value == "modalGetStartedComplete" || e.flowState.value == "modalBookIntroForm" || e.flowState.value == "modalGetDemoForm" || e.flowState.value == "modalGuidesContactForm" || e.flowState.value == "modalGuidesContactFormProcessing" || e.flowState.value == "modalGuidesContactFormError" || e.flowState.value == "modalGuidesContactFormSuccess" || e.flowState.value == "modalInterruptorPopupForm" || e.flowState.value == "modalInterruptorPopupFormProcessing" || e.flowState.value == "modalInterruptorPopupFormError" || e.flowState.value == "modalInterruptorPopupFormSuccess";
+        return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetStartedComplete" || t.flowState.value == "modalBookIntroForm" || t.flowState.value == "modalGetDemoForm" || t.flowState.value == "modalGuidesContactForm" || t.flowState.value == "modalGuidesContactFormProcessing" || t.flowState.value == "modalGuidesContactFormError" || t.flowState.value == "modalGuidesContactFormSuccess" || t.flowState.value == "modalInterruptorPopupForm" || t.flowState.value == "modalInterruptorPopupFormProcessing" || t.flowState.value == "modalInterruptorPopupFormError" || t.flowState.value == "modalInterruptorPopupFormSuccess";
       },
-      handleModalFlowStart(t = "GET_STARTED", r = null) {
-        e.flowState.transition(t);
-        const c = {
+      handleModalFlowStart(a = "GET_STARTED", r = null) {
+        t.flowState.transition(a);
+        const d = {
           GET_STARTED: "Get Started Clicked",
           GET_DEMO: "Get Demo Clicked"
-        }[t];
+        }[a];
         let u = {};
         r && (u = {
           cta_str: r
-        }), c && a.track(c, u);
+        }), d && e.track(d, u);
       },
-      handleModalClose(t) {
-        t.preventDefault(), t.stopPropagation(), e.flowState.transition("EXIT"), a.track("Modal Closed");
+      handleModalClose(a) {
+        a.preventDefault(), a.stopPropagation(), t.flowState.transition("EXIT"), e.track("Modal Closed");
       }
     }
   };
 }
-const E = {
+const G = {
   content: {
-    calcFlatFee: 8e3,
-    calcDefaultPurchasePrice: 12e5,
-    calcMaxPurchasePrice: 8e6,
-    calcMinPurchasePrice: 6e5,
-    calcInputStep: 1e5,
-    pricingDefaultPurchasePrice: "$1.2M",
-    pricingFlatFee: "$8K",
-    pricingCashBack: "$28K",
-    pricingAgentFee: "$36K+"
+    phoneNumberText: "(415) 941-5285",
+    phoneNumberLink: "tel:+14159415285"
   }
-}, y = {
+}, g = {
   content: {
-    calcFlatFee: 5e3,
-    calcDefaultPurchasePrice: 5e5,
-    calcMaxPurchasePrice: 2e6,
-    calcMinPurchasePrice: 2e5,
-    calcInputStep: 25e3,
-    pricingDefaultPurchasePrice: "$500K",
-    pricingFlatFee: "$5K",
-    pricingCashBack: "$10K",
-    pricingAgentFee: "$15K+"
-  },
-  state: "California",
-  cities: [
-    "Alta",
-    "Auburn",
-    "Carnelian Bay",
-    "Cedar Flat",
-    "Colfax",
-    "Dollar Point",
-    "Dutch Flat",
-    "Foresthill",
-    "Granite Bay",
-    "Kings Beach",
-    "Kingvale",
-    "Lincoln",
-    "Loomis",
-    "Meadow Vista",
-    "Newcastle",
-    "North Auburn",
-    "Penryn",
-    "Rocklin",
-    "Roseville",
-    "Sheridan",
-    "Sunnyside-Tahoe City",
-    "Tahoe Vista",
-    "Tahoma",
-    "Truckee",
-    "Antelope",
-    "Arden-Arcade",
-    "Carmichael",
-    "Citrus Heights",
-    "Clay",
-    "Courtland",
-    "Elk Grove",
-    "Elverta",
-    "Fair Oaks",
-    "Florin",
-    "Folsom",
-    "Foothill Farms",
-    "Franklin",
-    "Freeport",
-    "Fruitridge Pocket",
-    "Galt",
-    "Gold River",
-    "Herald",
-    "Hood",
-    "Isleton",
-    "La Riviera",
-    "Lemon Hill",
-    "Mather",
-    "McClellan Park",
-    "North Highlands",
-    "Orangevale",
-    "Parkway",
-    "Rancho Cordova",
-    "Rancho Murieta",
-    "Rio Linda",
-    "Rosemont",
-    "Sacramento",
-    "Vineyard",
-    "Walnut Grove",
-    "Wilton",
-    "Clarksburg",
-    "Davis",
-    "Dunnigan",
-    "El Macero",
-    "Esparto",
-    "Guinda",
-    "Knights Landing",
-    "Madison",
-    "Monument Hills",
-    "Rumsey",
-    "Tancred",
-    "West Sacramento",
-    "Winters",
-    "Woodland",
-    "Yolo"
-  ]
-}, G = {
-  content: {
-    calcFlatFee: 5e3,
-    calcDefaultPurchasePrice: 7e5,
-    calcMaxPurchasePrice: 5e6,
-    calcMinPurchasePrice: 3e5,
-    calcInputStep: 5e4,
-    pricingDefaultPurchasePrice: "$700K",
-    pricingFlatFee: "$5K",
-    pricingCashBack: "$16K",
-    pricingAgentFee: "$21K+"
+    phoneNumberText: "(213) 322-1360",
+    phoneNumberLink: "tel:+12133221360"
   },
   state: "California",
   cities: [
@@ -422,325 +319,18 @@ const E = {
     "Temecula",
     "Wildomar"
   ]
-}, T = {
+}, F = {
   content: {
-    calcFlatFee: 5e3,
-    calcDefaultPurchasePrice: 5e5,
-    calcMaxPurchasePrice: 15e5,
-    calcMinPurchasePrice: 25e4,
-    calcInputStep: 25e3,
-    pricingDefaultPurchasePrice: "$500K",
-    pricingFlatFee: "$5K",
-    pricingCashBack: "$10K",
-    pricingAgentFee: "$15K+"
+    phoneNumberText: "(469) 564-1214",
+    phoneNumberLink: "tel:+14695641214"
   },
   state: "Texas"
-}, D = {
-  DEFAULT: E,
-  "Bay Area": {
-    content: {
-      calcFlatFee: 8e3,
-      calcDefaultPurchasePrice: 12e5,
-      calcMaxPurchasePrice: 8e6,
-      calcMinPurchasePrice: 6e5,
-      calcInputStep: 1e5,
-      pricingDefaultPurchasePrice: "$1.2M",
-      pricingFlatFee: "$8K",
-      pricingCashBack: "$28K",
-      pricingAgentFee: "$36K+"
-    },
-    state: "California",
-    cities: [
-      "Alameda",
-      "Albany",
-      "Ashland",
-      "Berkeley",
-      "Castro Valley",
-      "Cherryland",
-      "Dublin",
-      "Emeryville",
-      "Fairview",
-      "Fremont",
-      "Hayward",
-      "Livermore",
-      "Newark",
-      "Oakland",
-      "Piedmont",
-      "Pleasanton",
-      "San Leandro",
-      "San Lorenzo",
-      "Sunol",
-      "Union City",
-      "Acalanes Ridge",
-      "Alamo",
-      "Alhambra Valley",
-      "Antioch",
-      "Bay Point",
-      "Bayview",
-      "Bethel Island",
-      "Blackhawk",
-      "Brentwood",
-      "Byron",
-      "Camino Tassajara",
-      "Castle Hill",
-      "Clayton",
-      "Clyde",
-      "Concord",
-      "Contra Costa Centre",
-      "Crockett",
-      "Danville",
-      "Diablo",
-      "Discovery Bay",
-      "East Richmond Heights",
-      "El Cerrito",
-      "El Sobrante",
-      "Hercules",
-      "Kensington",
-      "Knightsen",
-      "Lafayette",
-      "Martinez",
-      "Montalvin Manor",
-      "Moraga",
-      "Mountain View",
-      "Norris Canyon",
-      "North Gate",
-      "North Richmond",
-      "Oakley",
-      "Orinda",
-      "Pacheco",
-      "Pinole",
-      "Pittsburg",
-      "Pleasant Hill",
-      "Port Costa",
-      "Reliez Valley",
-      "Richmond",
-      "Rodeo",
-      "Rollingwood",
-      "San Miguel",
-      "San Pablo",
-      "San Ramon",
-      "Saranap",
-      "Shell Ridge",
-      "Tara Hills",
-      "Vine Hill",
-      "Walnut Creek",
-      "Alto",
-      "Belvedere",
-      "Black Point-Green Point",
-      "Bolinas",
-      "Corte Madera",
-      "Dillon Beach",
-      "Fairfax",
-      "Inverness",
-      "Kentfield",
-      "Lagunitas-Forest Knolls",
-      "Larkspur",
-      "Lucas Valley-Marinwood",
-      "Marin City",
-      "Mill Valley",
-      "Muir Beach",
-      "Nicasio",
-      "Novato",
-      "Point Reyes Station",
-      "Ross",
-      "San Anselmo",
-      "San Geronimo",
-      "San Rafael",
-      "Santa Venetia",
-      "Sausalito",
-      "Sleepy Hollow",
-      "Stinson Beach",
-      "Strawberry",
-      "Tamalpais-Homestead Valley",
-      "Tiburon",
-      "Tomales",
-      "Woodacre",
-      "Atwater",
-      "Ballico",
-      "Bear Creek",
-      "Cressey",
-      "Delhi",
-      "Dos Palos",
-      "Dos Palos Y",
-      "El Nido",
-      "Franklin",
-      "Gustine",
-      "Hilmar-Irwin",
-      "Le Grand",
-      "Livingston",
-      "Los Banos",
-      "McSwain",
-      "Merced",
-      "Planada",
-      "Santa Nella",
-      "Snelling",
-      "South Dos Palos",
-      "Stevinson",
-      "Tuttle",
-      "Volta",
-      "Winton",
-      "Aromas",
-      "Boronda",
-      "Bradley",
-      "Carmel Valley Village",
-      "Carmel-by-the-Sea",
-      "Castroville",
-      "Chualar",
-      "Del Monte Forest",
-      "Del Rey Oaks",
-      "Elkhorn",
-      "Gonzales",
-      "Greenfield",
-      "King City",
-      "Las Lomas",
-      "Lockwood",
-      "Marina",
-      "Monterey",
-      "Moss Landing",
-      "Pacific Grove",
-      "Pajaro",
-      "Pine Canyon",
-      "Prunedale",
-      "Salinas",
-      "San Ardo",
-      "San Lucas",
-      "Sand City",
-      "Seaside",
-      "Soledad",
-      "Spreckels",
-      "American Canyon",
-      "Angwin",
-      "Calistoga",
-      "Deer Park",
-      "Napa",
-      "Silverado Resort",
-      "St. Helena",
-      "Vallejo",
-      "Yountville",
-      "August",
-      "Country Club",
-      "Dogtown",
-      "Escalon",
-      "Farmington",
-      "French Camp",
-      "Garden Acres",
-      "Kennedy",
-      "Lathrop",
-      "Linden",
-      "Lockeford",
-      "Lodi",
-      "Manteca",
-      "Mountain House",
-      "Peters",
-      "Ripon",
-      "Stockton",
-      "Taft Mosswood",
-      "Tracy",
-      "Woodbridge",
-      "Baywood Park",
-      "Belmont",
-      "Brisbane",
-      "Broadmoor",
-      "Burlingame",
-      "Colma",
-      "Daly City",
-      "El Granada",
-      "Highlands",
-      "Hillsborough",
-      "Millbrae",
-      "Montara",
-      "Moss Beach",
-      "Pacifica",
-      "San Bruno",
-      "San Mateo",
-      "South San Francisco",
-      "Alum Rock",
-      "Burbank",
-      "Cambrian Park",
-      "Campbell",
-      "Cupertino",
-      "East Foothills",
-      "Fremont",
-      "Fruitdale",
-      "Gilroy",
-      "Lexington Hills",
-      "Los Altos",
-      "Los Altos Hills",
-      "Los Gatos",
-      "Loyola",
-      "Milpitas",
-      "Monte Sereno",
-      "Morgan Hill",
-      "Mountain View",
-      "Palo Alto",
-      "Portola Valley",
-      "San Jose",
-      "San Martin",
-      "Santa Clara",
-      "Saratoga",
-      "Stanford",
-      "Sunnyvale",
-      "Allendale",
-      "Benicia",
-      "Dixon",
-      "Elmira",
-      "Fairfield",
-      "Green Valley",
-      "Hartley",
-      "Rio Vista",
-      "Suisun City",
-      "Vacaville",
-      "Vallejo",
-      "Bloomfield",
-      "Bodega",
-      "Bodega Bay",
-      "Boyes Hot Springs",
-      "Carmet",
-      "Cazadero",
-      "Cloverdale",
-      "Cotati",
-      "El Verano",
-      "Eldridge",
-      "Fetters Hot Springs-Agua Caliente",
-      "Forestville",
-      "Fulton",
-      "Geyserville",
-      "Glen Ellen",
-      "Graton",
-      "Guerneville",
-      "Healdsburg",
-      "Jenner",
-      "Kenwood",
-      "Larkfield-Wikiup",
-      "Monte Rio",
-      "Occidental",
-      "Penngrove",
-      "Petaluma",
-      "Rohnert Park",
-      "Salmon Creek",
-      "Santa Rosa",
-      "Sea Ranch",
-      "Sebastopol",
-      "Sereno del Mar",
-      "Sonoma",
-      "Temelec",
-      "Timber Cove",
-      "Valley Ford",
-      "Windsor"
-    ]
-  },
-  Sacramento: y,
+}, L = {
+  DEFAULT: G,
   "Los Angeles": {
     content: {
-      calcFlatFee: 8e3,
-      calcDefaultPurchasePrice: 1e6,
-      calcMaxPurchasePrice: 5e6,
-      calcMinPurchasePrice: 6e5,
-      calcInputStep: 5e4,
-      pricingDefaultPurchasePrice: "$1M",
-      pricingFlatFee: "$8K",
-      pricingCashBack: "$22K",
-      pricingAgentFee: "$30K+"
+      phoneNumberText: "(213) 322-1360",
+      phoneNumberLink: "tel:+12133221360"
     },
     state: "California",
     cities: [
@@ -836,15 +426,8 @@ const E = {
   },
   "San Diego": {
     content: {
-      calcFlatFee: 8e3,
-      calcDefaultPurchasePrice: 95e4,
-      calcMaxPurchasePrice: 5e6,
-      calcMinPurchasePrice: 6e5,
-      calcInputStep: 5e4,
-      pricingDefaultPurchasePrice: "$950K",
-      pricingFlatFee: "$8K",
-      pricingCashBack: "$20.5K",
-      pricingAgentFee: "$28.5K+"
+      phoneNumberText: "(213) 322-1360",
+      phoneNumberLink: "tel:+12133221360"
     },
     state: "California",
     cities: [
@@ -868,10 +451,10 @@ const E = {
       "Vista"
     ]
   },
-  Riverside: G,
-  Texas: T
+  Riverside: g,
+  Texas: F
 };
-function I(e, a) {
+function D(t, e) {
   return {
     // Instance properties
     GUIDES: {
@@ -895,17 +478,17 @@ function I(e, a) {
      * @param {MouseEvent} event - Mouse event object.
      * @returns {void}
      */
-    handleDownloadClick(t, r) {
-      this.guide = r, this.downloadButtonElement = t.target;
-      const l = e.thGuidesContactViewModel.isSubmitted;
-      l || (t.preventDefault(), e.flowState.transition("GET_GUIDES")), a.track("Guide Download Clicked", {
+    handleDownloadClick(a, r) {
+      this.guide = r, this.downloadButtonElement = a.target;
+      const s = t.thGuidesContactViewModel.isSubmitted;
+      s || (a.preventDefault(), t.flowState.transition("GET_GUIDES")), e.track("Guide Download Clicked", {
         guide_str: this.guide,
-        contact_submitted_str: l
+        contact_submitted_str: s
       });
     }
   };
 }
-function B(e) {
+function R(t) {
   return {
     // Instance properties
     firstName: "",
@@ -936,52 +519,51 @@ function B(e) {
      * @param {object} options - Additional options for the submission.
      * @returns {void}
      */
-    handleSubmit(a, t = {}) {
-      a.preventDefault(), a.stopPropagation(), this.options = t, e.transition("SUBMIT_CONTACT");
+    handleSubmit(e, a = {}) {
+      e.preventDefault(), e.stopPropagation(), this.options = a, t.transition("SUBMIT_CONTACT");
     }
   };
 }
-function R(e) {
+const V = 0.025, m = 1e6, _ = 5e6, B = 6e5, N = 5e4;
+function A(t = {}) {
   return {
-    purchasePrice: null,
-    commissionRate: 0.03,
+    listPrice: null,
+    commissionRate: V,
     init: function() {
-      this.purchasePrice = e.getContent(
-        "calcDefaultPurchasePrice"
-      );
+      this.listPrice = t.getContent("calcDefaultListPrice") || m;
     },
     /**
-     * Computed property that returns the value of the calcDefaultPurchasePrice key in the personalizationViewModel
+     * Computed property that returns the value of the calcDefaultlistPrice key in the personalizationViewModel
      *
      * Add Alpine attribute to calc slider input element to update input value when this changes:
-     * x-init=$watch('$store.thCalculatorViewModel.defaultPurchasePrice', (newVal, oldVal) => $store.thCalculatorViewModel.purchasePrice = newVal)
+     * x-init=$watch('$store.thCalculatorViewModel.defaultlistPrice', (newVal, oldVal) => $store.thCalculatorViewModel.listPrice = newVal)
      *
      * @type {number}
      */
-    get defaultPurchasePrice() {
-      return e.getContent("calcDefaultPurchasePrice");
+    get defaultListPrice() {
+      return t.getContent("calcDefaultListPrice") || m;
     },
     /**
-     * Computed property that returns the value of the calcMaxPurchasePrice key in the personalizationViewModel
+     * Computed property that returns the value of the calcMaxlistPrice key in the personalizationViewModel
      *
      * Add Alpine attribute to calc slider input element to set max value of input element:
-     * x-bind:max=$store.thCalculatorViewModel.maxPurchasePrice
+     * x-bind:max=$store.thCalculatorViewModel.maxlistPrice
      *
      * @type {number}
      */
-    get maxPurchasePrice() {
-      return e.getContent("calcMaxPurchasePrice");
+    get maxListPrice() {
+      return t.getContent("calcMaxListPrice") || _;
     },
     /**
-     * Computed property that returns the value of the calcMinPurchasePrice key in the personalizationViewModel
+     * Computed property that returns the value of the calcMinlistPrice key in the personalizationViewModel
      *
      * Add Alpine attribute to calc slider input element to set min value of input element:
-     * x-bind:min=$store.thCalculatorViewModel.minPurchasePrice
+     * x-bind:min=$store.thCalculatorViewModel.minlistPrice
      *
      * @type {number}
      */
-    get minPurchasePrice() {
-      return e.getContent("calcMinPurchasePrice");
+    get minListPrice() {
+      return t.getContent("calcMinListPrice") || B;
     },
     /**
      * Computed property that returns the value of the calcInputStep key in the personalizationViewModel
@@ -992,76 +574,73 @@ function R(e) {
      * @type {number}
      */
     get inputStep() {
-      return e.getContent("calcInputStep");
+      return t.getContent("calcInputStep") || N;
     },
-    /**
-     * Computed property that returns the value of the calcFlatFee key in the personalizationViewModel
-     *
-     * @type {number}
-     */
-    get flatFee() {
-      return e.getContent("calcFlatFee");
+    get formattedListPrice() {
+      return p(this.listPrice);
     },
-    get formattedPurchasePrice() {
-      return m(this.purchasePrice);
+    get turboHomeFee() {
+      return this.listPrice <= 1e6 ? 5e3 : this.listPrice <= 2e6 ? 1e4 : 15e3;
     },
     get cashBack() {
-      return Math.round(this.purchasePrice * this.commissionRate - this.flatFee);
+      return Math.round(
+        this.listPrice * this.commissionRate - this.turboHomeFee
+      );
     },
     get formattedCashBack() {
-      return m(this.cashBack);
+      return p(this.cashBack);
     }
   };
 }
-function m(e) {
+function p(t) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0
-  }).format(e);
+  }).format(t);
 }
-window.Alpine = d;
-const i = C(d), o = {}, s = S(window.FS, o);
-k();
-V();
-d.start();
-function k() {
-  const a = new URL(window.location.href).searchParams.get("get_started"), t = a && a === "complete" ? "modalGetStartedComplete" : "default";
+window.Alpine = c;
+const i = w(c), o = {}, l = E(window.FS, o);
+y();
+U();
+c.start();
+function y() {
+  const e = new URL(window.location.href).searchParams.get("get_started"), a = e && e === "complete" ? "modalGetStartedComplete" : "default";
   o.flowState = i.createStore(
     "flowState",
-    h(
-      F(o, s),
-      s,
-      t
+    C(
+      I(o, l),
+      l,
+      a
     )
   ), o.flowUIHelpers = i.createStore(
     "flowUIHelpers",
-    w(o, s)
+    M(o, l)
   ), o.experimentationViewModel = i.createStore(
     "experimentationViewModel",
-    M()
+    T()
   ), o.personalizationViewModel = i.createStore(
     "personalizationViewModel",
-    P(D)
+    h(L)
   ), o.thGuidesContactViewModel = i.createStore(
     "thGuidesContactViewModel",
-    B(o.flowState)
+    R(o.flowState)
   ), o.thGuidesDownloadViewModel = i.createStore(
     "thGuidesDownloadViewModel",
-    I(o, s)
+    D(o, l)
   ), o.thCalculatorViewModel = i.createStore(
     "thCalculatorViewModel",
-    R(o.personalizationViewModel)
+    A(o.personalizationViewModel)
   );
 }
-function V() {
+function U() {
   if (o.flowState.value === "default") {
-    const a = "interruptor-popups-2024-11", t = ["none", "guides"], r = t[Math.floor(Math.random() * t.length)];
+    const e = "interruptor-popups-2024-11", a = ["none", "guides"], r = a[Math.floor(Math.random() * a.length)];
     o.experimentationViewModel.setActiveExperimentVariation(
-      a,
+      e,
       r
-    ), s.track("Interruptor Popup Experiment Set"), r !== "none" && (setTimeout(() => {
+    ), l.track("Interruptor Popup Experiment Set"), r !== "none" && (setTimeout(() => {
       o.flowState.transition("SHOW_INTERRUPTOR_POPUP");
-    }, 15e3), s.track("Interruptor Popup Scheduled"));
+    }, 15e3), l.track("Interruptor Popup Scheduled"));
   }
 }
