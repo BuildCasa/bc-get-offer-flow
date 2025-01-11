@@ -1,53 +1,73 @@
 /*
  * ----------------------------------------------------------------
+ * Constants
+ * ----------------------------------------------------------------
+ */
+const COMMISSION_RATE = 0.025
+const FALLBACK_DEFAULT_LIST_PRICE = 1000000
+const FALLBACK_MAX_LIST_PRICE = 5000000
+const FALLBACK_MIN_LIST_PRICE = 600000
+const FALLBACK_INPUT_STEP = 50000
+
+/*
+ * ----------------------------------------------------------------
  * Functions
  * ----------------------------------------------------------------
  */
-function createTHCalculatorViewModel(personalizationViewModel) {
+function createTHCalculatorViewModel(personalizationViewModel = {}) {
   return {
-    purchasePrice: null,
-    commissionRate: 0.03,
+    listPrice: null,
+    commissionRate: COMMISSION_RATE,
 
     init: function () {
-      this.purchasePrice = personalizationViewModel.getContent(
-        'calcDefaultPurchasePrice',
+      this.listPrice =
+        personalizationViewModel.getContent('calcDefaultListPrice') ||
+        FALLBACK_DEFAULT_LIST_PRICE
+    },
+
+    /**
+     * Computed property that returns the value of the calcDefaultlistPrice key in the personalizationViewModel
+     *
+     * Add Alpine attribute to calc slider input element to update input value when this changes:
+     * x-init=$watch('$store.thCalculatorViewModel.defaultlistPrice', (newVal, oldVal) => $store.thCalculatorViewModel.listPrice = newVal)
+     *
+     * @type {number}
+     */
+    get defaultListPrice() {
+      return (
+        personalizationViewModel.getContent('calcDefaultListPrice') ||
+        FALLBACK_DEFAULT_LIST_PRICE
       )
     },
 
     /**
-     * Computed property that returns the value of the calcDefaultPurchasePrice key in the personalizationViewModel
-     *
-     * Add Alpine attribute to calc slider input element to update input value when this changes:
-     * x-init=$watch('$store.thCalculatorViewModel.defaultPurchasePrice', (newVal, oldVal) => $store.thCalculatorViewModel.purchasePrice = newVal)
-     *
-     * @type {number}
-     */
-    get defaultPurchasePrice() {
-      return personalizationViewModel.getContent('calcDefaultPurchasePrice')
-    },
-
-    /**
-     * Computed property that returns the value of the calcMaxPurchasePrice key in the personalizationViewModel
+     * Computed property that returns the value of the calcMaxlistPrice key in the personalizationViewModel
      *
      * Add Alpine attribute to calc slider input element to set max value of input element:
-     * x-bind:max=$store.thCalculatorViewModel.maxPurchasePrice
+     * x-bind:max=$store.thCalculatorViewModel.maxlistPrice
      *
      * @type {number}
      */
-    get maxPurchasePrice() {
-      return personalizationViewModel.getContent('calcMaxPurchasePrice')
+    get maxListPrice() {
+      return (
+        personalizationViewModel.getContent('calcMaxListPrice') ||
+        FALLBACK_MAX_LIST_PRICE
+      )
     },
 
     /**
-     * Computed property that returns the value of the calcMinPurchasePrice key in the personalizationViewModel
+     * Computed property that returns the value of the calcMinlistPrice key in the personalizationViewModel
      *
      * Add Alpine attribute to calc slider input element to set min value of input element:
-     * x-bind:min=$store.thCalculatorViewModel.minPurchasePrice
+     * x-bind:min=$store.thCalculatorViewModel.minlistPrice
      *
      * @type {number}
      */
-    get minPurchasePrice() {
-      return personalizationViewModel.getContent('calcMinPurchasePrice')
+    get minListPrice() {
+      return (
+        personalizationViewModel.getContent('calcMinListPrice') ||
+        FALLBACK_MIN_LIST_PRICE
+      )
     },
 
     /**
@@ -59,24 +79,26 @@ function createTHCalculatorViewModel(personalizationViewModel) {
      * @type {number}
      */
     get inputStep() {
-      return personalizationViewModel.getContent('calcInputStep')
+      return (
+        personalizationViewModel.getContent('calcInputStep') ||
+        FALLBACK_INPUT_STEP
+      )
     },
 
-    /**
-     * Computed property that returns the value of the calcFlatFee key in the personalizationViewModel
-     *
-     * @type {number}
-     */
-    get flatFee() {
-      return personalizationViewModel.getContent('calcFlatFee')
+    get formattedListPrice() {
+      return getFormattedCurrencyValue(this.listPrice)
     },
 
-    get formattedPurchasePrice() {
-      return getFormattedCurrencyValue(this.purchasePrice)
+    get turboHomeFee() {
+      if (this.listPrice <= 1000000) return 5000
+      if (this.listPrice <= 2000000) return 10000
+      return 15000
     },
 
     get cashBack() {
-      return Math.round(this.purchasePrice * this.commissionRate - this.flatFee)
+      return Math.round(
+        this.listPrice * this.commissionRate - this.turboHomeFee,
+      )
     },
 
     get formattedCashBack() {
