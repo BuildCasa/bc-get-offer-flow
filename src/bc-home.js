@@ -22,10 +22,7 @@ import { createFlowState } from './modules/flows/FlowState'
 import {
   createFlowStateMachine,
   createFlowUIHelpers,
-} from './modules/flows/BCTypeformGetStartedFlow'
-
-import personalizationData from './data/bc-personalization-data.json'
-import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
+} from './modules/flows/BCConversionFlows'
 
 /*
  * ----------------------------------------------------------------
@@ -60,19 +57,10 @@ function initStores() {
   // Create flow state and UI helpers stores
   $store.flowState = $storeFactory.createStore(
     'flowState',
-    createFlowState(
-      createFlowStateMachine($store, $trackingService),
-      $trackingService,
-    ),
+    createFlowState(createFlowStateMachine($trackingService), $trackingService),
   )
   $store.flowUIHelpers = $storeFactory.createStore(
     'flowUIHelpers',
-    createFlowUIHelpers($store, $trackingService),
-  )
-
-  // Create viewModel stores
-  $store.personalizationViewModel = $storeFactory.createStore(
-    'personalizationViewModel',
-    createPersonalizationViewModel(personalizationData),
+    createFlowUIHelpers($store),
   )
 }

@@ -1,5 +1,5 @@
-import { m as M, c as T, a as D, b as F, d as N } from "./shared-mfbOJKPH.js";
-import { b as P, v as x, a as k, c as O } from "./shared-nZgaNMS3.js";
+import { m as M, c as T, a as D, b as F } from "./shared-lDivQ9uY.js";
+import { b as N, v as P, a as x, c as k, d as O } from "./shared-Ke-5IP1j.js";
 const _ = "https://app.regrid.com/api/v1/typeahead.json", L = "https://app.regrid.com/api/v1/parcel/", E = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
 async function S(e) {
   const t = _, s = E, n = new Request(`${t}/?token=${s}&query=${e}`, {
@@ -152,7 +152,7 @@ function $(e, t) {
               state: e.addressViewModel.parcelDetails.state,
               zip: e.addressViewModel.parcelDetails.zip
             }
-          }, d = await P(i);
+          }, d = await N(i);
           e.estimateViewModel.jurisdiction = d.jurisdiction, e.estimateViewModel.estimate = d.estimate;
         }
         e.flowState.transition("SUCCESS");
@@ -191,7 +191,7 @@ function $(e, t) {
         phone: e.contactViewModel.phone.trim(),
         desiredTimeline: e.contactViewModel.desiredTimeline.trim()
       };
-      if (!x(i.email))
+      if (!P(i.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
@@ -217,7 +217,7 @@ function $(e, t) {
       };
       await Promise.all([
         y(e.contactViewModel),
-        k(d)
+        x(d)
       ]), e.contactViewModel.isSubmitted = !0, e.flowState.transition("SUCCESS");
     } catch (i) {
       console.log("Error submitting contact:", i), i && i.cause && (i.cause === "INVALID_EMAIL" || i.cause === "INVALID_PHONE") ? e.contactViewModel.errorMessage = i.message : e.contactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", e.flowState.transition("ERROR");
@@ -686,7 +686,7 @@ function H(e) {
   };
 }
 window.Alpine = M;
-const u = F(M), r = {}, f = N(window.FS, r);
+const u = D(M), r = {}, f = F(window.FS, r);
 K();
 M.start();
 function K() {
@@ -710,7 +710,7 @@ function K() {
     H(r.flowState)
   ), r.personalizationViewModel = u.createStore(
     "personalizationViewModel",
-    D()
+    k()
   ), r.experimentationViewModel = u.createStore(
     "experimentationViewModel",
     O()

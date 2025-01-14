@@ -1,5 +1,5 @@
-import { m as c, c as C, a as h, b as w, d as E } from "./shared-mfbOJKPH.js";
-import { v as S, t as P, c as T } from "./shared-nZgaNMS3.js";
+import { m as c, c as C, a as h, b as w } from "./shared-lDivQ9uY.js";
+import { v as E, t as S, d as P, c as T } from "./shared-Ke-5IP1j.js";
 function I(t, e) {
   const a = {
     SUBMIT_CONTACT: {
@@ -33,7 +33,7 @@ function I(t, e) {
         lastName: t.thGuidesContactViewModel.lastName.trim(),
         email: t.thGuidesContactViewModel.email.trim()
       };
-      if (!S(n.email))
+      if (!E(n.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
@@ -41,7 +41,7 @@ function I(t, e) {
         ...t.thGuidesContactViewModel.options,
         contact: n
       };
-      await Promise.all([P(f)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
+      await Promise.all([S(f)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
     } catch (n) {
       console.log("Error submitting contact:", n), n && n.cause && n.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = n.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition("ERROR");
     }
@@ -600,7 +600,7 @@ function p(t) {
   }).format(t);
 }
 window.Alpine = c;
-const i = w(c), o = {}, l = E(window.FS, o);
+const i = h(c), o = {}, l = w(window.FS, o);
 y();
 U();
 c.start();
@@ -618,10 +618,10 @@ function y() {
     M(o, l)
   ), o.experimentationViewModel = i.createStore(
     "experimentationViewModel",
-    T()
+    P()
   ), o.personalizationViewModel = i.createStore(
     "personalizationViewModel",
-    h(L)
+    T(L)
   ), o.thGuidesContactViewModel = i.createStore(
     "thGuidesContactViewModel",
     R(o.flowState)
