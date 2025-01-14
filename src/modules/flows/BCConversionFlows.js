@@ -37,6 +37,9 @@ const flowConstants = {
     INVEST: {
       START: 'INVEST_START',
     },
+    SOMETHING_ELSE: {
+      START: 'SOMETHING_ELSE_START',
+    },
     EXIT: 'EXIT',
   },
 }
