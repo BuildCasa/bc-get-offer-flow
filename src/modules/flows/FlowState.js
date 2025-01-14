@@ -25,9 +25,10 @@ function createFlowState(stateMachine, trackingService, initialValue) {
     /**
      * Transition to a new state, based on the current state and a valid transition event.
      * @param {string} event - Event to trigger the desired state transition.
+     * @param {object} [eventProperties] - Optional: Additional context to pass to transition effects, tracking service, etc.
      * @returns {void}
      */
-    transition(event) {
+    transition(event, eventProperties = {}) {
       // Get references to the current state, transition, and target state definitions from the state machine
       const currentState = this.value
       const currentStateDef = stateMachine?.states?.[currentState]
@@ -44,6 +45,7 @@ function createFlowState(stateMachine, trackingService, initialValue) {
         !targetStateDef
       ) {
         trackingService.track('Invalid State Transition', {
+          ...eventProperties,
           current_state_str: currentState,
           event_str: event,
         })
@@ -52,18 +54,18 @@ function createFlowState(stateMachine, trackingService, initialValue) {
 
       // Run any exit effects for the current state before transitioning to the new state
       const currentStateExitEffects = currentStateDef.effects?.onExit
-      runEffects(currentStateExitEffects)
+      runEffects(currentStateExitEffects, eventProperties)
 
       // Run any transition effects for the current state before transitioning to the new state
       const transitionEffects = transitionDef.effects?.onTransition
-      runEffects(transitionEffects)
+      runEffects(transitionEffects, eventProperties)
 
       // Transition to the target state
       this.value = transitionTarget
 
       // Run any entry effects for the new (target) state
       const targetStateEntryEffects = targetStateDef.effects?.onEntry
-      runEffects(targetStateEntryEffects)
+      runEffects(targetStateEntryEffects, eventProperties)
     },
   }
 }
@@ -73,10 +75,10 @@ function createFlowState(stateMachine, trackingService, initialValue) {
  * @param {Function[]} effects - List of effects to run.
  * @returns {void}
  */
-function runEffects(effects) {
+function runEffects(effects, eventProperties = {}) {
   if (effects && effects.length) {
     effects.forEach((effect) => {
-      effect()
+      effect(eventProperties)
     })
   }
 }
