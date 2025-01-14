@@ -21,6 +21,8 @@ function createFlowState(stateMachine, trackingService, initialValue) {
 
   return {
     value: value,
+    STATES: stateMachine?.constants?.STATES || {},
+    EVENTS: stateMachine?.constants?.EVENTS || {},
 
     /**
      * Transition to a new state, based on the current state and a valid transition event.
