@@ -524,7 +524,7 @@ function R(t) {
     }
   };
 }
-const V = 0.025, m = 1e6, _ = 5e6, B = 6e5, N = 5e4;
+const V = 0.03, m = 1e6, _ = 5e6, B = 2e5, N = 5e4;
 function A(t = {}) {
   return {
     listPrice: null,
@@ -580,7 +580,7 @@ function A(t = {}) {
       return p(this.listPrice);
     },
     get turboHomeFee() {
-      return this.listPrice <= 1e6 ? 5e3 : this.listPrice <= 2e6 ? 1e4 : 15e3;
+      return this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
     },
     get cashBack() {
       return Math.round(
