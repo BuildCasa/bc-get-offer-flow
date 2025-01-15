@@ -97,9 +97,7 @@ function createTHCalculatorViewModel(personalizationViewModel = {}) {
     },
 
     get cashBack() {
-      return Math.round(
-        this.listPrice * this.commissionRate - this.turboHomeFee,
-      )
+      return Math.round(this.listPrice * this.commissionRate)
     },
 
     get formattedCashBack() {

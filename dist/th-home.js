@@ -583,9 +583,7 @@ function A(t = {}) {
       return this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
     },
     get cashBack() {
-      return Math.round(
-        this.listPrice * this.commissionRate - this.turboHomeFee
-      );
+      return Math.round(this.listPrice * this.commissionRate);
     },
     get formattedCashBack() {
       return p(this.cashBack);
