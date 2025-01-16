@@ -1,5 +1,5 @@
-import { m as c, c as C, a as h, b as w } from "./shared-lDivQ9uY.js";
-import { v as E, t as S, d as P, c as T } from "./shared-Ke-5IP1j.js";
+import { m as u, c as h, a as w, b as S } from "./shared-lDivQ9uY.js";
+import { v as E, t as P, c as T, d as g } from "./shared-Ke-5IP1j.js";
 function I(t, e) {
   const a = {
     SUBMIT_CONTACT: {
@@ -23,27 +23,27 @@ function I(t, e) {
         ]
       }
     }
-  }, s = {
+  }, n = {
     onEntry: [d]
   };
   async function d() {
     try {
-      let n = {
+      let i = {
         firstName: t.thGuidesContactViewModel.firstName.trim(),
         lastName: t.thGuidesContactViewModel.lastName.trim(),
         email: t.thGuidesContactViewModel.email.trim()
       };
-      if (!E(n.email))
+      if (!E(i.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
-      const f = {
+      const C = {
         ...t.thGuidesContactViewModel.options,
-        contact: n
+        contact: i
       };
-      await Promise.all([S(f)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
-    } catch (n) {
-      console.log("Error submitting contact:", n), n && n.cause && n.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = n.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition("ERROR");
+      await Promise.all([P(C)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
+    } catch (i) {
+      console.log("Error submitting contact:", i), i && i.cause && i.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = i.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition("ERROR");
     }
   }
   return {
@@ -159,7 +159,7 @@ function I(t, e) {
             target: "default"
           }
         },
-        effects: s
+        effects: n
       },
       modalGuidesContactFormError: {
         transitions: {
@@ -228,7 +228,7 @@ function I(t, e) {
             target: "default"
           }
         },
-        effects: s
+        effects: n
       },
       modalInterruptorPopupFormError: {
         transitions: {
@@ -267,10 +267,10 @@ function M(t, e) {
           GET_STARTED: "Get Started Clicked",
           GET_DEMO: "Get Demo Clicked"
         }[a];
-        let u = {};
-        r && (u = {
+        let c = {};
+        r && (c = {
           cta_str: r
-        }), d && e.track(d, u);
+        }), d && e.track(d, c);
       },
       handleModalClose(a) {
         a.preventDefault(), a.stopPropagation(), t.flowState.transition("EXIT"), e.track("Modal Closed");
@@ -278,12 +278,155 @@ function M(t, e) {
     }
   };
 }
-const G = {
+function G(t, e) {
+  return {
+    // Instance properties
+    GUIDES: {
+      HOMEBUYING: "homebuying",
+      OFFERS: "offers",
+      CLOSING: "closing"
+    },
+    guide: "",
+    downloadButtonElement: null,
+    /**
+     * Initializes the THGuidesDownloadViewModel instance properties.
+     * Run automatically by Alpine, but can also be called manually to reset the view model state.
+     * Need to call this manually on store creation if we stop using Alpine as our UI library.
+     * @returns {void}
+     */
+    init() {
+      this.guide = "", this.downloadButtonElement = null;
+    },
+    /**
+     * Handles the click event for a Guide Download button.
+     * @param {MouseEvent} event - Mouse event object.
+     * @returns {void}
+     */
+    handleDownloadClick(a, r) {
+      this.guide = r, this.downloadButtonElement = a.target;
+      const n = t.thGuidesContactViewModel.isSubmitted;
+      n || (a.preventDefault(), t.flowState.transition("GET_GUIDES")), e.track("Guide Download Clicked", {
+        guide_str: this.guide,
+        contact_submitted_str: n
+      });
+    }
+  };
+}
+function F(t) {
+  return {
+    // Instance properties
+    firstName: "",
+    lastName: "",
+    email: "",
+    options: {},
+    isSubmitted: !1,
+    errorMessage: "",
+    /**
+     * Initializes the ContactViewModel instance properties.
+     * Run automatically by Alpine, but can also be called manually to reset the view model state.
+     * Need to call this manually on store creation if we stop using Alpine as our UI library.
+     * @returns {void}
+     */
+    init() {
+      this.firstName = "", this.lastName = "", this.email = "", this.options = {}, this.isSubmitted = !1, this.errorMessage = "";
+    },
+    /**
+     * Whether or not any contact details have been added.
+     * @type {boolean}
+     */
+    get hasAnyContactDetails() {
+      return !!this.firstName.trim() || !!this.lastName.trim() || !!this.email.trim();
+    },
+    /**
+     * Handles the submission event for the contact form.
+     * @param {SubmitEvent} event - Form submission event object.
+     * @param {object} options - Additional options for the submission.
+     * @returns {void}
+     */
+    handleSubmit(e, a = {}) {
+      e.preventDefault(), e.stopPropagation(), this.options = a, t.transition("SUBMIT_CONTACT");
+    }
+  };
+}
+const L = 0.03, m = 1e6, D = 5e6, V = 2e5, R = 5e4;
+function y(t = {}) {
+  return {
+    listPrice: null,
+    commissionRate: L,
+    init: function() {
+      this.listPrice = t.getContent("calcDefaultListPrice") || m;
+    },
+    /**
+     * Computed property that returns the value of the calcDefaultlistPrice key in the personalizationViewModel
+     *
+     * Add Alpine attribute to calc slider input element to update input value when this changes:
+     * x-init=$watch('$store.thCalculatorViewModel.defaultlistPrice', (newVal, oldVal) => $store.thCalculatorViewModel.listPrice = newVal)
+     *
+     * @type {number}
+     */
+    get defaultListPrice() {
+      return t.getContent("calcDefaultListPrice") || m;
+    },
+    /**
+     * Computed property that returns the value of the calcMaxlistPrice key in the personalizationViewModel
+     *
+     * Add Alpine attribute to calc slider input element to set max value of input element:
+     * x-bind:max=$store.thCalculatorViewModel.maxlistPrice
+     *
+     * @type {number}
+     */
+    get maxListPrice() {
+      return t.getContent("calcMaxListPrice") || D;
+    },
+    /**
+     * Computed property that returns the value of the calcMinlistPrice key in the personalizationViewModel
+     *
+     * Add Alpine attribute to calc slider input element to set min value of input element:
+     * x-bind:min=$store.thCalculatorViewModel.minlistPrice
+     *
+     * @type {number}
+     */
+    get minListPrice() {
+      return t.getContent("calcMinListPrice") || V;
+    },
+    /**
+     * Computed property that returns the value of the calcInputStep key in the personalizationViewModel
+     *
+     * Add Alpine attribute to calc slider input element to set step value of input element:
+     * x-bind:step=$store.thCalculatorViewModel.inputStep
+     *
+     * @type {number}
+     */
+    get inputStep() {
+      return t.getContent("calcInputStep") || R;
+    },
+    get formattedListPrice() {
+      return p(this.listPrice);
+    },
+    get turboHomeFee() {
+      return this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
+    },
+    get cashBack() {
+      return Math.round(this.listPrice * this.commissionRate);
+    },
+    get formattedCashBack() {
+      return p(this.cashBack);
+    }
+  };
+}
+function p(t) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0
+  }).format(t);
+}
+const _ = {
   content: {
     phoneNumberText: "(415) 941-5285",
     phoneNumberLink: "tel:+14159415285"
   }
-}, g = {
+}, N = {
   content: {
     phoneNumberText: "(213) 322-1360",
     phoneNumberLink: "tel:+12133221360"
@@ -319,14 +462,14 @@ const G = {
     "Temecula",
     "Wildomar"
   ]
-}, F = {
+}, A = {
   content: {
     phoneNumberText: "(469) 564-1214",
     phoneNumberLink: "tel:+14695641214"
   },
   state: "Texas"
-}, L = {
-  DEFAULT: G,
+}, B = {
+  DEFAULT: _,
   "Los Angeles": {
     content: {
       phoneNumberText: "(213) 322-1360",
@@ -451,187 +594,87 @@ const G = {
       "Vista"
     ]
   },
-  Riverside: g,
-  Texas: F
+  Riverside: N,
+  Texas: A
 };
-function D(t, e) {
+function x() {
   return {
-    // Instance properties
-    GUIDES: {
-      HOMEBUYING: "homebuying",
-      OFFERS: "offers",
-      CLOSING: "closing"
-    },
-    guide: "",
-    downloadButtonElement: null,
+    gclid: null,
     /**
-     * Initializes the THGuidesDownloadViewModel instance properties.
+     * Initializes the AdTrackingViewModel instance properties.
      * Run automatically by Alpine, but can also be called manually to reset the view model state.
      * Need to call this manually on store creation if we stop using Alpine as our UI library.
      * @returns {void}
      */
-    init() {
-      this.guide = "", this.downloadButtonElement = null;
-    },
-    /**
-     * Handles the click event for a Guide Download button.
-     * @param {MouseEvent} event - Mouse event object.
-     * @returns {void}
-     */
-    handleDownloadClick(a, r) {
-      this.guide = r, this.downloadButtonElement = a.target;
-      const s = t.thGuidesContactViewModel.isSubmitted;
-      s || (a.preventDefault(), t.flowState.transition("GET_GUIDES")), e.track("Guide Download Clicked", {
-        guide_str: this.guide,
-        contact_submitted_str: s
-      });
-    }
-  };
-}
-function R(t) {
-  return {
-    // Instance properties
-    firstName: "",
-    lastName: "",
-    email: "",
-    options: {},
-    isSubmitted: !1,
-    errorMessage: "",
-    /**
-     * Initializes the ContactViewModel instance properties.
-     * Run automatically by Alpine, but can also be called manually to reset the view model state.
-     * Need to call this manually on store creation if we stop using Alpine as our UI library.
-     * @returns {void}
-     */
-    init() {
-      this.firstName = "", this.lastName = "", this.email = "", this.options = {}, this.isSubmitted = !1, this.errorMessage = "";
-    },
-    /**
-     * Whether or not any contact details have been added.
-     * @type {boolean}
-     */
-    get hasAnyContactDetails() {
-      return !!this.firstName.trim() || !!this.lastName.trim() || !!this.email.trim();
-    },
-    /**
-     * Handles the submission event for the contact form.
-     * @param {SubmitEvent} event - Form submission event object.
-     * @param {object} options - Additional options for the submission.
-     * @returns {void}
-     */
-    handleSubmit(e, a = {}) {
-      e.preventDefault(), e.stopPropagation(), this.options = a, t.transition("SUBMIT_CONTACT");
-    }
-  };
-}
-const V = 0.03, m = 1e6, _ = 5e6, B = 2e5, N = 5e4;
-function A(t = {}) {
-  return {
-    listPrice: null,
-    commissionRate: V,
     init: function() {
-      this.listPrice = t.getContent("calcDefaultListPrice") || m;
+      this.addGclid();
     },
     /**
-     * Computed property that returns the value of the calcDefaultlistPrice key in the personalizationViewModel
-     *
-     * Add Alpine attribute to calc slider input element to update input value when this changes:
-     * x-init=$watch('$store.thCalculatorViewModel.defaultlistPrice', (newVal, oldVal) => $store.thCalculatorViewModel.listPrice = newVal)
-     *
-     * @type {number}
+     * Sets the Google Click ID (GCLID) for the session.
+     * Adds GCLID to local storage if present in the URL and not expired.
+     * Sets the GCLID value to the view model if present in local storage and not expired.
+     * Adapted from script in Google Help Article: https://support.google.com/google-ads/answer/7012522
+     * @returns {void}
      */
-    get defaultListPrice() {
-      return t.getContent("calcDefaultListPrice") || m;
-    },
-    /**
-     * Computed property that returns the value of the calcMaxlistPrice key in the personalizationViewModel
-     *
-     * Add Alpine attribute to calc slider input element to set max value of input element:
-     * x-bind:max=$store.thCalculatorViewModel.maxlistPrice
-     *
-     * @type {number}
-     */
-    get maxListPrice() {
-      return t.getContent("calcMaxListPrice") || _;
-    },
-    /**
-     * Computed property that returns the value of the calcMinlistPrice key in the personalizationViewModel
-     *
-     * Add Alpine attribute to calc slider input element to set min value of input element:
-     * x-bind:min=$store.thCalculatorViewModel.minlistPrice
-     *
-     * @type {number}
-     */
-    get minListPrice() {
-      return t.getContent("calcMinListPrice") || B;
-    },
-    /**
-     * Computed property that returns the value of the calcInputStep key in the personalizationViewModel
-     *
-     * Add Alpine attribute to calc slider input element to set step value of input element:
-     * x-bind:step=$store.thCalculatorViewModel.inputStep
-     *
-     * @type {number}
-     */
-    get inputStep() {
-      return t.getContent("calcInputStep") || N;
-    },
-    get formattedListPrice() {
-      return p(this.listPrice);
-    },
-    get turboHomeFee() {
-      return this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
-    },
-    get cashBack() {
-      return Math.round(this.listPrice * this.commissionRate);
-    },
-    get formattedCashBack() {
-      return p(this.cashBack);
+    addGclid() {
+      const t = f("gclid");
+      let e = null;
+      const a = f("gclsrc"), r = !a || a.indexOf("aw") !== -1;
+      t && r && (e = k(t), localStorage.setItem("gclid", JSON.stringify(e)));
+      const n = e || JSON.parse(localStorage.getItem("gclid"));
+      n && (/* @__PURE__ */ new Date()).getTime() < n.expiryDate && (this.gclid = n.value);
     }
   };
 }
-function p(t) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0
-  }).format(t);
+function f(t) {
+  const e = RegExp("[?&]" + t + "=([^&]*)").exec(window.location.search);
+  return e && decodeURIComponent(e[1].replace(/\+/g, " "));
 }
-window.Alpine = c;
-const i = h(c), o = {}, l = w(window.FS, o);
-y();
+function k(t) {
+  const a = (/* @__PURE__ */ new Date()).getTime() + 7776e6;
+  return {
+    value: t,
+    expiryDate: a
+  };
+}
+window.Alpine = u;
+const s = w(u), o = {}, l = S(window.FS, o);
 U();
-c.start();
-function y() {
+O();
+u.start();
+function U() {
   const e = new URL(window.location.href).searchParams.get("get_started"), a = e && e === "complete" ? "modalGetStartedComplete" : "default";
-  o.flowState = i.createStore(
+  o.flowState = s.createStore(
     "flowState",
-    C(
+    h(
       I(o, l),
       l,
       a
     )
-  ), o.flowUIHelpers = i.createStore(
+  ), o.flowUIHelpers = s.createStore(
     "flowUIHelpers",
     M(o, l)
-  ), o.experimentationViewModel = i.createStore(
-    "experimentationViewModel",
-    P()
-  ), o.personalizationViewModel = i.createStore(
+  ), o.personalizationViewModel = s.createStore(
     "personalizationViewModel",
-    T(L)
-  ), o.thGuidesContactViewModel = i.createStore(
+    T(B)
+  ), o.experimentationViewModel = s.createStore(
+    "experimentationViewModel",
+    g()
+  ), o.adTrackingViewModel = s.createStore(
+    "adTrackingViewModel",
+    x()
+  ), o.thGuidesContactViewModel = s.createStore(
     "thGuidesContactViewModel",
-    R(o.flowState)
-  ), o.thGuidesDownloadViewModel = i.createStore(
+    F(o.flowState)
+  ), o.thGuidesDownloadViewModel = s.createStore(
     "thGuidesDownloadViewModel",
-    D(o, l)
-  ), o.thCalculatorViewModel = i.createStore(
+    G(o, l)
+  ), o.thCalculatorViewModel = s.createStore(
     "thCalculatorViewModel",
-    A(o.personalizationViewModel)
+    y(o.personalizationViewModel)
   );
 }
-function U() {
+function O() {
   if (o.flowState.value === "default") {
     const e = "interruptor-popups-2024-11", a = ["none", "guides"], r = a[Math.floor(Math.random() * a.length)];
     o.experimentationViewModel.setActiveExperimentVariation(

@@ -24,14 +24,15 @@ import {
   createFlowUIHelpers,
 } from './modules/flows/THGetStartedFlow'
 
+import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
+import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
+import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
+
 import personalizationData from './data/th-personalization-data.json'
 import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
 
 import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
-
-import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
-import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
-import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
+import { createAdTrackingViewModel } from './modules/models/AdTrackingViewModel'
 
 /*
  * ----------------------------------------------------------------
@@ -88,19 +89,20 @@ function initStores() {
     createFlowUIHelpers($store, $trackingService),
   )
 
-  // Create experimentation view model store
-  $store.experimentationViewModel = $storeFactory.createStore(
-    'experimentationViewModel',
-    createExperimentationViewModel(),
-  )
-
-  // Create personalization view model store
+  // Create view model stores
   $store.personalizationViewModel = $storeFactory.createStore(
     'personalizationViewModel',
     createPersonalizationViewModel(personalizationData),
   )
+  $store.experimentationViewModel = $storeFactory.createStore(
+    'experimentationViewModel',
+    createExperimentationViewModel(),
+  )
+  $store.adTrackingViewModel = $storeFactory.createStore(
+    'adTrackingViewModel',
+    createAdTrackingViewModel(),
+  )
 
-  // Create view model stores
   $store.thGuidesContactViewModel = $storeFactory.createStore(
     'thGuidesContactViewModel',
     createTHGuidesContactViewModel($store.flowState),
