@@ -1,4 +1,4 @@
-import { m as R, c as P, a as o, b as n } from "./shared-lDivQ9uY.js";
+import { m as R, c as o, a as P, b as n } from "./shared-lDivQ9uY.js";
 const T = {
   STATES: {
     DEFAULT: "default",
@@ -147,20 +147,26 @@ function s(E) {
   return {
     modal: {
       get isOpen() {
-        return E.flowState.value == T.STATES.GET_STARTED_MODAL || E.flowState.value == T.STATES.BUY_PROPERTY.IFRAME || E.flowState.value == T.STATES.SPLIT_PROPERTY.TYPEFORM || E.flowState.value == T.STATES.INVEST.TYPEFORM || E.flowState.value == T.STATES.SOMETHING_ELSE.TYPEFORM;
+        return [
+          T.STATES.GET_STARTED_MODAL,
+          T.STATES.BUY_PROPERTY.IFRAME,
+          T.STATES.SPLIT_PROPERTY.TYPEFORM,
+          T.STATES.INVEST.TYPEFORM,
+          T.STATES.SOMETHING_ELSE.TYPEFORM
+        ].includes(E.state.value);
       }
     }
   };
 }
 window.Alpine = R;
-const a = o(R), e = {}, r = n(window.FS, e);
+const r = P(R), e = {}, a = n(window.FS, e);
 O();
 R.start();
 function O() {
-  e.flowState = a.createStore(
+  e.flowState = r.createStore(
     "flowState",
-    P(A(r), r)
-  ), e.flowUIHelpers = a.createStore(
+    o(A(a), a)
+  ), e.flowUIHelpers = r.createStore(
     "flowUIHelpers",
     s(e)
   );
