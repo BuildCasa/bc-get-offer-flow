@@ -6,6 +6,7 @@
  * ----------------------------------------------------------------
  */
 import {
+  loadPlacesLibrary,
   getAutocompleteSessionToken,
   fetchAddressSuggestions,
   isValidTHAddress,
@@ -58,6 +59,8 @@ function createAddressViewModel() {
       this.selectedPlaceData = {}
       this.isSubmitted = false
       this.errorMessage = ''
+
+      await loadPlacesLibrary()
 
       this.refreshSessionToken()
     },

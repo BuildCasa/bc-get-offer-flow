@@ -24,9 +24,10 @@ const googleMapsAPILoader = new Loader({
   version: 'weekly',
 })
 
+let AutocompleteSuggestion = null
+let AutocompleteSessionToken = null
+
 // Load the Google Maps Places library and assign variables for the Autocomplete classes
-const { AutocompleteSuggestion, AutocompleteSessionToken } =
-  await loadPlacesLibrary()
 
 /*
  * ----------------------------------------------------------------
@@ -37,17 +38,22 @@ const { AutocompleteSuggestion, AutocompleteSessionToken } =
 async function loadPlacesLibrary() {
   try {
     const placesLibrary = await googleMapsAPILoader.importLibrary('places')
-    return placesLibrary
+    AutocompleteSuggestion = placesLibrary.AutocompleteSuggestion
+    AutocompleteSessionToken = placesLibrary.AutocompleteSessionToken
   } catch (error) {
     console.error('Error loading Google Maps Places library:', error)
   }
 }
 
 function getAutocompleteSessionToken() {
+  if (!AutocompleteSessionToken) return
+
   return new AutocompleteSessionToken()
 }
 
 async function fetchAddressSuggestions(query, token) {
+  if (!AutocompleteSuggestion) return
+
   try {
     const { suggestions } =
       await AutocompleteSuggestion.fetchAutocompleteSuggestions({
@@ -130,6 +136,7 @@ function getTHAddressSlug(suggestion) {
  * ----------------------------------------------------------------
  */
 export {
+  loadPlacesLibrary,
   getAutocompleteSessionToken,
   fetchAddressSuggestions,
   isValidTHAddress,
