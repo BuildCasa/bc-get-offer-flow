@@ -23,7 +23,7 @@ import {
   flowConstants,
   createFlowStateMachine,
   createFlowUIHelpers,
-} from './modules/flows/THGetStartedFlow'
+} from './modules/flows/THFlows'
 
 import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
 import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'

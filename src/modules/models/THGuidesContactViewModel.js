@@ -3,7 +3,7 @@
  * Imports
  * ----------------------------------------------------------------
  */
-import { flowConstants } from '../flows/THGetStartedFlow'
+import { flowConstants } from '../flows/THFlows'
 
 // TODO: Create JSDoc interface for a THGuidesContactViewModel.
 
