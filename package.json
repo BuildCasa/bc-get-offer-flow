@@ -13,12 +13,14 @@
     "format:fix": "prettier . --write"
   },
   "devDependencies": {
+    "@types/google.maps": "^3.58.1",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "3.1.1",
     "vite": "^5.0.8"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8",
     "alpinejs": "^3.10.5"
   }
 }
