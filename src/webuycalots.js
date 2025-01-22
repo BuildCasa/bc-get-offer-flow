@@ -24,9 +24,9 @@ import {
   createFlowUIHelpers,
 } from './modules/flows/WeBuyCALotsFlows'
 
-import { createAddressViewModel } from './modules/models/AddressViewModel'
-import { createContactViewModel } from './modules/models/ContactViewModel'
-import { createEstimateViewModel } from './modules/models/EstimateViewModel'
+import { createAddressViewModel } from './modules/models/WeBuyCALotsAddressViewModel'
+import { createContactViewModel } from './modules/models/WeBuyCALotsContactViewModel'
+import { createEstimateViewModel } from './modules/models/WeBuyCALotsEstimateViewModel'
 import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
 import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
 
