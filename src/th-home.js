@@ -25,6 +25,7 @@ import {
   createFlowUIHelpers,
 } from './modules/flows/THFlows'
 
+import { createAddressViewModel } from './modules/models/THAddressViewModel'
 import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
 import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
 import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
@@ -102,6 +103,11 @@ function initStores() {
   $store.adTrackingViewModel = $storeFactory.createStore(
     'adTrackingViewModel',
     createAdTrackingViewModel(),
+  )
+
+  $store.addressViewModel = $storeFactory.createStore(
+    'addressViewModel',
+    createAddressViewModel(),
   )
 
   $store.thGuidesContactViewModel = $storeFactory.createStore(
