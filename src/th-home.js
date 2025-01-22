@@ -20,6 +20,7 @@ import { createTrackingService } from './modules/services/FullStoryTrackingServi
 
 import { createFlowState } from './modules/flows/FlowState'
 import {
+  flowConstants,
   createFlowStateMachine,
   createFlowUIHelpers,
 } from './modules/flows/THGetStartedFlow'
@@ -72,8 +73,8 @@ function initStores() {
   const getStartedURLParam = sessionURL.searchParams.get('get_started')
   const getStartedFlowState =
     getStartedURLParam && getStartedURLParam === 'complete'
-      ? 'modalGetStartedComplete'
-      : 'default'
+      ? flowConstants.STATES.GET_STARTED.COMPLETE.MODAL
+      : flowConstants.STATES.DEFAULT
 
   // Create flow state and UI helpers stores
   $store.flowState = $storeFactory.createStore(
@@ -120,7 +121,8 @@ function initStores() {
 function initExperiments() {
   // Determine whether or not to include in the Interruptor Popups experiment
   // If the user has already completed the Get Started flow, then they should not see the Interruptor Popups
-  const includeInterruptorPopupExperiment = $store.flowState.value === 'default'
+  const includeInterruptorPopupExperiment =
+    $store.flowState.value === flowConstants.STATES.DEFAULT
 
   // If including in the Interruptor Popups experiment
   if (includeInterruptorPopupExperiment) {
@@ -143,7 +145,9 @@ function initExperiments() {
       setTimeout(() => {
         // Send Show Interruptor Popup flow transition event
         // State machine logic will ensure that it is only transitioned to from a valid state
-        $store.flowState.transition('SHOW_INTERRUPTOR_POPUP')
+        $store.flowState.transition(
+          flowConstants.EVENTS.INTERRUPTOR_POPUP.START,
+        )
       }, 15000)
 
       // Track the scheduled popup event

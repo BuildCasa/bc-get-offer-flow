@@ -4,8 +4,66 @@
  * ----------------------------------------------------------------
  */
 import { thCreateLead } from '../services/MakeBCBackendService.js'
-
 import { validateEmailAddress } from '../utils/EmailUtils.js'
+
+/*
+ * ----------------------------------------------------------------
+ * Constants
+ * ----------------------------------------------------------------
+ */
+const flowConstants = {
+  STATES: {
+    DEFAULT: 'default',
+    GET_STARTED: {
+      PROPERTY_QUESTION: 'modalGetStartedPropertyQuestion',
+      ADDRESS_SEARCH: 'modalGetStartedAddressSearch',
+      TYPEFORM: 'getStartedForm',
+      COMPLETE: {
+        DEFAULT: 'getStartedComplete',
+        MODAL: 'modalGetStartedComplete',
+      },
+    },
+    BOOK_INTRO: {
+      FORM: 'modalBookIntroForm',
+    },
+    GET_GUIDES: {
+      FORM: 'modalGuidesContactForm',
+      PROCESSING: 'modalGuidesContactFormProcessing',
+      ERROR: 'modalGuidesContactFormError',
+      SUCCESS: 'modalGuidesContactFormSuccess',
+    },
+    INTERRUPTOR_POPUP: {
+      FORM: 'modalInterruptorPopupForm',
+      PROCESSING: 'modalInterruptorPopupFormProcessing',
+      ERROR: 'modalInterruptorPopupFormError',
+      SUCCESS: 'modalInterruptorPopupFormSuccess',
+    },
+  },
+  EVENTS: {
+    GET_STARTED: {
+      START: 'GET_STARTED_START',
+      HAS_PROPERTY: {
+        YES: 'HAS_PROPERTY_YES',
+        NO: 'HAS_PROPERTY_NO',
+      },
+    },
+    BOOK_INTRO: {
+      START: 'BOOK_INTRO_START',
+    },
+    GET_GUIDES: {
+      START: 'GET_GUIDES_START',
+    },
+    INTERRUPTOR_POPUP: {
+      START: 'INTERRUPTOR_POPUP_START',
+    },
+    SUBMIT_CONTACT: {
+      SUBMIT: 'CONTACT_SUBMIT',
+      SUCCESS: 'CONTACT_SUBMIT_SUCCESS',
+      ERROR: 'CONTACT_SUBMIT_ERROR',
+    },
+    EXIT: 'EXIT',
+  },
+}
 
 /*
  * ----------------------------------------------------------------
@@ -14,13 +72,40 @@ import { validateEmailAddress } from '../utils/EmailUtils.js'
  */
 
 function createFlowStateMachine(globalStore, trackingService) {
-  const submitGuidesContactTransition = {
-    SUBMIT_CONTACT: {
-      target: 'modalGuidesContactFormProcessing',
+  // Transition definition objects for *shared* transition events / paths
+  const defaultExitTransition = {
+    [flowConstants.EVENTS.EXIT]: {
+      target: flowConstants.STATES.DEFAULT,
       effects: {
         onTransition: [
-          () => {
-            trackingService?.track('Guides Contact Submitted')
+          (eventProperties) => {
+            trackingService?.track('Modal Closed', eventProperties)
+          },
+        ],
+      },
+    },
+  }
+
+  const getStartedCompleteExitTransition = {
+    [flowConstants.EVENTS.EXIT]: {
+      target: flowConstants.STATES.GET_STARTED.COMPLETE.DEFAULT,
+      effects: {
+        onTransition: [
+          (eventProperties) => {
+            trackingService?.track('Modal Closed', eventProperties)
+          },
+        ],
+      },
+    },
+  }
+
+  const submitGuidesContactTransition = {
+    [flowConstants.EVENTS.SUBMIT_CONTACT.SUBMIT]: {
+      target: flowConstants.STATES.GET_GUIDES.PROCESSING,
+      effects: {
+        onTransition: [
+          (eventProperties) => {
+            trackingService?.track('Guides Contact Submitted', eventProperties)
           },
         ],
       },
@@ -28,173 +113,182 @@ function createFlowStateMachine(globalStore, trackingService) {
   }
 
   const submitInterruptorPopupContactTransition = {
-    SUBMIT_CONTACT: {
-      target: 'modalInterruptorPopupFormProcessing',
+    [flowConstants.EVENTS.SUBMIT_CONTACT.SUBMIT]: {
+      target: flowConstants.STATES.INTERRUPTOR_POPUP.PROCESSING,
       effects: {
         onTransition: [
-          () => {
-            trackingService?.track('Interruptor Popup Contact Submitted')
+          (eventProperties) => {
+            trackingService?.track(
+              'Interruptor Popup Contact Submitted',
+              eventProperties,
+            )
           },
         ],
       },
     },
   }
 
+  // Effects definition objects for *shared* state or transition effects
   const contactProcessingStateEffects = {
-    onEntry: [processContactSubmission],
-  }
-
-  async function processContactSubmission() {
-    try {
-      // Process the submitted contact info, and transition the state accordingly
-
-      // Create contact object for the create lead payload
-      let contact = {
-        firstName: globalStore.thGuidesContactViewModel.firstName.trim(),
-        lastName: globalStore.thGuidesContactViewModel.lastName.trim(),
-        email: globalStore.thGuidesContactViewModel.email.trim(),
-      }
-
-      // Validate email address
-      if (!validateEmailAddress(contact.email)) {
-        throw new Error('Please enter a valid email address, and try again.', {
-          cause: 'INVALID_EMAIL',
-        })
-      }
-
-      // Put together the create lead payload
-      const createLeadPayload = {
-        ...globalStore.thGuidesContactViewModel.options,
-        contact: contact,
-      }
-
-      // Start sequencing through the lot analysis steps, and the create lead request in parallel
-      await Promise.all([thCreateLead(createLeadPayload)])
-
-      globalStore.thGuidesContactViewModel.isSubmitted = true
-
-      // Transition state according to desired logic for successful contact submissions
-      globalStore.flowState.transition('SUCCESS')
-    } catch (error) {
-      console.log('Error submitting contact:', error)
-      // If error is thrown due to invalid email or phone number, show the specific error message
-      // Otherwise, show a generic error message
-      if (error && error.cause && error.cause === 'INVALID_EMAIL') {
-        globalStore.thGuidesContactViewModel.errorMessage = error.message
-      } else {
-        globalStore.thGuidesContactViewModel.errorMessage =
-          'There was an error processing your info. Please try again, or contact us for help.'
-      }
-
-      // Transition state according to desired logic for contact submission errors
-      globalStore.flowState.transition('ERROR')
-    }
+    onEntry: [async () => processContactSubmission(globalStore)],
   }
 
   // Create state machine store
   const stateMachineDefinition = {
-    defaultState: 'default',
+    constants: flowConstants,
+    defaultState: flowConstants.STATES.DEFAULT,
     states: {
-      default: {
+      [flowConstants.STATES.DEFAULT]: {
         transitions: {
-          GET_STARTED: {
-            target: 'modalGetStartedForm',
-          },
-          GET_DEMO: {
-            target: 'modalGetDemoForm',
-          },
-          GET_GUIDES: {
-            target: 'modalGuidesContactForm',
-          },
-          SHOW_INTERRUPTOR_POPUP: {
-            target: 'modalInterruptorPopupForm',
+          [flowConstants.EVENTS.GET_STARTED.START]: {
+            target: flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
             effects: {
               onTransition: [
-                () => {
-                  trackingService.track('Interruptor Popup Shown')
+                (eventProperties) => {
+                  trackingService.track('Get Started Clicked', eventProperties)
+                },
+              ],
+            },
+          },
+          [flowConstants.EVENTS.GET_GUIDES.START]: {
+            target: flowConstants.STATES.GET_GUIDES.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track('Get Guide Clicked', eventProperties)
+                },
+              ],
+            },
+          },
+          [flowConstants.EVENTS.INTERRUPTOR_POPUP.START]: {
+            target: flowConstants.STATES.INTERRUPTOR_POPUP.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Interruptor Popup Shown',
+                    eventProperties,
+                  )
                 },
               ],
             },
           },
         },
       },
-      getStartedComplete: {
+      [flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION]: {
         transitions: {
-          GET_STARTED: {
-            target: 'modalGetStartedComplete',
-          },
-          GET_DEMO: {
-            target: 'modalGetDemoForm',
-          },
-          GET_GUIDES: {
-            target: 'modalGuidesContactForm',
-          },
-        },
-      },
-      modalGetStartedForm: {
-        transitions: {
-          EXIT: {
-            target: 'default',
-          },
-        },
-      },
-      modalGetStartedComplete: {
-        transitions: {
-          BOOK_INTRO: {
-            target: 'modalBookIntroForm',
+          ...defaultExitTransition,
+          [flowConstants.EVENTS.GET_STARTED.HAS_PROPERTY.YES]: {
+            target: flowConstants.STATES.GET_STARTED.ADDRESS_SEARCH,
             effects: {
               onTransition: [
-                () => {
-                  trackingService.track('Book Intro Call Clicked')
+                (eventProperties) => {
+                  trackingService.track(
+                    'Has Specific Property',
+                    eventProperties,
+                  )
                 },
               ],
             },
           },
-          EXIT: {
-            target: 'getStartedComplete',
+          [flowConstants.EVENTS.GET_STARTED.HAS_PROPERTY.NO]: {
+            target: flowConstants.STATES.GET_STARTED.TYPEFORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track('No Specific Property', eventProperties)
+                },
+              ],
+            },
           },
         },
       },
-      modalBookIntroForm: {
+      [flowConstants.STATES.GET_STARTED.ADDRESS_SEARCH]: {
         transitions: {
-          EXIT: {
-            target: 'getStartedComplete',
+          ...defaultExitTransition,
+        },
+      },
+      [flowConstants.STATES.GET_STARTED.TYPEFORM]: {
+        transitions: {
+          ...defaultExitTransition,
+        },
+      },
+      [flowConstants.STATES.GET_STARTED.COMPLETE.DEFAULT]: {
+        transitions: {
+          [flowConstants.EVENTS.GET_STARTED.START]: {
+            target: flowConstants.STATES.GET_STARTED.COMPLETE.MODAL,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track('Get Started Clicked', eventProperties)
+                },
+              ],
+            },
+          },
+          [flowConstants.EVENTS.GET_GUIDES.START]: {
+            target: flowConstants.STATES.GET_GUIDES.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track('Get Guide Clicked', eventProperties)
+                },
+              ],
+            },
           },
         },
       },
-      modalGetDemoForm: {
+      [flowConstants.STATES.GET_STARTED.COMPLETE.MODAL]: {
         transitions: {
-          EXIT: {
-            target: 'default',
+          ...getStartedCompleteExitTransition,
+          [flowConstants.EVENTS.BOOK_INTRO.START]: {
+            target: flowConstants.STATES.BOOK_INTRO.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Book Intro Call Clicked',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
           },
         },
       },
-      modalGuidesContactForm: {
+      [flowConstants.STATES.BOOK_INTRO.FORM]: {
         transitions: {
+          ...getStartedCompleteExitTransition,
+        },
+      },
+      [flowConstants.STATES.GET_GUIDES.FORM]: {
+        transitions: {
+          ...defaultExitTransition,
           ...submitGuidesContactTransition,
-          EXIT: {
-            target: 'default',
-          },
         },
       },
-      modalGuidesContactFormProcessing: {
+      [flowConstants.STATES.GET_GUIDES.PROCESSING]: {
         transitions: {
-          SUCCESS: {
-            target: 'modalGuidesContactFormSuccess',
+          ...defaultExitTransition,
+          [flowConstants.EVENTS.SUBMIT_CONTACT.SUCCESS]: {
+            target: flowConstants.STATES.GET_GUIDES.SUCCESS,
             effects: {
               onTransition: [
-                () => {
-                  trackingService.track('Guides Contact Submission Succeeded')
+                (eventProperties) => {
+                  trackingService.track(
+                    'Guides Contact Submission Succeeded',
+                    eventProperties,
+                  )
                 },
               ],
             },
           },
-          ERROR: {
-            target: 'modalGuidesContactFormError',
+          [flowConstants.EVENTS.SUBMIT_CONTACT.ERROR]: {
+            target: flowConstants.STATES.GET_GUIDES.ERROR,
             effects: {
               onTransition: [
-                () => {
+                (eventProperties) => {
                   trackingService.track('Guides Contact Submission Failed', {
+                    ...eventProperties,
                     error_str:
                       globalStore.thGuidesContactViewModel.errorMessage,
                   })
@@ -202,18 +296,13 @@ function createFlowStateMachine(globalStore, trackingService) {
               ],
             },
           },
-          EXIT: {
-            target: 'default',
-          },
         },
         effects: contactProcessingStateEffects,
       },
-      modalGuidesContactFormError: {
+      [flowConstants.STATES.GET_GUIDES.ERROR]: {
         transitions: {
+          ...defaultExitTransition,
           ...submitGuidesContactTransition,
-          EXIT: {
-            target: 'default',
-          },
         },
         effects: {
           onExit: [
@@ -224,11 +313,9 @@ function createFlowStateMachine(globalStore, trackingService) {
           ],
         },
       },
-      modalGuidesContactFormSuccess: {
+      [flowConstants.STATES.GET_GUIDES.SUCCESS]: {
         transitions: {
-          EXIT: {
-            target: 'default',
-          },
+          ...defaultExitTransition,
         },
         effects: {
           onEntry: [
@@ -238,34 +325,35 @@ function createFlowStateMachine(globalStore, trackingService) {
           ],
         },
       },
-      modalInterruptorPopupForm: {
+      [flowConstants.STATES.INTERRUPTOR_POPUP.FORM]: {
         transitions: {
+          ...defaultExitTransition,
           ...submitInterruptorPopupContactTransition,
-          EXIT: {
-            target: 'default',
-          },
         },
       },
-      modalInterruptorPopupFormProcessing: {
+      [flowConstants.STATES.INTERRUPTOR_POPUP.PROCESSING]: {
         transitions: {
-          SUCCESS: {
-            target: 'modalInterruptorPopupFormSuccess',
+          ...defaultExitTransition,
+          [flowConstants.EVENTS.SUBMIT_CONTACT.SUCCESS]: {
+            target: flowConstants.STATES.INTERRUPTOR_POPUP.SUCCESS,
             effects: {
               onTransition: [
-                () => {
+                (eventProperties) => {
                   trackingService.track(
                     'Interruptor Popup Submission Succeeded',
+                    eventProperties,
                   )
                 },
               ],
             },
           },
-          ERROR: {
-            target: 'modalInterruptorPopupFormError',
+          [flowConstants.EVENTS.SUBMIT_CONTACT.ERROR]: {
+            target: flowConstants.STATES.INTERRUPTOR_POPUP.ERROR,
             effects: {
               onTransition: [
-                () => {
+                (eventProperties) => {
                   trackingService.track('Interruptor Popup Submission Failed', {
+                    ...eventProperties,
                     error_str:
                       globalStore.thGuidesContactViewModel.errorMessage,
                   })
@@ -273,18 +361,13 @@ function createFlowStateMachine(globalStore, trackingService) {
               ],
             },
           },
-          EXIT: {
-            target: 'default',
-          },
         },
         effects: contactProcessingStateEffects,
       },
-      modalInterruptorPopupFormError: {
+      [flowConstants.STATES.INTERRUPTOR_POPUP.ERROR]: {
         transitions: {
+          ...defaultExitTransition,
           ...submitInterruptorPopupContactTransition,
-          EXIT: {
-            target: 'default',
-          },
         },
         effects: {
           onExit: [
@@ -295,11 +378,9 @@ function createFlowStateMachine(globalStore, trackingService) {
           ],
         },
       },
-      modalInterruptorPopupFormSuccess: {
+      [flowConstants.STATES.INTERRUPTOR_POPUP.SUCCESS]: {
         transitions: {
-          EXIT: {
-            target: 'default',
-          },
+          ...defaultExitTransition,
         },
       },
     },
@@ -308,57 +389,78 @@ function createFlowStateMachine(globalStore, trackingService) {
   return stateMachineDefinition
 }
 
-function createFlowUIHelpers(globalStore, trackingService) {
+function createFlowUIHelpers(globalStore) {
   return {
     modal: {
       get isOpen() {
-        return (
-          globalStore.flowState.value == 'modalGetStartedForm' ||
-          globalStore.flowState.value == 'modalGetStartedComplete' ||
-          globalStore.flowState.value == 'modalBookIntroForm' ||
-          globalStore.flowState.value == 'modalGetDemoForm' ||
-          globalStore.flowState.value == 'modalGuidesContactForm' ||
-          globalStore.flowState.value == 'modalGuidesContactFormProcessing' ||
-          globalStore.flowState.value == 'modalGuidesContactFormError' ||
-          globalStore.flowState.value == 'modalGuidesContactFormSuccess' ||
-          globalStore.flowState.value == 'modalInterruptorPopupForm' ||
-          globalStore.flowState.value ==
-            'modalInterruptorPopupFormProcessing' ||
-          globalStore.flowState.value == 'modalInterruptorPopupFormError' ||
-          globalStore.flowState.value == 'modalInterruptorPopupFormSuccess'
-        )
-      },
-      handleModalFlowStart(transition = 'GET_STARTED', cta = null) {
-        globalStore.flowState.transition(transition)
+        const modalStates = [
+          flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
+          flowConstants.STATES.GET_STARTED.ADDRESS_SEARCH,
+          flowConstants.STATES.GET_STARTED.TYPEFORM,
+          flowConstants.STATES.GET_STARTED.COMPLETE.MODAL,
+          flowConstants.STATES.BOOK_INTRO.FORM,
+          flowConstants.STATES.GET_GUIDES.FORM,
+          flowConstants.STATES.GET_GUIDES.PROCESSING,
+          flowConstants.STATES.GET_GUIDES.ERROR,
+          flowConstants.STATES.GET_GUIDES.SUCCESS,
+          flowConstants.STATES.INTERRUPTOR_POPUP.FORM,
+          flowConstants.STATES.INTERRUPTOR_POPUP.PROCESSING,
+          flowConstants.STATES.INTERRUPTOR_POPUP.ERROR,
+          flowConstants.STATES.INTERRUPTOR_POPUP.SUCCESS,
+        ]
 
-        const transitionEvents = {
-          GET_STARTED: 'Get Started Clicked',
-          GET_DEMO: 'Get Demo Clicked',
-        }
-
-        const transitionEvent = transitionEvents[transition]
-
-        let eventProperties = {}
-        if (cta) {
-          eventProperties = {
-            cta_str: cta,
-          }
-        }
-
-        if (transitionEvent) {
-          trackingService.track(transitionEvent, eventProperties)
-        }
-      },
-      handleModalClose(event) {
-        // Block default click event behavior
-        event.preventDefault()
-        event.stopPropagation()
-
-        globalStore.flowState.transition('EXIT')
-
-        trackingService.track('Modal Closed')
+        return modalStates.includes(globalStore.flowState.value)
       },
     },
+  }
+}
+
+async function processContactSubmission(globalStore) {
+  try {
+    // Process the submitted contact info, and transition the state accordingly
+
+    // Create contact object for the create lead payload
+    let contact = {
+      firstName: globalStore.thGuidesContactViewModel.firstName.trim(),
+      lastName: globalStore.thGuidesContactViewModel.lastName.trim(),
+      email: globalStore.thGuidesContactViewModel.email.trim(),
+    }
+
+    // Validate email address
+    if (!validateEmailAddress(contact.email)) {
+      throw new Error('Please enter a valid email address, and try again.', {
+        cause: 'INVALID_EMAIL',
+      })
+    }
+
+    // Put together the create lead payload
+    const createLeadPayload = {
+      ...globalStore.thGuidesContactViewModel.options,
+      contact: contact,
+    }
+
+    // Start sequencing through the lot analysis steps, and the create lead request in parallel
+    await Promise.all([thCreateLead(createLeadPayload)])
+
+    globalStore.thGuidesContactViewModel.isSubmitted = true
+
+    // Transition state according to desired logic for successful contact submissions
+    globalStore.flowState.transition(
+      flowConstants.EVENTS.SUBMIT_CONTACT.SUCCESS,
+    )
+  } catch (error) {
+    console.log('Error submitting contact:', error)
+    // If error is thrown due to invalid email or phone number, show the specific error message
+    // Otherwise, show a generic error message
+    if (error && error.cause && error.cause === 'INVALID_EMAIL') {
+      globalStore.thGuidesContactViewModel.errorMessage = error.message
+    } else {
+      globalStore.thGuidesContactViewModel.errorMessage =
+        'There was an error processing your info. Please try again, or contact us for help.'
+    }
+
+    // Transition state according to desired logic for contact submission errors
+    globalStore.flowState.transition(flowConstants.EVENTS.SUBMIT_CONTACT.ERROR)
   }
 }
 
@@ -367,4 +469,4 @@ function createFlowUIHelpers(globalStore, trackingService) {
  * Exports
  * ----------------------------------------------------------------
  */
-export { createFlowStateMachine, createFlowUIHelpers }
+export { flowConstants, createFlowStateMachine, createFlowUIHelpers }
