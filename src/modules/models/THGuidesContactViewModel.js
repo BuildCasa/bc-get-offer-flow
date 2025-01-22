@@ -3,6 +3,7 @@
  * Imports
  * ----------------------------------------------------------------
  */
+import { flowConstants } from '../flows/THGetStartedFlow'
 
 // TODO: Create JSDoc interface for a THGuidesContactViewModel.
 
@@ -69,7 +70,7 @@ function createTHGuidesContactViewModel(flowState) {
       this.options = options
 
       // Transition state according to desired logic for contact submissions
-      flowState.transition('SUBMIT_CONTACT')
+      flowState.transition(flowConstants.EVENTS.SUBMIT_CONTACT.SUBMIT)
     },
   }
 }
