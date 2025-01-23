@@ -197,9 +197,6 @@ function createAddressViewModel() {
       // Block default form submission behavior
       event.preventDefault()
       event.stopPropagation()
-
-      // Redirect the user to the report page in the app property
-      this.redirectToReport()
     },
 
     redirectToReport() {
