@@ -211,6 +211,7 @@ function createAddressViewModel() {
 
       // If the address is not valid, return and do not redirect
       if (!this.isSelected || !this.isSelectedValid || !addressSlug) {
+        this.isSubmitted = false
         return
       }
 
