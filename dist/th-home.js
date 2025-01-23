@@ -397,7 +397,7 @@ async function $(t) {
     console.log("Error submitting contact:", e), e && e.cause && e.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = e.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition(i.EVENTS.SUBMIT_CONTACT.ERROR);
   }
 }
-function W(t, e, s, r) {
+function J(t, e, s, r) {
   function a(n) {
     return n instanceof s ? n : new s(function(l) {
       l(n);
@@ -424,7 +424,7 @@ function W(t, e, s, r) {
     E((r = r.apply(t, e || [])).next());
   });
 }
-function J(t) {
+function W(t) {
   return t && t.__esModule && Object.prototype.hasOwnProperty.call(t, "default") ? t.default : t;
 }
 var Q = function t(e, s) {
@@ -461,7 +461,7 @@ var Q = function t(e, s) {
     return !0;
   }
   return e !== e && s !== s;
-}, q = /* @__PURE__ */ J(Q);
+}, q = /* @__PURE__ */ W(Q);
 const G = "__googleMapsScriptId";
 var p;
 (function(t) {
@@ -579,7 +579,7 @@ class h {
       m = m[d] || (m[d] = {});
       const g = m.maps || (m.maps = {}), M = /* @__PURE__ */ new Set(), P = new URLSearchParams(), b = () => (
         // @ts-ignore
-        l || (l = new Promise((A, I) => W(this, void 0, void 0, function* () {
+        l || (l = new Promise((A, I) => J(this, void 0, void 0, function* () {
           var O;
           yield T = f.createElement("script"), T.id = this.id, P.set("libraries", [...M] + "");
           for (o in n)
@@ -680,7 +680,7 @@ function L(t) {
     (e) => e.types[0] === "administrative_area_level_1"
   );
 }
-function se(t) {
+function ie(t) {
   let e = "";
   if (L(t)) {
     const s = t.addressComponents.reduce(
@@ -702,7 +702,7 @@ function se(t) {
   }
   return e;
 }
-const ie = "https://buyer.turbohome.com/onboard?address=";
+const se = "https://bc-turbohome-buyer-portal-git-staging-turbohome.vercel.app/onboard?address=";
 function oe() {
   return {
     // Instance properties
@@ -769,16 +769,18 @@ function oe() {
       let e = t.toPlace();
       await e.fetchFields({
         fields: ["displayName", "formattedAddress", "addressComponents"]
-      }), this.selectedSuggestion = e, this.inputValue = e.formattedAddress, this.isSelectedValid || (this.errorMessage = "Please select a valid property address to continue, or contact us for help."), this.refreshSessionToken(), this.suggestions = [], this.keyboardNavIndex = -1;
+      }), this.selectedSuggestion = e, this.inputValue = e.formattedAddress, this.isSelectedValid || (this.errorMessage = "Please select a valid property address to continue, or contact us for help."), this.refreshSessionToken(), this.suggestions = [], this.keyboardNavIndex = -1, this.isSelectedValid && this.redirectToReport();
     },
     handleSubmit(t) {
-      t.preventDefault(), t.stopPropagation();
-      const e = se(this.selectedSuggestion);
-      if (!this.isSelected || !this.isSelectedValid || !e)
-        return;
+      t.preventDefault(), t.stopPropagation(), this.redirectToReport();
+    },
+    redirectToReport() {
       this.isSubmitted = !0;
-      const s = new URL(ie + e);
-      this.errorMessage = `Production app not ready. Will redirect to: ${s.toString()}`;
+      const t = ie(this.selectedSuggestion);
+      if (!this.isSelected || !this.isSelectedValid || !t)
+        return;
+      const e = new URL(se + t);
+      window.location.assign(e);
     }
   };
 }
