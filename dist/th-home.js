@@ -772,7 +772,7 @@ function oe() {
       }), this.selectedSuggestion = e, this.inputValue = e.formattedAddress, this.isSelectedValid || (this.errorMessage = "Please select a valid property address to continue, or contact us for help."), this.refreshSessionToken(), this.suggestions = [], this.keyboardNavIndex = -1, this.isSelectedValid && this.redirectToReport();
     },
     handleSubmit(t) {
-      t.preventDefault(), t.stopPropagation(), this.redirectToReport();
+      t.preventDefault(), t.stopPropagation();
     },
     redirectToReport() {
       this.isSubmitted = !0;
