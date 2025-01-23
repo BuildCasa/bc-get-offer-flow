@@ -185,27 +185,37 @@ function createAddressViewModel() {
       this.refreshSessionToken()
       this.suggestions = []
       this.keyboardNavIndex = -1
+
+      // If selected suggestion is valid, redirect to the report page
+      if (this.isSelectedValid) {
+        this.redirectToReport()
+      }
     },
 
     handleSubmit(event) {
+      // Block default form submission behavior
       event.preventDefault()
       event.stopPropagation()
 
+      // Redirect the user to the report page in the app property
+      this.redirectToReport()
+    },
+
+    redirectToReport() {
+      // Set submitted state
+      this.isSubmitted = true
+
+      // Get the address slug for the selected suggestion
       const addressSlug = getTHAddressSlug(this.selectedSuggestion)
 
+      // If the address is not valid, return and do not redirect
       if (!this.isSelected || !this.isSelectedValid || !addressSlug) {
         return
       }
 
-      this.isSubmitted = true
-
+      // Otherwise, generate the full report URL and redirect the user session to it
       const reportURL = new URL(BASE_COMPS_REPORT_URL_PATH + addressSlug)
-
-      // TODO: Remove this when ready to navigate to the report URL
-      this.errorMessage = `Production app not ready. Will redirect to: ${reportURL.toString()}`
-
-      // TODO: Uncomment this when ready to navigate to the report URL
-      // window.location.assign(reportURL)
+      window.location.assign(reportURL)
     },
   }
 }
