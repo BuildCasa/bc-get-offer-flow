@@ -777,8 +777,10 @@ function oe() {
     redirectToReport() {
       this.isSubmitted = !0;
       const t = ie(this.selectedSuggestion);
-      if (!this.isSelected || !this.isSelectedValid || !t)
+      if (!this.isSelected || !this.isSelectedValid || !t) {
+        this.isSubmitted = !1;
         return;
+      }
       const e = new URL(se + t);
       window.location.assign(e);
     }
