@@ -18,9 +18,9 @@ import {
  * Constants
  * ----------------------------------------------------------------
  */
-// const BASE_COMPS_REPORT_URL_PATH = 'https://buyer.turbohome.com/onboard?address='
+// const BASE_COMPS_REPORT_URL_PATH = 'https://buyer.turbohome.com/onboard'
 const BASE_COMPS_REPORT_URL_PATH =
-  'https://bc-turbohome-buyer-portal-git-staging-turbohome.vercel.app/onboard?address='
+  'https://bc-turbohome-buyer-portal-git-staging-turbohome.vercel.app/onboard'
 
 /*
  * ----------------------------------------------------------------
@@ -213,7 +213,18 @@ function createAddressViewModel() {
       }
 
       // Otherwise, generate the full report URL and redirect the user session to it
-      const reportURL = new URL(BASE_COMPS_REPORT_URL_PATH + addressSlug)
+      const reportURL = new URL(BASE_COMPS_REPORT_URL_PATH)
+
+      // Add the address slug to the report URL
+      reportURL.searchParams.append('address', addressSlug)
+
+      // Check the current URL for any additional query parameters to pass along
+      const currentURL = new URL(window.location.href)
+      currentURL.searchParams.forEach((value, key) => {
+        reportURL.searchParams.append(key, value)
+      })
+
+      // Redirect to the full report URL
       window.location.assign(reportURL)
     },
   }
