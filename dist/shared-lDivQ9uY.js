@@ -54,7 +54,7 @@ function vt(e, t) {
 function Rr(e) {
   pt.push(e);
 }
-function Vr(e, t, r) {
+function Nr(e, t, r) {
   e._x_attributeCleanups || (e._x_attributeCleanups = {}), e._x_attributeCleanups[t] || (e._x_attributeCleanups[t] = []), e._x_attributeCleanups[t].push(r);
 }
 function xt(e, t) {
@@ -66,11 +66,11 @@ var ze = new MutationObserver(qe), Be = !1;
 function yt() {
   ze.observe(document, { subtree: !0, childList: !0, attributes: !0, attributeOldValue: !0 }), Be = !0;
 }
-function Lr() {
-  Nr(), ze.disconnect(), Be = !1;
+function Vr() {
+  Lr(), ze.disconnect(), Be = !1;
 }
 var W = [], we = !1;
-function Nr() {
+function Lr() {
   W = W.concat(ze.takeRecords()), W.length && !we && (we = !0, queueMicrotask(() => {
     Fr(), we = !1;
   }));
@@ -81,7 +81,7 @@ function Fr() {
 function y(e) {
   if (!Be)
     return e();
-  Lr();
+  Vr();
   let t = e();
   return yt(), t;
 }
@@ -250,7 +250,7 @@ function Br(e) {
   let t = ne;
   ne = !1, e(), ne = t;
 }
-function N(e, t, r = {}) {
+function L(e, t, r = {}) {
   let n;
   return m(e, t)((i) => n = i, r), n;
 }
@@ -358,13 +358,13 @@ function Tt(e) {
     effect: n,
     cleanup: r,
     evaluateLater: m.bind(m, e),
-    evaluate: N.bind(N, e)
+    evaluate: L.bind(L, e)
   }, () => t.forEach((a) => a())];
 }
 function Jr(e, t) {
   let r = () => {
   }, n = Ot[t.type] || r, [i, s] = Tt(e);
-  Vr(e, t.original, s);
+  Nr(e, t.original, s);
   let o = () => {
     e._x_ignore || e._x_ignoreSelf || (n.inline && n.inline(e, t, i), n = n.bind(n, e, t, i), $e ? q.get(Mt).push(n) : n());
   };
@@ -383,12 +383,12 @@ function Ge(e) {
   jt.push(e);
 }
 function Rt({ name: e }) {
-  return Vt().test(e);
+  return Nt().test(e);
 }
-var Vt = () => new RegExp(`^${We}([^:^.]+)\\b`);
+var Nt = () => new RegExp(`^${We}([^:^.]+)\\b`);
 function Qr(e, t) {
   return ({ name: r, value: n }) => {
-    let i = r.match(Vt()), s = r.match(/:([a-zA-Z0-9\-:]+)/), o = r.match(/\.[^.\]]+(?=[^\]]*$)/g) || [], a = t || e[r] || r;
+    let i = r.match(Nt()), s = r.match(/:([a-zA-Z0-9\-:]+)/), o = r.match(/\.[^.\]]+(?=[^\]]*$)/g) || [], a = t || e[r] || r;
     return {
       type: i ? i[1] : null,
       value: s ? s[1] : null,
@@ -437,7 +437,7 @@ function U(e, t, r = {}) {
   }));
 }
 var je = [], Ye = !1;
-function Lt(e = () => {
+function Vt(e = () => {
 }) {
   return queueMicrotask(() => {
     Ye || setTimeout(() => {
@@ -456,9 +456,9 @@ function Re() {
 function Xr() {
   Ye = !0;
 }
-function V(e, t) {
+function N(e, t) {
   if (typeof ShadowRoot == "function" && e instanceof ShadowRoot) {
-    Array.from(e.children).forEach((i) => V(i, t));
+    Array.from(e.children).forEach((i) => N(i, t));
     return;
   }
   let r = !1;
@@ -466,13 +466,13 @@ function V(e, t) {
     return;
   let n = e.firstElementChild;
   for (; n; )
-    V(n, t), n = n.nextElementSibling;
+    N(n, t), n = n.nextElementSibling;
 }
 function K(e, ...t) {
   console.warn(`Alpine Warning: ${e}`, ...t);
 }
 function en() {
-  document.body || K("Unable to initialize. Trying to load Alpine before `<body>` is available. Did you forget to add `defer` in Alpine's `<script>` tag?"), U(document, "alpine:init"), U(document, "alpine:initializing"), yt(), jr((t) => T(t, V)), vt((t) => rn(t)), Rr((t, r) => {
+  document.body || K("Unable to initialize. Trying to load Alpine before `<body>` is available. Did you forget to add `defer` in Alpine's `<script>` tag?"), U(document, "alpine:init"), U(document, "alpine:initializing"), yt(), jr((t) => T(t, N)), vt((t) => rn(t)), Rr((t, r) => {
     Ue(t, r).forEach((n) => n());
   });
   let e = (t) => !ce(t.parentElement, !0);
@@ -480,18 +480,18 @@ function en() {
     T(t);
   }), U(document, "alpine:initialized");
 }
-var Je = [], Nt = [];
+var Je = [], Lt = [];
 function Ft() {
   return Je.map((e) => e());
 }
 function Kt() {
-  return Je.concat(Nt).map((e) => e());
+  return Je.concat(Lt).map((e) => e());
 }
 function Dt(e) {
   Je.push(e);
 }
 function kt(e) {
-  Nt.push(e);
+  Lt.push(e);
 }
 function ce(e, t = !1) {
   return ue(e, (r) => {
@@ -510,7 +510,7 @@ function ue(e, t) {
 function tn(e) {
   return Ft().some((t) => e.matches(t));
 }
-function T(e, t = V) {
+function T(e, t = N) {
   Yr(() => {
     t(e, (r, n) => {
       Ue(r, r.attributes).forEach((i) => i()), r._x_ignore && n();
@@ -518,7 +518,7 @@ function T(e, t = V) {
   });
 }
 function rn(e) {
-  V(e, (t) => xt(t));
+  N(e, (t) => xt(t));
 }
 function Qe(e, t) {
   return Array.isArray(t) ? at(e, t.join(" ")) : typeof t == "object" && t !== null ? nn(e, t) : typeof t == "function" ? Qe(e, t()) : at(e, t);
@@ -561,7 +561,7 @@ function on(e, t) {
 function an(e) {
   return e.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 }
-function Ve(e, t = () => {
+function Ne(e, t = () => {
 }) {
   let r = !1;
   return function() {
@@ -597,7 +597,7 @@ function un(e, t, r) {
   zt(e, le);
   let n = !t.includes("in") && !t.includes("out") && !r, i = n || t.includes("in") || ["enter"].includes(r), s = n || t.includes("out") || ["leave"].includes(r);
   t.includes("in") && !n && (t = t.filter((_, g) => g < t.indexOf("out"))), t.includes("out") && !n && (t = t.filter((_, g) => g > t.indexOf("out")));
-  let o = !t.includes("opacity") && !t.includes("scale"), a = o || t.includes("opacity"), c = o || t.includes("scale"), u = a ? 0 : 1, l = c ? B(t, "scale", 95) / 100 : 1, d = B(t, "delay", 0), p = B(t, "origin", "center"), b = "opacity, transform", C = B(t, "duration", 150) / 1e3, L = B(t, "duration", 75) / 1e3, f = "cubic-bezier(0.4, 0.0, 0.2, 1)";
+  let o = !t.includes("opacity") && !t.includes("scale"), a = o || t.includes("opacity"), c = o || t.includes("scale"), u = a ? 0 : 1, l = c ? B(t, "scale", 95) / 100 : 1, d = B(t, "delay", 0), p = B(t, "origin", "center"), b = "opacity, transform", C = B(t, "duration", 150) / 1e3, V = B(t, "duration", 75) / 1e3, f = "cubic-bezier(0.4, 0.0, 0.2, 1)";
   i && (e._x_transition.enter.during = {
     transformOrigin: p,
     transitionDelay: d,
@@ -614,7 +614,7 @@ function un(e, t, r) {
     transformOrigin: p,
     transitionDelay: d,
     transitionProperty: b,
-    transitionDuration: `${L}s`,
+    transitionDuration: `${V}s`,
     transitionTimingFunction: f
   }, e._x_transition.leave.start = {
     opacity: 1,
@@ -631,7 +631,7 @@ function zt(e, t, r = {}) {
     in(n = () => {
     }, i = () => {
     }) {
-      Le(e, t, {
+      Ve(e, t, {
         during: this.enter.during,
         start: this.enter.start,
         end: this.enter.end
@@ -640,7 +640,7 @@ function zt(e, t, r = {}) {
     out(n = () => {
     }, i = () => {
     }) {
-      Le(e, t, {
+      Ve(e, t, {
         during: this.leave.during,
         start: this.leave.start,
         end: this.leave.end
@@ -680,7 +680,7 @@ function Bt(e) {
   if (t)
     return t._x_hidePromise ? t : Bt(t);
 }
-function Le(e, t, { during: r, start: n, end: i } = {}, s = () => {
+function Ve(e, t, { during: r, start: n, end: i } = {}, s = () => {
 }, o = () => {
 }) {
   if (e._x_transitioning && e._x_transitioning.cancel(), Object.keys(r).length === 0 && Object.keys(n).length === 0 && Object.keys(i).length === 0) {
@@ -706,7 +706,7 @@ function Le(e, t, { during: r, start: n, end: i } = {}, s = () => {
   });
 }
 function ln(e, t) {
-  let r, n, i, s = Ve(() => {
+  let r, n, i, s = Ne(() => {
     y(() => {
       r = !0, n || t.before(), i || (t.end(), Re()), t.after(), e.isConnected && t.cleanup(), delete e._x_transitioning;
     });
@@ -716,7 +716,7 @@ function ln(e, t) {
     beforeCancel(o) {
       this.beforeCancels.push(o);
     },
-    cancel: Ve(function() {
+    cancel: Ne(function() {
       for (; this.beforeCancels.length; )
         this.beforeCancels.shift()();
       s();
@@ -750,20 +750,20 @@ function B(e, t, r) {
   }
   return t === "origin" && ["top", "right", "left", "center", "bottom"].includes(e[e.indexOf(t) + 2]) ? [n, e[e.indexOf(t) + 2]].join(" ") : n;
 }
-var Ne = !1;
+var Le = !1;
 function fe(e, t = () => {
 }) {
-  return (...r) => Ne ? t(...r) : e(...r);
+  return (...r) => Le ? t(...r) : e(...r);
 }
 function fn(e, t) {
-  t._x_dataStack || (t._x_dataStack = e._x_dataStack), Ne = !0, _n(() => {
+  t._x_dataStack || (t._x_dataStack = e._x_dataStack), Le = !0, _n(() => {
     dn(t);
-  }), Ne = !1;
+  }), Le = !1;
 }
 function dn(e) {
   let t = !1;
   T(e, (n, i) => {
-    V(n, (s, o) => {
+    N(n, (s, o) => {
       if (t && tn(s))
         return o();
       t = !0, i(s, o);
@@ -968,15 +968,15 @@ var Pn = {
   findClosest: ue,
   closestRoot: ce,
   interceptor: bt,
-  transition: Le,
+  transition: Ve,
   setStyles: le,
   mutateDom: y,
   directive: v,
   throttle: Ut,
   debounce: Wt,
-  evaluate: N,
+  evaluate: L,
   initTree: T,
-  nextTick: Lt,
+  nextTick: Vt,
   prefixed: z,
   prefix: Gr,
   plugin: En,
@@ -995,10 +995,10 @@ function $n(e, t) {
     r[n[i]] = !0;
   return t ? (i) => !!r[i.toLowerCase()] : (i) => !!r[i];
 }
-var In = Object.freeze({}), Qt = Object.assign, jn = Object.prototype.hasOwnProperty, de = (e, t) => jn.call(e, t), j = Array.isArray, G = (e) => Zt(e) === "[object Map]", Rn = (e) => typeof e == "string", Ze = (e) => typeof e == "symbol", _e = (e) => e !== null && typeof e == "object", Vn = Object.prototype.toString, Zt = (e) => Vn.call(e), Xt = (e) => Zt(e).slice(8, -1), Xe = (e) => Rn(e) && e !== "NaN" && e[0] !== "-" && "" + parseInt(e, 10) === e, Ln = (e) => {
+var In = Object.freeze({}), Qt = Object.assign, jn = Object.prototype.hasOwnProperty, de = (e, t) => jn.call(e, t), j = Array.isArray, G = (e) => Zt(e) === "[object Map]", Rn = (e) => typeof e == "string", Ze = (e) => typeof e == "symbol", _e = (e) => e !== null && typeof e == "object", Nn = Object.prototype.toString, Zt = (e) => Nn.call(e), Xt = (e) => Zt(e).slice(8, -1), Xe = (e) => Rn(e) && e !== "NaN" && e[0] !== "-" && "" + parseInt(e, 10) === e, Vn = (e) => {
   const t = /* @__PURE__ */ Object.create(null);
   return (r) => t[r] || (t[r] = e(r));
-}, Nn = Ln((e) => e.charAt(0).toUpperCase() + e.slice(1)), er = (e, t) => e !== t && (e === e || t === t), Fe = /* @__PURE__ */ new WeakMap(), H = [], S, R = Symbol("iterate"), Ke = Symbol("Map key iterate");
+}, Ln = Vn((e) => e.charAt(0).toUpperCase() + e.slice(1)), er = (e, t) => e !== t && (e === e || t === t), Fe = /* @__PURE__ */ new WeakMap(), H = [], S, R = Symbol("iterate"), Ke = Symbol("Map key iterate");
 function Fn(e) {
   return e && e._isEffect === !0;
 }
@@ -1245,7 +1245,7 @@ function M(e) {
   return function(...t) {
     {
       const r = t[0] ? `on key "${t[0]}" ` : "";
-      console.warn(`${Nn(e)} operation ${r}failed: target is readonly.`, h(this));
+      console.warn(`${Ln(e)} operation ${r}failed: target is readonly.`, h(this));
     }
     return e === "delete" ? !1 : this;
   };
@@ -1370,7 +1370,7 @@ function h(e) {
 function De(e) {
   return !!(e && e.__v_isRef === !0);
 }
-A("nextTick", () => Lt);
+A("nextTick", () => Vt);
 A("dispatch", (e) => U.bind(U, e));
 A("watch", (e, { evaluateLater: t, effect: r }) => (n, i) => {
   let s = t(n), o = !0, a, c = r(() => s((u) => {
@@ -1637,13 +1637,13 @@ v("data", fe((e, { expression: t }, { cleanup: r }) => {
   Pe(n, e);
   let i = {};
   Tn(i, n);
-  let s = N(e, t, { scope: i });
+  let s = L(e, t, { scope: i });
   s === void 0 && (s = {}), Pe(s, e);
   let o = k(s);
   wt(o);
   let a = Q(e, o);
-  o.init && N(e, o.init), r(() => {
-    o.destroy && N(e, o.destroy), a();
+  o.init && L(e, o.init), r(() => {
+    o.destroy && L(e, o.destroy), a();
   });
 }));
 v("show", (e, { modifiers: t, expression: r }, { effect: n }) => {
@@ -1661,7 +1661,7 @@ v("show", (e, { modifiers: t, expression: r }, { effect: n }) => {
     e._x_doHide(), e._x_isShown = !1;
   }, o = () => {
     e._x_doShow(), e._x_isShown = !0;
-  }, a = () => setTimeout(o), c = Ve((d) => d ? o() : s(), (d) => {
+  }, a = () => setTimeout(o), c = Ne((d) => d ? o() : s(), (d) => {
     typeof e._x_toggleAndCascadeWithTransitions == "function" ? e._x_toggleAndCascadeWithTransitions(e, d, o, s) : d ? a() : s();
   }), u, l = !0;
   n(() => i((d) => {
@@ -1695,17 +1695,17 @@ function mi(e, t, r, n) {
       l.indexOf(_) === -1 && b.push(_);
     }
     c = c.filter((f) => !b.includes(f));
-    let L = "template";
+    let V = "template";
     for (let f = 0; f < l.length; f++) {
       let _ = l[f], g = c.indexOf(_);
       if (g === -1)
-        c.splice(f, 0, _), d.push([L, f]);
+        c.splice(f, 0, _), d.push([V, f]);
       else if (g !== f) {
         let x = c.splice(f, 1)[0], w = c.splice(g - 1, 1)[0];
         c.splice(f, 0, w), c.splice(g, 0, x), p.push([x, w]);
       } else
         C.push(_);
-      L = _;
+      V = _;
     }
     for (let f = 0; f < b.length; f++) {
       let _ = b[f];
@@ -1765,7 +1765,7 @@ v("if", (e, { expression: t }, { effect: r, cleanup: n }) => {
     return Q(a, {}, e), y(() => {
       e.after(a), T(a);
     }), e._x_currentIfEl = a, e._x_undoIf = () => {
-      V(a, (c) => {
+      N(a, (c) => {
         c._x_effects && c._x_effects.forEach(dt);
       }), a.remove(), delete e._x_currentIfEl;
     }, a;
@@ -1823,10 +1823,7 @@ function Oi(e, t) {
      */
     track(r, n = {}) {
       try {
-        console.log("Tracking event:", r, {
-          ...this._defaultTrackingProperties,
-          ...n
-        }), e && e.event(r, {
+        e && e.event(r, {
           ...this._defaultTrackingProperties,
           ...n
         });
@@ -1923,8 +1920,8 @@ function Ci(e, t, r) {
       Se(b, a);
       const C = (w = l.effects) == null ? void 0 : w.onTransition;
       Se(C, a), this.value = d;
-      const L = (O = p.effects) == null ? void 0 : O.onEntry;
-      Se(L, a);
+      const V = (O = p.effects) == null ? void 0 : O.onEntry;
+      Se(V, a);
     }
   };
 }
