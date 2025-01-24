@@ -30,11 +30,10 @@ const BASE_COMPS_REPORT_URL_PATH =
 
 /**
  * Factory function for creating a THAddressViewModel instance.
- * @param {unknown} globalStore - Reference to the global store.
  * @param {object} trackingService - Reference to the desired TrackingService to use for event tracking.
  * @returns {AddressViewModel} New AddressViewModel instance.
  */
-function createAddressViewModel() {
+function createAddressViewModel(trackingService) {
   return {
     // Instance properties
     inputValue: '',
@@ -182,6 +181,9 @@ function createAddressViewModel() {
           'Please select a valid property address to continue, or contact us for help.'
       }
 
+      // Track address selection event
+      trackingService.track('Address Selected')
+
       // Re-initialize matches / keyboard nav
       this.refreshSessionToken()
       this.suggestions = []
@@ -223,6 +225,9 @@ function createAddressViewModel() {
       currentURL.searchParams.forEach((value, key) => {
         reportURL.searchParams.append(key, value)
       })
+
+      // Track address selection event
+      trackingService.track('Redirected to Comps Report')
 
       // Redirect to the full report URL
       window.location.assign(reportURL)

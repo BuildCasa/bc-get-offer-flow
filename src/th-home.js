@@ -107,7 +107,7 @@ function initStores() {
 
   $store.addressViewModel = $storeFactory.createStore(
     'addressViewModel',
-    createAddressViewModel(),
+    createAddressViewModel($trackingService),
   )
 
   $store.thGuidesContactViewModel = $storeFactory.createStore(
