@@ -1,5 +1,5 @@
-import { m as y, c as F, a as k, b as B } from "./shared-lDivQ9uY.js";
-import { v as x, t as v, c as H, d as K } from "./shared-Ke-5IP1j.js";
+import { m as M, c as F, a as k, b as x } from "./shared-lDivQ9uY.js";
+import { v as B, t as v, c as H, d as K } from "./shared-Ke-5IP1j.js";
 const i = {
   STATES: {
     DEFAULT: "default",
@@ -101,7 +101,7 @@ function Y(t, e) {
         ]
       }
     }
-  }, l = {
+  }, c = {
     onEntry: [async () => $(t)]
   };
   return {
@@ -266,7 +266,7 @@ function Y(t, e) {
             }
           }
         },
-        effects: l
+        effects: c
       },
       [i.STATES.GET_GUIDES.ERROR]: {
         transitions: {
@@ -329,7 +329,7 @@ function Y(t, e) {
             }
           }
         },
-        effects: l
+        effects: c
       },
       [i.STATES.INTERRUPTOR_POPUP.ERROR]: {
         transitions: {
@@ -382,7 +382,7 @@ async function $(t) {
       lastName: t.thGuidesContactViewModel.lastName.trim(),
       email: t.thGuidesContactViewModel.email.trim()
     };
-    if (!x(e.email))
+    if (!B(e.email))
       throw new Error("Please enter a valid email address, and try again.", {
         cause: "INVALID_EMAIL"
       });
@@ -399,23 +399,23 @@ async function $(t) {
 }
 function J(t, e, s, o) {
   function a(n) {
-    return n instanceof s ? n : new s(function(l) {
-      l(n);
+    return n instanceof s ? n : new s(function(c) {
+      c(n);
     });
   }
-  return new (s || (s = Promise))(function(n, l) {
+  return new (s || (s = Promise))(function(n, c) {
     function T(d) {
       try {
         E(o.next(d));
       } catch (u) {
-        l(u);
+        c(u);
       }
     }
     function r(d) {
       try {
         E(o.throw(d));
       } catch (u) {
-        l(u);
+        c(u);
       }
     }
     function E(d) {
@@ -454,8 +454,8 @@ var Q = function t(e, s) {
       if (!Object.prototype.hasOwnProperty.call(s, n[a]))
         return !1;
     for (a = o; a-- !== 0; ) {
-      var l = n[a];
-      if (!t(e[l], s[l]))
+      var c = n[a];
+      if (!t(e[c], s[c]))
         return !1;
     }
     return !0;
@@ -477,8 +477,8 @@ class h {
    * const loader = Loader({apiKey, version: 'weekly', libraries: ['places']});
    * ```
    */
-  constructor({ apiKey: e, authReferrerPolicy: s, channel: o, client: a, id: n = G, language: l, libraries: T = [], mapIds: r, nonce: E, region: d, retries: u = 3, url: g = "https://maps.googleapis.com/maps/api/js", version: f }) {
-    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = s, this.channel = o, this.client = a, this.id = n || G, this.language = l, this.libraries = T, this.mapIds = r, this.nonce = E, this.region = d, this.retries = u, this.url = g, this.version = f, h.instance) {
+  constructor({ apiKey: e, authReferrerPolicy: s, channel: o, client: a, id: n = G, language: c, libraries: T = [], mapIds: r, nonce: E, region: d, retries: u = 3, url: g = "https://maps.googleapis.com/maps/api/js", version: f }) {
+    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = s, this.channel = o, this.client = a, this.id = n || G, this.language = c, this.libraries = T, this.mapIds = r, this.nonce = E, this.region = d, this.retries = u, this.url = g, this.version = f, h.instance) {
       if (!q(this.options, h.instance.options))
         throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(h.instance.options)}`);
       return h.instance;
@@ -575,24 +575,24 @@ class h {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (n) => !o[n] && delete o[n]
     ), !((s = (e = window == null ? void 0 : window.google) === null || e === void 0 ? void 0 : e.maps) === null || s === void 0) && s.importLibrary || ((n) => {
-      let l, T, r, E = "The Google Maps JavaScript API", d = "google", u = "importLibrary", g = "__ib__", f = document, m = window;
+      let c, T, r, E = "The Google Maps JavaScript API", d = "google", u = "importLibrary", g = "__ib__", f = document, m = window;
       m = m[d] || (m[d] = {});
-      const P = m.maps || (m.maps = {}), M = /* @__PURE__ */ new Set(), A = new URLSearchParams(), b = () => (
+      const P = m.maps || (m.maps = {}), y = /* @__PURE__ */ new Set(), A = new URLSearchParams(), b = () => (
         // @ts-ignore
-        l || (l = new Promise((C, I) => J(this, void 0, void 0, function* () {
+        c || (c = new Promise((C, I) => J(this, void 0, void 0, function* () {
           var O;
-          yield T = f.createElement("script"), T.id = this.id, A.set("libraries", [...M] + "");
+          yield T = f.createElement("script"), T.id = this.id, A.set("libraries", [...y] + "");
           for (r in n)
             A.set(r.replace(/[A-Z]/g, (V) => "_" + V[0].toLowerCase()), n[r]);
-          A.set("callback", d + ".maps." + g), T.src = this.url + "?" + A, P[g] = C, T.onerror = () => l = I(Error(E + " could not load.")), T.nonce = this.nonce || ((O = f.querySelector("script[nonce]")) === null || O === void 0 ? void 0 : O.nonce) || "", f.head.append(T);
+          A.set("callback", d + ".maps." + g), T.src = this.url + "?" + A, P[g] = C, T.onerror = () => c = I(Error(E + " could not load.")), T.nonce = this.nonce || ((O = f.querySelector("script[nonce]")) === null || O === void 0 ? void 0 : O.nonce) || "", f.head.append(T);
         })))
       );
-      P[u] ? console.warn(E + " only loads once. Ignoring:", n) : P[u] = (C, ...I) => M.add(C) && b().then(() => P[u](C, ...I));
+      P[u] ? console.warn(E + " only loads once. Ignoring:", n) : P[u] = (C, ...I) => y.add(C) && b().then(() => P[u](C, ...I));
     })(o);
     const a = this.libraries.map((n) => this.importLibrary(n));
     a.length || a.push(this.importLibrary("core")), Promise.all(a).then(() => this.callback(), (n) => {
-      const l = new ErrorEvent("error", { error: n });
-      this.loadErrorCallback(l);
+      const c = new ErrorEvent("error", { error: n });
+      this.loadErrorCallback(c);
     });
   }
   /**
@@ -659,7 +659,10 @@ async function te(t, e) {
         includedRegionCodes: ["us"],
         includedPrimaryTypes: ["geocode"]
       });
-      return s.map((o) => o.placePrediction);
+      return s.map((o) => ({
+        placePrediction: o.placePrediction,
+        text: o.placePrediction.text.toString()
+      }));
     } catch (s) {
       throw console.error(
         "Error fetching Google Places Autocomplete suggestions:",
@@ -683,16 +686,13 @@ function L(t) {
 function se(t) {
   let e = "";
   if (L(t)) {
-    const s = t.addressComponents.reduce(
-      (a, n) => ({
-        ...a,
-        [n.types[0]]: {
-          shortText: n.shortText,
-          longText: n.longText
-        }
-      }),
-      {}
-    );
+    const s = t.addressComponents.reduce((a, n) => ({
+      ...a,
+      [n.types[0]]: {
+        shortText: n.shortText,
+        longText: n.longText
+      }
+    }), {});
     e = [
       s.street_number.shortText,
       s.route.shortText,
@@ -710,8 +710,7 @@ function re(t) {
     sessionToken: "",
     suggestions: [],
     keyboardNavIndex: -1,
-    selectedSuggestion: {},
-    selectedPlaceData: {},
+    selectedPlace: {},
     isSubmitted: !1,
     errorMessage: "",
     /**
@@ -721,7 +720,7 @@ function re(t) {
      * @returns {void}
      */
     async init() {
-      this.inputValue = "", this.suggestions = [], this.keyboardNavIndex = -1, this.selectedSuggestion = {}, this.selectedPlaceData = {}, this.isSubmitted = !1, this.errorMessage = "", await z(), this.refreshSessionToken();
+      this.inputValue = "", this.suggestions = [], this.keyboardNavIndex = -1, this.selectedPlace = {}, this.isSubmitted = !1, this.errorMessage = "", await z(), this.refreshSessionToken();
     },
     refreshSessionToken() {
       this.sessionToken = ee();
@@ -731,10 +730,10 @@ function re(t) {
      * @type {boolean}
      */
     get isSelected() {
-      return Object.keys(this.selectedSuggestion).length != 0;
+      return Object.keys(this.selectedPlace).length != 0;
     },
     get isSelectedValid() {
-      return L(this.selectedSuggestion);
+      return L(this.selectedPlace);
     },
     /**
      * Handles input events from the address typeahead input field.
@@ -742,7 +741,7 @@ function re(t) {
      * @returns {Promise.<void>} Promise that resolves when input handling is complete.
      */
     async handleInput() {
-      if (this.isSubmitted && (this.isSubmitted = !1), this.errorMessage && (this.errorMessage = ""), this.isSelected && (this.selectedSuggestion = {}), !this.inputValue) {
+      if (this.isSubmitted && (this.isSubmitted = !1), this.errorMessage && (this.errorMessage = ""), this.isSelected && (this.selectedPlace = {}), !this.inputValue) {
         this.suggestions = [];
         return;
       }
@@ -766,17 +765,17 @@ function re(t) {
       e.key != "Enter" && e.key != "ArrowUp" && e.key != "ArrowDown" || this.isSelected || this.suggestions.length === 0 || (e.preventDefault(), e.stopPropagation(), e.key === "Enter" && this.keyboardNavIndex != -1 ? this.selectSuggestion(this.suggestions[this.keyboardNavIndex]) : e.key === "ArrowUp" ? this.keyboardNavIndex = this.keyboardNavIndex <= -1 ? this.suggestions.length - 1 : this.keyboardNavIndex - 1 : e.key === "ArrowDown" && (this.keyboardNavIndex = this.keyboardNavIndex >= this.suggestions.length - 1 ? -1 : this.keyboardNavIndex + 1));
     },
     async selectSuggestion(e) {
-      let s = e.toPlace();
+      let s = e.placePrediction.toPlace();
       await s.fetchFields({
         fields: ["displayName", "formattedAddress", "addressComponents"]
-      }), this.selectedSuggestion = s, this.inputValue = s.formattedAddress, this.isSelectedValid || (this.errorMessage = "Please select a valid property address to continue, or contact us for help."), t.track("Address Selected"), this.refreshSessionToken(), this.suggestions = [], this.keyboardNavIndex = -1, this.isSelectedValid && this.redirectToReport();
+      }), this.selectedPlace = s, this.inputValue = s.formattedAddress, this.isSelectedValid || (this.errorMessage = "Please select a valid property address to continue, or contact us for help."), t.track("Address Selected"), this.refreshSessionToken(), this.suggestions = [], this.keyboardNavIndex = -1, this.isSelectedValid && this.redirectToReport();
     },
     handleSubmit(e) {
       e.preventDefault(), e.stopPropagation();
     },
     redirectToReport() {
       this.isSubmitted = !0;
-      const e = se(this.selectedSuggestion);
+      const e = se(this.selectedPlace);
       if (!this.isSelected || !this.isSelectedValid || !e) {
         this.isSubmitted = !1;
         return;
@@ -1150,54 +1149,54 @@ function fe(t) {
     expiryDate: s
   };
 }
-window.Alpine = y;
-const S = k(y), c = {}, R = B(window.FS, c);
+window.Alpine = M;
+const S = k(M), l = {}, R = x(window.FS, l);
 me();
 Re();
-y.start();
+M.start();
 function me() {
   const e = new URL(window.location.href).searchParams.get("get_started"), s = e && e === "complete" ? i.STATES.GET_STARTED.COMPLETE.MODAL : i.STATES.DEFAULT;
-  c.flowState = S.createStore(
+  l.flowState = S.createStore(
     "flowState",
     F(
-      Y(c, R),
+      Y(l, R),
       R,
       s
     )
-  ), c.flowUIHelpers = S.createStore(
+  ), l.flowUIHelpers = S.createStore(
     "flowUIHelpers",
-    j(c)
-  ), c.personalizationViewModel = S.createStore(
+    j(l)
+  ), l.personalizationViewModel = S.createStore(
     "personalizationViewModel",
     H(he)
-  ), c.experimentationViewModel = S.createStore(
+  ), l.experimentationViewModel = S.createStore(
     "experimentationViewModel",
     K()
-  ), c.adTrackingViewModel = S.createStore(
+  ), l.adTrackingViewModel = S.createStore(
     "adTrackingViewModel",
     pe()
-  ), c.addressViewModel = S.createStore(
+  ), l.addressViewModel = S.createStore(
     "addressViewModel",
     re(R)
-  ), c.thGuidesContactViewModel = S.createStore(
+  ), l.thGuidesContactViewModel = S.createStore(
     "thGuidesContactViewModel",
-    ne(c.flowState)
-  ), c.thGuidesDownloadViewModel = S.createStore(
+    ne(l.flowState)
+  ), l.thGuidesDownloadViewModel = S.createStore(
     "thGuidesDownloadViewModel",
-    oe(c)
-  ), c.thCalculatorViewModel = S.createStore(
+    oe(l)
+  ), l.thCalculatorViewModel = S.createStore(
     "thCalculatorViewModel",
-    Te(c.personalizationViewModel)
+    Te(l.personalizationViewModel)
   );
 }
 function Re() {
-  if (c.flowState.value === i.STATES.DEFAULT) {
+  if (l.flowState.value === i.STATES.DEFAULT) {
     const e = "interruptor-popups-2024-11", s = ["none", "guides"], o = s[Math.floor(Math.random() * s.length)];
-    c.experimentationViewModel.setActiveExperimentVariation(
+    l.experimentationViewModel.setActiveExperimentVariation(
       e,
       o
     ), R.track("Interruptor Popup Experiment Set"), o !== "none" && (setTimeout(() => {
-      c.flowState.transition(
+      (!l.addressViewModel || !l.addressViewModel.suggestions.length && !l.addressViewModel.isSelected && !l.addressViewModel.isSubmitted) && l.flowState.transition(
         i.EVENTS.INTERRUPTOR_POPUP.START
       );
     }, 15e3), R.track("Interruptor Popup Scheduled"));
