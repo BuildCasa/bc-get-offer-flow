@@ -151,9 +151,19 @@ function initExperiments() {
       setTimeout(() => {
         // Send Show Interruptor Popup flow transition event
         // State machine logic will ensure that it is only transitioned to from a valid state
-        $store.flowState.transition(
-          flowConstants.EVENTS.INTERRUPTOR_POPUP.START,
-        )
+        // EXCEPT for the case where the user is interacting with a non-modal address autocomplete
+        // In that case, don't interrupt the user's flow
+        // NOTE: We may want to add these states to the flow state machine in the future
+        if (
+          !$store.addressViewModel ||
+          (!$store.addressViewModel.suggestions.length &&
+            !$store.addressViewModel.isSelected &&
+            !$store.addressViewModel.isSubmitted)
+        ) {
+          $store.flowState.transition(
+            flowConstants.EVENTS.INTERRUPTOR_POPUP.START,
+          )
+        }
       }, 15000)
 
       // Track the scheduled popup event
