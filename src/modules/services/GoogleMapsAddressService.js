@@ -65,7 +65,12 @@ async function fetchAddressSuggestions(query, token) {
         includedPrimaryTypes: ['geocode'],
       })
 
-    return suggestions.map((suggestion) => suggestion.placePrediction)
+    return suggestions.map((suggestion) => {
+      return {
+        placePrediction: suggestion.placePrediction,
+        text: suggestion.placePrediction.text.toString(),
+      }
+    })
   } catch (error) {
     console.error(
       'Error fetching Google Places Autocomplete suggestions:',
@@ -77,40 +82,37 @@ async function fetchAddressSuggestions(query, token) {
   }
 }
 
-function isValidTHAddress(suggestion) {
+function isPlaceTHAddressValid(place) {
   return (
-    suggestion.addressComponents &&
-    suggestion.addressComponents.some(
+    place.addressComponents &&
+    place.addressComponents.some(
       (component) => component.types[0] === 'street_number',
     ) &&
-    suggestion.addressComponents.some(
+    place.addressComponents.some(
       (component) => component.types[0] === 'route',
     ) &&
-    suggestion.addressComponents.some(
+    place.addressComponents.some(
       (component) => component.types[0] === 'locality',
     ) &&
-    suggestion.addressComponents.some(
+    place.addressComponents.some(
       (component) => component.types[0] === 'administrative_area_level_1',
     )
   )
 }
 
-function getTHAddressSlug(suggestion) {
+function getTHAddressSlugForPlace(place) {
   let response = ''
 
-  if (isValidTHAddress(suggestion)) {
-    const addressComponents = suggestion.addressComponents.reduce(
-      (acc, cur) => {
-        return {
-          ...acc,
-          [cur.types[0]]: {
-            shortText: cur.shortText,
-            longText: cur.longText,
-          },
-        }
-      },
-      {},
-    )
+  if (isPlaceTHAddressValid(place)) {
+    const addressComponents = place.addressComponents.reduce((acc, cur) => {
+      return {
+        ...acc,
+        [cur.types[0]]: {
+          shortText: cur.shortText,
+          longText: cur.longText,
+        },
+      }
+    }, {})
 
     const slugComponents = [
       addressComponents['street_number'].shortText,
@@ -139,6 +141,6 @@ export {
   loadPlacesLibrary,
   getAutocompleteSessionToken,
   fetchAddressSuggestions,
-  isValidTHAddress,
-  getTHAddressSlug,
+  isPlaceTHAddressValid,
+  getTHAddressSlugForPlace,
 }

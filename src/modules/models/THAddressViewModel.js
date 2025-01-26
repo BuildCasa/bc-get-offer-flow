@@ -9,8 +9,8 @@ import {
   loadPlacesLibrary,
   getAutocompleteSessionToken,
   fetchAddressSuggestions,
-  isValidTHAddress,
-  getTHAddressSlug,
+  isPlaceTHAddressValid,
+  getTHAddressSlugForPlace,
 } from '../services/GoogleMapsAddressService.js'
 
 /*
@@ -40,8 +40,7 @@ function createAddressViewModel(trackingService) {
     sessionToken: '',
     suggestions: [],
     keyboardNavIndex: -1,
-    selectedSuggestion: {},
-    selectedPlaceData: {},
+    selectedPlace: {},
     isSubmitted: false,
     errorMessage: '',
 
@@ -55,8 +54,7 @@ function createAddressViewModel(trackingService) {
       this.inputValue = ''
       this.suggestions = []
       this.keyboardNavIndex = -1
-      this.selectedSuggestion = {}
-      this.selectedPlaceData = {}
+      this.selectedPlace = {}
       this.isSubmitted = false
       this.errorMessage = ''
 
@@ -74,11 +72,11 @@ function createAddressViewModel(trackingService) {
      * @type {boolean}
      */
     get isSelected() {
-      return Object.keys(this.selectedSuggestion).length != 0
+      return Object.keys(this.selectedPlace).length != 0
     },
 
     get isSelectedValid() {
-      return isValidTHAddress(this.selectedSuggestion)
+      return isPlaceTHAddressValid(this.selectedPlace)
     },
 
     /**
@@ -96,7 +94,7 @@ function createAddressViewModel(trackingService) {
       }
 
       if (this.isSelected) {
-        this.selectedSuggestion = {}
+        this.selectedPlace = {}
       }
 
       if (!this.inputValue) {
@@ -105,6 +103,7 @@ function createAddressViewModel(trackingService) {
       }
 
       // Fetch and update address matches (or handle errors)
+      // Returns an array of place suggestions with `placePrediction` and `text` properties
       try {
         this.suggestions = await fetchAddressSuggestions(
           this.inputValue,
@@ -163,14 +162,14 @@ function createAddressViewModel(trackingService) {
     },
 
     async selectSuggestion(suggestion) {
-      let place = suggestion.toPlace()
+      let place = suggestion.placePrediction.toPlace()
 
       await place.fetchFields({
         fields: ['displayName', 'formattedAddress', 'addressComponents'],
       })
 
       // Set selected address
-      this.selectedSuggestion = place
+      this.selectedPlace = place
 
       // Update input value
       this.inputValue = place.formattedAddress
@@ -206,7 +205,7 @@ function createAddressViewModel(trackingService) {
       this.isSubmitted = true
 
       // Get the address slug for the selected suggestion
-      const addressSlug = getTHAddressSlug(this.selectedSuggestion)
+      const addressSlug = getTHAddressSlugForPlace(this.selectedPlace)
 
       // If the address is not valid, return and do not redirect
       if (!this.isSelected || !this.isSelectedValid || !addressSlug) {
