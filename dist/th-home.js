@@ -860,7 +860,7 @@ function ne(t) {
     }
   };
 }
-const ae = 0.03, U = 15e5, le = 5e6, ce = 2e5, de = 5e4;
+const ae = 0.03, U = 15e5, le = 5e6, ce = 25e4, de = 5e4;
 function Te(t = {}) {
   return {
     listPrice: null,
@@ -916,10 +916,12 @@ function Te(t = {}) {
       return N(this.listPrice);
     },
     get turboHomeFee() {
-      return this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
+      return this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
     },
     get cashBack() {
-      return Math.round(this.listPrice * this.commissionRate);
+      return Math.round(
+        this.listPrice * this.commissionRate - this.turboHomeFee
+      );
     },
     get formattedCashBack() {
       return N(this.cashBack);
