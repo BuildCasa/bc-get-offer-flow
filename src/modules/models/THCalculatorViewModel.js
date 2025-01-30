@@ -6,7 +6,7 @@
 const COMMISSION_RATE = 0.03
 const FALLBACK_DEFAULT_LIST_PRICE = 1500000
 const FALLBACK_MAX_LIST_PRICE = 5000000
-const FALLBACK_MIN_LIST_PRICE = 200000
+const FALLBACK_MIN_LIST_PRICE = 250000
 const FALLBACK_INPUT_STEP = 50000
 
 /*
@@ -90,14 +90,15 @@ function createTHCalculatorViewModel(personalizationViewModel = {}) {
     },
 
     get turboHomeFee() {
-      if (this.listPrice <= 500000) return 5000
       if (this.listPrice <= 1000000) return 7500
       if (this.listPrice <= 2000000) return 10000
       return 15000
     },
 
     get cashBack() {
-      return Math.round(this.listPrice * this.commissionRate)
+      return Math.round(
+        this.listPrice * this.commissionRate - this.turboHomeFee,
+      )
     },
 
     get formattedCashBack() {
