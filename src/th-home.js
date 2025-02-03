@@ -33,7 +33,6 @@ import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewMo
 import personalizationData from './data/th-personalization-data.json'
 import { createPersonalizationViewModel } from './modules/models/PersonalizationViewModel'
 
-import { createExperimentationViewModel } from './modules/models/ExperimentationViewModel'
 import { createAdTrackingViewModel } from './modules/models/AdTrackingViewModel'
 
 /*
@@ -56,9 +55,6 @@ const $trackingService = createTrackingService(window.FS, $store)
 
 // Initialize the stores with custom state and business logic that powers the site interactivity
 initStores()
-
-// Initialize experiments and determine each experiment variant
-initExperiments()
 
 // Start Alpine.js to enable the site interactivity
 Alpine.start()
@@ -96,10 +92,6 @@ function initStores() {
     'personalizationViewModel',
     createPersonalizationViewModel(personalizationData),
   )
-  $store.experimentationViewModel = $storeFactory.createStore(
-    'experimentationViewModel',
-    createExperimentationViewModel(),
-  )
   $store.adTrackingViewModel = $storeFactory.createStore(
     'adTrackingViewModel',
     createAdTrackingViewModel(),
@@ -122,52 +114,4 @@ function initStores() {
     'thCalculatorViewModel',
     createTHCalculatorViewModel($store.personalizationViewModel),
   )
-}
-
-function initExperiments() {
-  // Determine whether or not to include in the Interruptor Popups experiment
-  // If the user has already completed the Get Started flow, then they should not see the Interruptor Popups
-  const includeInterruptorPopupExperiment =
-    $store.flowState.value === flowConstants.STATES.DEFAULT
-
-  // If including in the Interruptor Popups experiment
-  if (includeInterruptorPopupExperiment) {
-    // Set the experiment id slug, and determine the experiment variant
-    const experiment = 'interruptor-popups-2024-11'
-    const possibleVariations = ['none', 'guides']
-    const variation =
-      possibleVariations[Math.floor(Math.random() * possibleVariations.length)] // Randomly select a variation with equal probability
-
-    $store.experimentationViewModel.setActiveExperimentVariation(
-      experiment,
-      variation,
-    )
-
-    // Track the experiment set event
-    $trackingService.track('Interruptor Popup Experiment Set')
-
-    // If the variation is not 'none', schedule the interruptor popup to appear after a 15 second delay
-    if (variation !== 'none') {
-      setTimeout(() => {
-        // Send Show Interruptor Popup flow transition event
-        // State machine logic will ensure that it is only transitioned to from a valid state
-        // EXCEPT for the case where the user is interacting with a non-modal address autocomplete
-        // In that case, don't interrupt the user's flow
-        // NOTE: We may want to add these states to the flow state machine in the future
-        if (
-          !$store.addressViewModel ||
-          (!$store.addressViewModel.suggestions.length &&
-            !$store.addressViewModel.isSelected &&
-            !$store.addressViewModel.isSubmitted)
-        ) {
-          $store.flowState.transition(
-            flowConstants.EVENTS.INTERRUPTOR_POPUP.START,
-          )
-        }
-      }, 15000)
-
-      // Track the scheduled popup event
-      $trackingService.track('Interruptor Popup Scheduled')
-    }
-  }
 }
