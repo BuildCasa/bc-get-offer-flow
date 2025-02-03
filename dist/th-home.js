@@ -1,5 +1,5 @@
-import { m as M, c as F, a as k, b as x } from "./shared-lDivQ9uY.js";
-import { v as B, t as v, c as H, d as K } from "./shared-Ke-5IP1j.js";
+import { m as y, c as V, a as F, b as k } from "./shared-lDivQ9uY.js";
+import { v as B, t as x, c as v } from "./shared-3ha5dRcd.js";
 const i = {
   STATES: {
     DEFAULT: "default",
@@ -53,7 +53,7 @@ const i = {
     EXIT: "EXIT"
   }
 };
-function Y(t, e) {
+function H(t, e) {
   const s = {
     [i.EVENTS.EXIT]: {
       target: i.STATES.DEFAULT,
@@ -101,8 +101,8 @@ function Y(t, e) {
         ]
       }
     }
-  }, c = {
-    onEntry: [async () => $(t)]
+  }, l = {
+    onEntry: [async () => Y(t)]
   };
   return {
     constants: i,
@@ -266,7 +266,7 @@ function Y(t, e) {
             }
           }
         },
-        effects: c
+        effects: l
       },
       [i.STATES.GET_GUIDES.ERROR]: {
         transitions: {
@@ -329,7 +329,7 @@ function Y(t, e) {
             }
           }
         },
-        effects: c
+        effects: l
       },
       [i.STATES.INTERRUPTOR_POPUP.ERROR]: {
         transitions: {
@@ -352,7 +352,7 @@ function Y(t, e) {
     }
   };
 }
-function j(t) {
+function K(t) {
   return {
     modal: {
       get isOpen() {
@@ -375,7 +375,7 @@ function j(t) {
     }
   };
 }
-async function $(t) {
+async function Y(t) {
   try {
     let e = {
       firstName: t.thGuidesContactViewModel.firstName.trim(),
@@ -390,44 +390,44 @@ async function $(t) {
       ...t.thGuidesContactViewModel.options,
       contact: e
     };
-    await Promise.all([v(s)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition(
+    await Promise.all([x(s)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition(
       i.EVENTS.SUBMIT_CONTACT.SUCCESS
     );
   } catch (e) {
     console.log("Error submitting contact:", e), e && e.cause && e.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = e.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition(i.EVENTS.SUBMIT_CONTACT.ERROR);
   }
 }
-function J(t, e, s, o) {
+function j(t, e, s, o) {
   function a(n) {
-    return n instanceof s ? n : new s(function(c) {
-      c(n);
+    return n instanceof s ? n : new s(function(l) {
+      l(n);
     });
   }
-  return new (s || (s = Promise))(function(n, c) {
+  return new (s || (s = Promise))(function(n, l) {
     function T(d) {
       try {
-        E(o.next(d));
+        S(o.next(d));
       } catch (u) {
-        c(u);
+        l(u);
       }
     }
     function r(d) {
       try {
-        E(o.throw(d));
+        S(o.throw(d));
       } catch (u) {
-        c(u);
+        l(u);
       }
     }
-    function E(d) {
+    function S(d) {
       d.done ? n(d.value) : a(d.value).then(T, r);
     }
-    E((o = o.apply(t, e || [])).next());
+    S((o = o.apply(t, e || [])).next());
   });
 }
-function W(t) {
+function $(t) {
   return t && t.__esModule && Object.prototype.hasOwnProperty.call(t, "default") ? t.default : t;
 }
-var Q = function t(e, s) {
+var J = function t(e, s) {
   if (e === s)
     return !0;
   if (e && s && typeof e == "object" && typeof s == "object") {
@@ -454,19 +454,19 @@ var Q = function t(e, s) {
       if (!Object.prototype.hasOwnProperty.call(s, n[a]))
         return !1;
     for (a = o; a-- !== 0; ) {
-      var c = n[a];
-      if (!t(e[c], s[c]))
+      var l = n[a];
+      if (!t(e[l], s[l]))
         return !1;
     }
     return !0;
   }
   return e !== e && s !== s;
-}, q = /* @__PURE__ */ W(Q);
+}, W = /* @__PURE__ */ $(J);
 const G = "__googleMapsScriptId";
-var p;
+var f;
 (function(t) {
   t[t.INITIALIZED = 0] = "INITIALIZED", t[t.LOADING = 1] = "LOADING", t[t.SUCCESS = 2] = "SUCCESS", t[t.FAILURE = 3] = "FAILURE";
-})(p || (p = {}));
+})(f || (f = {}));
 class h {
   /**
    * Creates an instance of Loader using [[LoaderOptions]]. No defaults are set
@@ -477,9 +477,9 @@ class h {
    * const loader = Loader({apiKey, version: 'weekly', libraries: ['places']});
    * ```
    */
-  constructor({ apiKey: e, authReferrerPolicy: s, channel: o, client: a, id: n = G, language: c, libraries: T = [], mapIds: r, nonce: E, region: d, retries: u = 3, url: g = "https://maps.googleapis.com/maps/api/js", version: f }) {
-    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = s, this.channel = o, this.client = a, this.id = n || G, this.language = c, this.libraries = T, this.mapIds = r, this.nonce = E, this.region = d, this.retries = u, this.url = g, this.version = f, h.instance) {
-      if (!q(this.options, h.instance.options))
+  constructor({ apiKey: e, authReferrerPolicy: s, channel: o, client: a, id: n = G, language: l, libraries: T = [], mapIds: r, nonce: S, region: d, retries: u = 3, url: R = "https://maps.googleapis.com/maps/api/js", version: p }) {
+    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = s, this.channel = o, this.client = a, this.id = n || G, this.language = l, this.libraries = T, this.mapIds = r, this.nonce = S, this.region = d, this.retries = u, this.url = R, this.version = p, h.instance) {
+      if (!W(this.options, h.instance.options))
         throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(h.instance.options)}`);
       return h.instance;
     }
@@ -502,7 +502,7 @@ class h {
     };
   }
   get status() {
-    return this.errors.length ? p.FAILURE : this.done ? p.SUCCESS : this.loading ? p.LOADING : p.INITIALIZED;
+    return this.errors.length ? f.FAILURE : this.done ? f.SUCCESS : this.loading ? f.LOADING : f.INITIALIZED;
   }
   get failed() {
     return this.done && !this.loading && this.errors.length >= this.retries + 1;
@@ -575,24 +575,24 @@ class h {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (n) => !o[n] && delete o[n]
     ), !((s = (e = window == null ? void 0 : window.google) === null || e === void 0 ? void 0 : e.maps) === null || s === void 0) && s.importLibrary || ((n) => {
-      let c, T, r, E = "The Google Maps JavaScript API", d = "google", u = "importLibrary", g = "__ib__", f = document, m = window;
+      let l, T, r, S = "The Google Maps JavaScript API", d = "google", u = "importLibrary", R = "__ib__", p = document, m = window;
       m = m[d] || (m[d] = {});
-      const P = m.maps || (m.maps = {}), y = /* @__PURE__ */ new Set(), A = new URLSearchParams(), b = () => (
+      const g = m.maps || (m.maps = {}), M = /* @__PURE__ */ new Set(), P = new URLSearchParams(), L = () => (
         // @ts-ignore
-        c || (c = new Promise((C, I) => J(this, void 0, void 0, function* () {
-          var O;
-          yield T = f.createElement("script"), T.id = this.id, A.set("libraries", [...y] + "");
+        l || (l = new Promise((A, C) => j(this, void 0, void 0, function* () {
+          var I;
+          yield T = p.createElement("script"), T.id = this.id, P.set("libraries", [...M] + "");
           for (r in n)
-            A.set(r.replace(/[A-Z]/g, (V) => "_" + V[0].toLowerCase()), n[r]);
-          A.set("callback", d + ".maps." + g), T.src = this.url + "?" + A, P[g] = C, T.onerror = () => c = I(Error(E + " could not load.")), T.nonce = this.nonce || ((O = f.querySelector("script[nonce]")) === null || O === void 0 ? void 0 : O.nonce) || "", f.head.append(T);
+            P.set(r.replace(/[A-Z]/g, (b) => "_" + b[0].toLowerCase()), n[r]);
+          P.set("callback", d + ".maps." + R), T.src = this.url + "?" + P, g[R] = A, T.onerror = () => l = C(Error(S + " could not load.")), T.nonce = this.nonce || ((I = p.querySelector("script[nonce]")) === null || I === void 0 ? void 0 : I.nonce) || "", p.head.append(T);
         })))
       );
-      P[u] ? console.warn(E + " only loads once. Ignoring:", n) : P[u] = (C, ...I) => y.add(C) && b().then(() => P[u](C, ...I));
+      g[u] ? console.warn(S + " only loads once. Ignoring:", n) : g[u] = (A, ...C) => M.add(A) && L().then(() => g[u](A, ...C));
     })(o);
     const a = this.libraries.map((n) => this.importLibrary(n));
     a.length || a.push(this.importLibrary("core")), Promise.all(a).then(() => this.callback(), (n) => {
-      const c = new ErrorEvent("error", { error: n });
-      this.loadErrorCallback(c);
+      const l = new ErrorEvent("error", { error: n });
+      this.loadErrorCallback(l);
     });
   }
   /**
@@ -631,27 +631,27 @@ class h {
       }
   }
 }
-const X = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", Z = new h({
-  apiKey: X,
+const Q = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", q = new h({
+  apiKey: Q,
   version: "weekly"
 });
-let w = null, _ = null;
-async function z() {
+let _ = null, w = null;
+async function X() {
   try {
-    const t = await Z.importLibrary("places");
-    w = t.AutocompleteSuggestion, _ = t.AutocompleteSessionToken;
+    const t = await q.importLibrary("places");
+    _ = t.AutocompleteSuggestion, w = t.AutocompleteSessionToken;
   } catch (t) {
     console.error("Error loading Google Maps Places library:", t);
   }
 }
-function ee() {
-  if (_)
-    return new _();
-}
-async function te(t, e) {
+function Z() {
   if (w)
+    return new w();
+}
+async function z(t, e) {
+  if (_)
     try {
-      const { suggestions: s } = await w.fetchAutocompleteSuggestions({
+      const { suggestions: s } = await _.fetchAutocompleteSuggestions({
         input: t,
         language: "en-US",
         region: "us",
@@ -672,7 +672,7 @@ async function te(t, e) {
       );
     }
 }
-function L(t) {
+function ee(t) {
   return t.addressComponents && t.addressComponents.some(
     (e) => e.types[0] === "street_number"
   ) && t.addressComponents.some(
@@ -683,27 +683,11 @@ function L(t) {
     (e) => e.types[0] === "administrative_area_level_1"
   );
 }
-function se(t) {
-  let e = "";
-  if (L(t)) {
-    const s = t.addressComponents.reduce((a, n) => ({
-      ...a,
-      [n.types[0]]: {
-        shortText: n.shortText,
-        longText: n.longText
-      }
-    }), {});
-    e = [
-      s.street_number.shortText,
-      s.route.shortText,
-      s.locality.longText,
-      s.administrative_area_level_1.shortText
-    ].join("-").toLowerCase().replace(/[^a-z0-9 -]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
-  }
-  return e;
+function te(t) {
+  return encodeURIComponent(t.formattedAddress);
 }
-const ie = "https://bc-turbohome-buyer-portal-git-staging-turbohome.vercel.app/onboard";
-function re(t) {
+const se = "https://bc-turbohome-buyer-portal-git-staging-turbohome.vercel.app/onboard";
+function ie(t) {
   return {
     // Instance properties
     inputValue: "",
@@ -720,10 +704,10 @@ function re(t) {
      * @returns {void}
      */
     async init() {
-      this.inputValue = "", this.suggestions = [], this.keyboardNavIndex = -1, this.selectedPlace = {}, this.isSubmitted = !1, this.errorMessage = "", await z(), this.refreshSessionToken();
+      this.inputValue = "", this.suggestions = [], this.keyboardNavIndex = -1, this.selectedPlace = {}, this.isSubmitted = !1, this.errorMessage = "", await X(), this.refreshSessionToken();
     },
     refreshSessionToken() {
-      this.sessionToken = ee();
+      this.sessionToken = Z();
     },
     /**
      * Whether or not an address match has been selected with the typeahead.
@@ -733,7 +717,7 @@ function re(t) {
       return Object.keys(this.selectedPlace).length != 0;
     },
     get isSelectedValid() {
-      return L(this.selectedPlace);
+      return ee(this.selectedPlace);
     },
     /**
      * Handles input events from the address typeahead input field.
@@ -746,7 +730,7 @@ function re(t) {
         return;
       }
       try {
-        this.suggestions = await te(
+        this.suggestions = await z(
           this.inputValue,
           this.sessionToken
         );
@@ -775,19 +759,21 @@ function re(t) {
     },
     redirectToReport() {
       this.isSubmitted = !0;
-      const e = se(this.selectedPlace);
+      const e = te(
+        this.selectedPlace
+      );
       if (!this.isSelected || !this.isSelectedValid || !e) {
         this.isSubmitted = !1;
         return;
       }
-      const s = new URL(ie);
+      const s = new URL(se);
       s.searchParams.append("address", e), new URL(window.location.href).searchParams.forEach((a, n) => {
         s.searchParams.append(n, a);
       }), t.track("Redirected to Comps Report"), window.location.assign(s);
     }
   };
 }
-function oe(t) {
+function re(t) {
   return {
     // Instance properties
     GUIDES: {
@@ -824,7 +810,7 @@ function oe(t) {
     }
   };
 }
-function ne(t) {
+function oe(t) {
   return {
     // Instance properties
     firstName: "",
@@ -860,11 +846,11 @@ function ne(t) {
     }
   };
 }
-const ae = 0.03, U = 15e5, le = 5e6, ce = 25e4, de = 5e4;
-function Te(t = {}) {
+const ne = 0.03, U = 15e5, ae = 5e6, le = 25e4, ce = 5e4;
+function de(t = {}) {
   return {
     listPrice: null,
-    commissionRate: ae,
+    commissionRate: ne,
     init: function() {
       this.listPrice = t.getContent("calcDefaultListPrice") || U;
     },
@@ -888,7 +874,7 @@ function Te(t = {}) {
      * @type {number}
      */
     get maxListPrice() {
-      return t.getContent("calcMaxListPrice") || le;
+      return t.getContent("calcMaxListPrice") || ae;
     },
     /**
      * Computed property that returns the value of the calcMinlistPrice key in the personalizationViewModel
@@ -899,7 +885,7 @@ function Te(t = {}) {
      * @type {number}
      */
     get minListPrice() {
-      return t.getContent("calcMinListPrice") || ce;
+      return t.getContent("calcMinListPrice") || le;
     },
     /**
      * Computed property that returns the value of the calcInputStep key in the personalizationViewModel
@@ -910,7 +896,7 @@ function Te(t = {}) {
      * @type {number}
      */
     get inputStep() {
-      return t.getContent("calcInputStep") || de;
+      return t.getContent("calcInputStep") || ce;
     },
     get formattedListPrice() {
       return N(this.listPrice);
@@ -935,12 +921,12 @@ function N(t) {
     maximumFractionDigits: 0
   }).format(t);
 }
-const ue = {
+const Te = {
   content: {
     phoneNumberText: "(415) 941-5285",
     phoneNumberLink: "tel:+14159415285"
   }
-}, Se = {
+}, ue = {
   content: {
     phoneNumberText: "(213) 322-1360",
     phoneNumberLink: "tel:+12133221360"
@@ -976,14 +962,14 @@ const ue = {
     "Temecula",
     "Wildomar"
   ]
-}, Ee = {
+}, Se = {
   content: {
     phoneNumberText: "(469) 564-1214",
     phoneNumberLink: "tel:+14695641214"
   },
   state: "Texas"
-}, he = {
-  DEFAULT: ue,
+}, Ee = {
+  DEFAULT: Te,
   "Los Angeles": {
     content: {
       phoneNumberText: "(213) 322-1360",
@@ -1108,10 +1094,10 @@ const ue = {
       "Vista"
     ]
   },
-  Riverside: Se,
-  Texas: Ee
+  Riverside: ue,
+  Texas: Se
 };
-function pe() {
+function he() {
   return {
     gclid: null,
     /**
@@ -1151,56 +1137,39 @@ function fe(t) {
     expiryDate: s
   };
 }
-window.Alpine = M;
-const S = k(M), l = {}, R = x(window.FS, l);
-me();
-Re();
-M.start();
-function me() {
+window.Alpine = y;
+const E = F(y), c = {}, O = k(window.FS, c);
+pe();
+y.start();
+function pe() {
   const e = new URL(window.location.href).searchParams.get("get_started"), s = e && e === "complete" ? i.STATES.GET_STARTED.COMPLETE.MODAL : i.STATES.DEFAULT;
-  l.flowState = S.createStore(
+  c.flowState = E.createStore(
     "flowState",
-    F(
-      Y(l, R),
-      R,
+    V(
+      H(c, O),
+      O,
       s
     )
-  ), l.flowUIHelpers = S.createStore(
+  ), c.flowUIHelpers = E.createStore(
     "flowUIHelpers",
-    j(l)
-  ), l.personalizationViewModel = S.createStore(
+    K(c)
+  ), c.personalizationViewModel = E.createStore(
     "personalizationViewModel",
-    H(he)
-  ), l.experimentationViewModel = S.createStore(
-    "experimentationViewModel",
-    K()
-  ), l.adTrackingViewModel = S.createStore(
+    v(Ee)
+  ), c.adTrackingViewModel = E.createStore(
     "adTrackingViewModel",
-    pe()
-  ), l.addressViewModel = S.createStore(
+    he()
+  ), c.addressViewModel = E.createStore(
     "addressViewModel",
-    re(R)
-  ), l.thGuidesContactViewModel = S.createStore(
+    ie(O)
+  ), c.thGuidesContactViewModel = E.createStore(
     "thGuidesContactViewModel",
-    ne(l.flowState)
-  ), l.thGuidesDownloadViewModel = S.createStore(
+    oe(c.flowState)
+  ), c.thGuidesDownloadViewModel = E.createStore(
     "thGuidesDownloadViewModel",
-    oe(l)
-  ), l.thCalculatorViewModel = S.createStore(
+    re(c)
+  ), c.thCalculatorViewModel = E.createStore(
     "thCalculatorViewModel",
-    Te(l.personalizationViewModel)
+    de(c.personalizationViewModel)
   );
-}
-function Re() {
-  if (l.flowState.value === i.STATES.DEFAULT) {
-    const e = "interruptor-popups-2024-11", s = ["none", "guides"], o = s[Math.floor(Math.random() * s.length)];
-    l.experimentationViewModel.setActiveExperimentVariation(
-      e,
-      o
-    ), R.track("Interruptor Popup Experiment Set"), o !== "none" && (setTimeout(() => {
-      (!l.addressViewModel || !l.addressViewModel.suggestions.length && !l.addressViewModel.isSelected && !l.addressViewModel.isSubmitted) && l.flowState.transition(
-        i.EVENTS.INTERRUPTOR_POPUP.START
-      );
-    }, 15e3), R.track("Interruptor Popup Scheduled"));
-  }
 }
