@@ -100,36 +100,8 @@ function isPlaceTHAddressValid(place) {
   )
 }
 
-function getTHAddressSlugForPlace(place) {
-  let response = ''
-
-  if (isPlaceTHAddressValid(place)) {
-    const addressComponents = place.addressComponents.reduce((acc, cur) => {
-      return {
-        ...acc,
-        [cur.types[0]]: {
-          shortText: cur.shortText,
-          longText: cur.longText,
-        },
-      }
-    }, {})
-
-    const slugComponents = [
-      addressComponents['street_number'].shortText,
-      addressComponents['route'].shortText,
-      addressComponents['locality'].longText,
-      addressComponents['administrative_area_level_1'].shortText,
-    ]
-
-    response = slugComponents
-      .join('-')
-      .toLowerCase()
-      .replace(/[^a-z0-9 -]/g, '') // Remove invalid chars
-      .replace(/\s+/g, '-') // Collapse whitespace and replace by -
-      .replace(/-+/g, '-') // Collapse dashes
-  }
-
-  return response
+function getTHAddressEncodedURIComponentForPlace(place) {
+  return encodeURIComponent(place.formattedAddress)
 }
 
 /*
@@ -142,5 +114,5 @@ export {
   getAutocompleteSessionToken,
   fetchAddressSuggestions,
   isPlaceTHAddressValid,
-  getTHAddressSlugForPlace,
+  getTHAddressEncodedURIComponentForPlace,
 }

@@ -10,7 +10,7 @@ import {
   getAutocompleteSessionToken,
   fetchAddressSuggestions,
   isPlaceTHAddressValid,
-  getTHAddressSlugForPlace,
+  getTHAddressEncodedURIComponentForPlace,
 } from '../services/GoogleMapsAddressService.js'
 
 /*
@@ -204,11 +204,13 @@ function createAddressViewModel(trackingService) {
       // Set submitted state
       this.isSubmitted = true
 
-      // Get the address slug for the selected suggestion
-      const addressSlug = getTHAddressSlugForPlace(this.selectedPlace)
+      // Get the encoded address URI component for the selected suggestion
+      const addressURIComponent = getTHAddressEncodedURIComponentForPlace(
+        this.selectedPlace,
+      )
 
       // If the address is not valid, return and do not redirect
-      if (!this.isSelected || !this.isSelectedValid || !addressSlug) {
+      if (!this.isSelected || !this.isSelectedValid || !addressURIComponent) {
         this.isSubmitted = false
         return
       }
@@ -217,7 +219,7 @@ function createAddressViewModel(trackingService) {
       const reportURL = new URL(BASE_COMPS_REPORT_URL_PATH)
 
       // Add the address slug to the report URL
-      reportURL.searchParams.append('address', addressSlug)
+      reportURL.searchParams.append('address', addressURIComponent)
 
       // Check the current URL for any additional query parameters to pass along
       const currentURL = new URL(window.location.href)
