@@ -18,9 +18,7 @@ import {
  * Constants
  * ----------------------------------------------------------------
  */
-// const BASE_COMPS_REPORT_URL_PATH = 'https://buyer.turbohome.com/onboard'
-const BASE_COMPS_REPORT_URL_PATH =
-  'https://bc-turbohome-buyer-portal-git-staging-turbohome.vercel.app/onboard'
+const BASE_COMPS_REPORT_URL_PATH = 'https://buyer.turbohome.com/onboard'
 
 /*
  * ----------------------------------------------------------------
