@@ -32,12 +32,6 @@ const flowConstants = {
       ERROR: 'modalGuidesContactFormError',
       SUCCESS: 'modalGuidesContactFormSuccess',
     },
-    INTERRUPTOR_POPUP: {
-      FORM: 'modalInterruptorPopupForm',
-      PROCESSING: 'modalInterruptorPopupFormProcessing',
-      ERROR: 'modalInterruptorPopupFormError',
-      SUCCESS: 'modalInterruptorPopupFormSuccess',
-    },
   },
   EVENTS: {
     GET_STARTED: {
@@ -52,9 +46,6 @@ const flowConstants = {
     },
     GET_GUIDES: {
       START: 'GET_GUIDES_START',
-    },
-    INTERRUPTOR_POPUP: {
-      START: 'INTERRUPTOR_POPUP_START',
     },
     SUBMIT_CONTACT: {
       SUBMIT: 'CONTACT_SUBMIT',
@@ -112,22 +103,6 @@ function createFlowStateMachine(globalStore, trackingService) {
     },
   }
 
-  const submitInterruptorPopupContactTransition = {
-    [flowConstants.EVENTS.SUBMIT_CONTACT.SUBMIT]: {
-      target: flowConstants.STATES.INTERRUPTOR_POPUP.PROCESSING,
-      effects: {
-        onTransition: [
-          (eventProperties) => {
-            trackingService?.track(
-              'Interruptor Popup Contact Submitted',
-              eventProperties,
-            )
-          },
-        ],
-      },
-    },
-  }
-
   // Effects definition objects for *shared* state or transition effects
   const contactProcessingStateEffects = {
     onEntry: [async () => processContactSubmission(globalStore)],
@@ -169,19 +144,6 @@ function createFlowStateMachine(globalStore, trackingService) {
               onTransition: [
                 (eventProperties) => {
                   trackingService.track('Get Guide Clicked', eventProperties)
-                },
-              ],
-            },
-          },
-          [flowConstants.EVENTS.INTERRUPTOR_POPUP.START]: {
-            target: flowConstants.STATES.INTERRUPTOR_POPUP.FORM,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track(
-                    'Interruptor Popup Shown',
-                    eventProperties,
-                  )
                 },
               ],
             },
@@ -351,64 +313,6 @@ function createFlowStateMachine(globalStore, trackingService) {
           ],
         },
       },
-      [flowConstants.STATES.INTERRUPTOR_POPUP.FORM]: {
-        transitions: {
-          ...defaultExitTransition,
-          ...submitInterruptorPopupContactTransition,
-        },
-      },
-      [flowConstants.STATES.INTERRUPTOR_POPUP.PROCESSING]: {
-        transitions: {
-          ...defaultExitTransition,
-          [flowConstants.EVENTS.SUBMIT_CONTACT.SUCCESS]: {
-            target: flowConstants.STATES.INTERRUPTOR_POPUP.SUCCESS,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track(
-                    'Interruptor Popup Submission Succeeded',
-                    eventProperties,
-                  )
-                },
-              ],
-            },
-          },
-          [flowConstants.EVENTS.SUBMIT_CONTACT.ERROR]: {
-            target: flowConstants.STATES.INTERRUPTOR_POPUP.ERROR,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track('Interruptor Popup Submission Failed', {
-                    ...eventProperties,
-                    error_str:
-                      globalStore.thGuidesContactViewModel.errorMessage,
-                  })
-                },
-              ],
-            },
-          },
-        },
-        effects: contactProcessingStateEffects,
-      },
-      [flowConstants.STATES.INTERRUPTOR_POPUP.ERROR]: {
-        transitions: {
-          ...defaultExitTransition,
-          ...submitInterruptorPopupContactTransition,
-        },
-        effects: {
-          onExit: [
-            () => {
-              // Clear out any existing error message
-              globalStore.thGuidesContactViewModel.errorMessage = ''
-            },
-          ],
-        },
-      },
-      [flowConstants.STATES.INTERRUPTOR_POPUP.SUCCESS]: {
-        transitions: {
-          ...defaultExitTransition,
-        },
-      },
     },
   }
 
@@ -429,10 +333,6 @@ function createFlowUIHelpers(globalStore) {
           flowConstants.STATES.GET_GUIDES.PROCESSING,
           flowConstants.STATES.GET_GUIDES.ERROR,
           flowConstants.STATES.GET_GUIDES.SUCCESS,
-          flowConstants.STATES.INTERRUPTOR_POPUP.FORM,
-          flowConstants.STATES.INTERRUPTOR_POPUP.PROCESSING,
-          flowConstants.STATES.INTERRUPTOR_POPUP.ERROR,
-          flowConstants.STATES.INTERRUPTOR_POPUP.SUCCESS,
         ]
 
         return modalStates.includes(globalStore.flowState.value)
