@@ -150,6 +150,19 @@ function createFlowStateMachine(globalStore, trackingService) {
               ],
             },
           },
+          [flowConstants.EVENTS.BOOK_INTRO.START]: {
+            target: flowConstants.STATES.BOOK_INTRO.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Book Intro Call Clicked',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
+          },
           [flowConstants.EVENTS.GET_GUIDES.START]: {
             target: flowConstants.STATES.GET_GUIDES.FORM,
             effects: {
@@ -225,6 +238,19 @@ function createFlowStateMachine(globalStore, trackingService) {
               ],
             },
           },
+          [flowConstants.EVENTS.BOOK_INTRO.START]: {
+            target: flowConstants.STATES.BOOK_INTRO.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Book Intro Call Clicked',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
+          },
           [flowConstants.EVENTS.GET_GUIDES.START]: {
             target: flowConstants.STATES.GET_GUIDES.FORM,
             effects: {
@@ -257,7 +283,7 @@ function createFlowStateMachine(globalStore, trackingService) {
       },
       [flowConstants.STATES.BOOK_INTRO.FORM]: {
         transitions: {
-          ...getStartedCompleteExitTransition,
+          ...defaultExitTransition,
         },
       },
       [flowConstants.STATES.GET_GUIDES.FORM]: {
