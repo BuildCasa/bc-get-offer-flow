@@ -1,32 +1,32 @@
-import { m as M, c as T, a as D, b as F } from "./shared-lDivQ9uY.js";
-import { b as N, v as P, a as x, c as k, d as O } from "./shared-Ke-5IP1j.js";
-const _ = "https://app.regrid.com/api/v1/typeahead.json", L = "https://app.regrid.com/api/v1/parcel/", E = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
-async function S(e) {
-  const t = _, s = E, n = new Request(`${t}/?token=${s}&query=${e}`, {
+import { m as M, c as T, a as D, b as x } from "./shared-lDivQ9uY.js";
+import { b as F, v as N, a as P, c as k } from "./shared-3ha5dRcd.js";
+const O = "https://app.regrid.com/api/v1/typeahead.json", _ = "https://app.regrid.com/api/v1/parcel/", E = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZWdyaWQuY29tIiwiaWF0IjoxNzIyNDQyMTU0LCJnIjo1NDA4OSwidCI6MSwiY2FwIjoicGE6dHkiLCJ0aSI6ODJ9.7c30coXkbffieawauRttlK0mC_uBhrzWdNPLtRCzXA8";
+async function v(e) {
+  const t = O, s = E, n = new Request(`${t}/?token=${s}&query=${e}`, {
     method: "GET"
   }), a = await fetch(n);
   if (!a.ok)
     throw new Error("Network response was not OK");
-  const o = await a.json();
-  return U(o);
+  const r = await a.json();
+  return L(r);
 }
-function U(e) {
+function L(e) {
   return e.filter((n) => n.ll_uuid && n.address && n.address.match(/^[0-9].*[^0-9]$/)).sort((n, a) => {
-    const o = j(n, a);
-    return o != 0 ? o : v(n, a);
+    const r = S(n, a);
+    return r != 0 ? r : U(n, a);
   }).slice(0, 10);
 }
-function j(e, t) {
+function S(e, t) {
   return m(e) && !m(t) ? -1 : !m(e) && m(t) ? 1 : 0;
 }
 function m(e) {
   return e.context.endsWith("CA");
 }
-function v(e, t) {
+function U(e, t) {
   return e.score > t.score ? -1 : e.score < t.score ? 1 : 0;
 }
-async function B(e) {
-  const t = L, s = E, n = new Request(
+async function j(e) {
+  const t = _, s = E, n = new Request(
     `${t}${e}.json?token=${s}&return_custom=false`,
     {
       method: "GET"
@@ -34,10 +34,10 @@ async function B(e) {
   ), a = await fetch(n);
   if (!a.ok)
     throw new Error("Network response was not OK");
-  const o = await a.json();
-  return z(o);
+  const r = await a.json();
+  return B(r);
 }
-function z(e) {
+function B(e) {
   const t = e.results[0].properties.fields;
   return {
     apn: t.parcelnumb,
@@ -45,13 +45,13 @@ function z(e) {
     zip: t.szip
   };
 }
-function G(e) {
-  const t = e.replace(/\D/g, ""), s = t.startsWith("1"), o = (s ? t.slice(1) : t).slice(0, 10).match(
+function z(e) {
+  const t = e.replace(/\D/g, ""), s = t.startsWith("1"), r = (s ? t.slice(1) : t).slice(0, 10).match(
     /^(\d{0,3})(\d{0,3})(\d{0,4})$/
-  ), h = s ? "1" : "", l = o[1] ? (s ? " " : "") + ("(" + o[1]) : "", w = o[2] ? ") " + o[2] : "", p = o[3] ? "-" + o[3] : "";
-  return h + l + w + p;
+  ), h = s ? "1" : "", l = r[1] ? (s ? " " : "") + ("(" + r[1]) : "", p = r[2] ? ") " + r[2] : "", w = r[3] ? "-" + r[3] : "";
+  return h + l + p + w;
 }
-function W(e) {
+function G(e) {
   return /^\+?1?\s?(\()?\d{3}(\))?[-.\s]?\d{3}[-.\s]?\d{4}$|^\d{10}$/.test(e);
 }
 async function V(e, t = {}) {
@@ -59,12 +59,12 @@ async function V(e, t = {}) {
     const a = document.createElement("script");
     a.src = e, t.defer ? a.defer = !0 : t.async && (a.async = !0), a.addEventListener("load", function() {
       s();
-    }), a.addEventListener("error", function(o) {
-      n(o);
+    }), a.addEventListener("error", function(r) {
+      n(r);
     }), document.body.appendChild(a);
   });
 }
-function $(e, t) {
+function W(e, t) {
   const s = {
     SUBMIT_ADDRESS: {
       target: "addressFormProcessing",
@@ -122,7 +122,7 @@ function $(e, t) {
         ]
       }
     }
-  }, o = {
+  }, r = {
     onEntry: [h]
   };
   async function h() {
@@ -131,7 +131,7 @@ function $(e, t) {
         e.flowState.transition("SKIP_CONTACT");
       else {
         if (e.addressViewModel.hasParcelDetails || (e.addressViewModel.parcelDetails = {
-          ...await B(
+          ...await j(
             e.addressViewModel.selectedMatch.ll_uuid
           ),
           address: e.addressViewModel.selectedMatch.address,
@@ -152,7 +152,7 @@ function $(e, t) {
               state: e.addressViewModel.parcelDetails.state,
               zip: e.addressViewModel.parcelDetails.zip
             }
-          }, d = await N(i);
+          }, d = await F(i);
           e.estimateViewModel.jurisdiction = d.jurisdiction, e.estimateViewModel.estimate = d.estimate;
         }
         e.flowState.transition("SUCCESS");
@@ -172,10 +172,10 @@ function $(e, t) {
         ]
       }
     }
-  }, w = {
-    onEntry: [p]
+  }, p = {
+    onEntry: [w]
   };
-  async function p() {
+  async function w() {
     if (e.estimateViewModel.hasActiveJurisdiction && e.estimateViewModel.hasEstimate && e.contactViewModel.options && e.contactViewModel.options.lead && e.contactViewModel.options.lead.type && e.contactViewModel.options.lead.type === "Windfall") {
       const i = "windfall-estimate-or-eligibility-2023-07", d = Math.random() < 0.5 ? "amount-excluded" : "amount-included";
       e.experimentationViewModel.setActiveExperimentVariation(
@@ -191,11 +191,11 @@ function $(e, t) {
         phone: e.contactViewModel.phone.trim(),
         desiredTimeline: e.contactViewModel.desiredTimeline.trim()
       };
-      if (!P(i.email))
+      if (!N(i.email))
         throw new Error("Please enter a valid email address, and try again.", {
           cause: "INVALID_EMAIL"
         });
-      if (!W(i.phone))
+      if (!G(i.phone))
         throw new Error(
           "Please enter a valid phone number, including area code, and try again.",
           { cause: "INVALID_PHONE" }
@@ -217,7 +217,7 @@ function $(e, t) {
       };
       await Promise.all([
         y(e.contactViewModel),
-        x(d)
+        P(d)
       ]), e.contactViewModel.isSubmitted = !0, e.flowState.transition("SUCCESS");
     } catch (i) {
       console.log("Error submitting contact:", i), i && i.cause && (i.cause === "INVALID_EMAIL" || i.cause === "INVALID_PHONE") ? e.contactViewModel.errorMessage = i.message : e.contactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", e.flowState.transition("ERROR");
@@ -296,7 +296,7 @@ function $(e, t) {
             }
           }
         },
-        effects: o
+        effects: r
       },
       addressFormError: {
         transitions: {
@@ -331,7 +331,7 @@ function $(e, t) {
           },
           ...c
         },
-        effects: o
+        effects: r
       },
       modalAddressFormError: {
         transitions: {
@@ -378,7 +378,7 @@ function $(e, t) {
           },
           ...c
         },
-        effects: w
+        effects: p
       },
       contactFormError: {
         transitions: {
@@ -432,7 +432,7 @@ function $(e, t) {
     }
   };
 }
-function J(e, t) {
+function $(e, t) {
   return {
     modal: {
       get isOpen() {
@@ -454,7 +454,7 @@ function J(e, t) {
     }
   };
 }
-function q(e, t) {
+function J(e, t) {
   return {
     // Instance properties
     inputValue: "",
@@ -510,7 +510,7 @@ function q(e, t) {
         "windfall-estimate-or-eligibility-2023-07"
       );
       try {
-        this.matches = await S(this.inputValue);
+        this.matches = await v(this.inputValue);
       } catch {
         this.errorMessage = "There was an error finding your address. Please try again, or contact us for help.", e.flowState.transition("ERROR");
       }
@@ -585,7 +585,7 @@ function g(e) {
       return !!this.firstName.trim() || !!this.lastName.trim() || !!this.email.trim() || !!this.phone.trim();
     },
     formatPhoneInput(t) {
-      return G(t);
+      return z(t);
     },
     /**
      * Handles the submission event for the contact form.
@@ -598,7 +598,7 @@ function g(e) {
     }
   };
 }
-function H(e) {
+function q(e) {
   return {
     // Instance properties
     jurisdiction: {
@@ -685,34 +685,74 @@ function H(e) {
     }
   };
 }
+function H() {
+  return {
+    // Instance properties
+    activeExperimentVariations: {},
+    /**
+     * Initializes the ExperimentationViewModel instance properties.
+     * Run automatically by Alpine, but can also be called manually to reset the view model state.
+     * Need to call this manually on store creation if we stop using Alpine as our UI library.
+     * @returns {void}
+     */
+    init() {
+      this.activeExperimentVariations = {};
+    },
+    /**
+     * Sets the active variation for a given experiment.
+     * @param {string} experiment - The name of the experiment.
+     * @param {string} variation - The name of the variation.
+     * @returns {void}
+     */
+    setActiveExperimentVariation(e, t) {
+      this.activeExperimentVariations[e] = t;
+    },
+    /**
+     * Gets the active variation for a given experiment.
+     * @param {string} experiment - The name of the experiment.
+     * @returns {string} The name of the active variation.
+     */
+    getActiveExperimentVariation(e) {
+      return this.activeExperimentVariations[e];
+    },
+    /**
+     * Clears the active variation for a given experiment.
+     * @param {string} experiment - The name of the experiment.
+     * @returns {void}
+     */
+    clearActiveExperiment(e) {
+      this.activeExperimentVariations[e] && delete this.activeExperimentVariations[e];
+    }
+  };
+}
 window.Alpine = M;
-const u = D(M), r = {}, f = F(window.FS, r);
+const u = D(M), o = {}, f = x(window.FS, o);
 K();
 M.start();
 function K() {
-  r.flowState = u.createStore(
+  o.flowState = u.createStore(
     "flowState",
     T(
-      $(r, f),
+      W(o, f),
       f
     )
-  ), r.flowUIHelpers = u.createStore(
+  ), o.flowUIHelpers = u.createStore(
     "flowUIHelpers",
-    J(r, f)
-  ), r.addressViewModel = u.createStore(
+    $(o, f)
+  ), o.addressViewModel = u.createStore(
     "addressViewModel",
-    q(r, f)
-  ), r.contactViewModel = u.createStore(
+    J(o, f)
+  ), o.contactViewModel = u.createStore(
     "contactViewModel",
-    g(r.flowState)
-  ), r.estimateViewModel = u.createStore(
+    g(o.flowState)
+  ), o.estimateViewModel = u.createStore(
     "estimateViewModel",
-    H(r.flowState)
-  ), r.personalizationViewModel = u.createStore(
+    q(o.flowState)
+  ), o.personalizationViewModel = u.createStore(
     "personalizationViewModel",
     k()
-  ), r.experimentationViewModel = u.createStore(
+  ), o.experimentationViewModel = u.createStore(
     "experimentationViewModel",
-    O()
+    H()
   );
 }

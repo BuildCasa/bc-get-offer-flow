@@ -3,6 +3,7 @@
  * Imports
  * ----------------------------------------------------------------
  */
+import { flowConstants } from '../flows/THFlows'
 
 // TODO: Create JSDoc interface for a THGuidesDownloadViewModel.
 
@@ -15,10 +16,9 @@
 /**
  * Factory function for creating a THGuidesDownloadViewModel instance.
  * @param {unknown} globalStore - Reference to the global store.
- * @param {object} trackingService - Reference to the desired TrackingService to use for event tracking.
  * @returns {THGuidesDownloadViewModel} New THGuidesDownloadViewModel instance.
  */
-function createTHGuidesDownloadViewModel(globalStore, trackingService) {
+function createTHGuidesDownloadViewModel(globalStore) {
   return {
     // Instance properties
     GUIDES: {
@@ -61,14 +61,14 @@ function createTHGuidesDownloadViewModel(globalStore, trackingService) {
 
         // Transition state according to desired logic for Guide Download requests
         // This will trigger the Guides Contact form to be displayed
-        globalStore.flowState.transition('GET_GUIDES')
+        globalStore.flowState.transition(
+          flowConstants.EVENTS.GET_GUIDES.START,
+          {
+            guide_str: this.guide,
+            contact_submitted_str: contactIsSubmitted,
+          },
+        )
       }
-
-      // Track the Guide Download Click event
-      trackingService.track('Guide Download Clicked', {
-        guide_str: this.guide,
-        contact_submitted_str: contactIsSubmitted,
-      })
     },
   }
 }

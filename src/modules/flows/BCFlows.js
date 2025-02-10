@@ -170,17 +170,15 @@ function createFlowUIHelpers(globalStore) {
   return {
     modal: {
       get isOpen() {
-        return (
-          globalStore.flowState.value ==
-            flowConstants.STATES.GET_STARTED_MODAL ||
-          globalStore.flowState.value ==
-            flowConstants.STATES.BUY_PROPERTY.IFRAME ||
-          globalStore.flowState.value ==
-            flowConstants.STATES.SPLIT_PROPERTY.TYPEFORM ||
-          globalStore.flowState.value == flowConstants.STATES.INVEST.TYPEFORM ||
-          globalStore.flowState.value ==
-            flowConstants.STATES.SOMETHING_ELSE.TYPEFORM
-        )
+        const modalStates = [
+          flowConstants.STATES.GET_STARTED_MODAL,
+          flowConstants.STATES.BUY_PROPERTY.IFRAME,
+          flowConstants.STATES.SPLIT_PROPERTY.TYPEFORM,
+          flowConstants.STATES.INVEST.TYPEFORM,
+          flowConstants.STATES.SOMETHING_ELSE.TYPEFORM,
+        ]
+
+        return modalStates.includes(globalStore.state.value)
       },
     },
   }

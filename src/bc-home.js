@@ -22,7 +22,7 @@ import { createFlowState } from './modules/flows/FlowState'
 import {
   createFlowStateMachine,
   createFlowUIHelpers,
-} from './modules/flows/BCConversionFlows'
+} from './modules/flows/BCFlows'
 
 /*
  * ----------------------------------------------------------------

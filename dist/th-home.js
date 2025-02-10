@@ -1,172 +1,267 @@
-import { m as u, c as h, a as w, b as S } from "./shared-lDivQ9uY.js";
-import { v as E, t as P, c as T, d as g } from "./shared-Ke-5IP1j.js";
-function I(t, e) {
-  const a = {
+import { m as _, c as k, a as V, b as F } from "./shared-lDivQ9uY.js";
+import { v as B, t as v, c as x } from "./shared-3ha5dRcd.js";
+const s = {
+  STATES: {
+    DEFAULT: "default",
+    GET_STARTED: {
+      PROPERTY_QUESTION: "modalGetStartedPropertyQuestion",
+      ADDRESS_SEARCH: "modalGetStartedAddressSearch",
+      TYPEFORM: "getStartedForm",
+      COMPLETE: {
+        DEFAULT: "getStartedComplete",
+        MODAL: "modalGetStartedComplete"
+      }
+    },
+    BOOK_INTRO: {
+      FORM: "modalBookIntroForm"
+    },
+    GET_GUIDES: {
+      FORM: "modalGuidesContactForm",
+      PROCESSING: "modalGuidesContactFormProcessing",
+      ERROR: "modalGuidesContactFormError",
+      SUCCESS: "modalGuidesContactFormSuccess"
+    }
+  },
+  EVENTS: {
+    GET_STARTED: {
+      START: "GET_STARTED_START",
+      HAS_PROPERTY: {
+        YES: "HAS_PROPERTY_YES",
+        NO: "HAS_PROPERTY_NO"
+      }
+    },
+    BOOK_INTRO: {
+      START: "BOOK_INTRO_START"
+    },
+    GET_GUIDES: {
+      START: "GET_GUIDES_START"
+    },
     SUBMIT_CONTACT: {
-      target: "modalGuidesContactFormProcessing",
+      SUBMIT: "CONTACT_SUBMIT",
+      SUCCESS: "CONTACT_SUBMIT_SUCCESS",
+      ERROR: "CONTACT_SUBMIT_ERROR"
+    },
+    EXIT: "EXIT"
+  }
+};
+function H(t, e) {
+  const i = {
+    [s.EVENTS.EXIT]: {
+      target: s.STATES.DEFAULT,
       effects: {
         onTransition: [
-          () => {
-            e == null || e.track("Guides Contact Submitted");
+          (r) => {
+            e == null || e.track("Modal Closed", r);
           }
         ]
       }
     }
-  }, r = {
-    SUBMIT_CONTACT: {
-      target: "modalInterruptorPopupFormProcessing",
+  }, o = {
+    [s.EVENTS.EXIT]: {
+      target: s.STATES.GET_STARTED.COMPLETE.DEFAULT,
       effects: {
         onTransition: [
-          () => {
-            e == null || e.track("Interruptor Popup Contact Submitted");
+          (r) => {
+            e == null || e.track("Modal Closed", r);
           }
         ]
       }
     }
   }, n = {
-    onEntry: [d]
-  };
-  async function d() {
-    try {
-      let i = {
-        firstName: t.thGuidesContactViewModel.firstName.trim(),
-        lastName: t.thGuidesContactViewModel.lastName.trim(),
-        email: t.thGuidesContactViewModel.email.trim()
-      };
-      if (!E(i.email))
-        throw new Error("Please enter a valid email address, and try again.", {
-          cause: "INVALID_EMAIL"
-        });
-      const C = {
-        ...t.thGuidesContactViewModel.options,
-        contact: i
-      };
-      await Promise.all([P(C)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition("SUCCESS");
-    } catch (i) {
-      console.log("Error submitting contact:", i), i && i.cause && i.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = i.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition("ERROR");
+    [s.EVENTS.SUBMIT_CONTACT.SUBMIT]: {
+      target: s.STATES.GET_GUIDES.PROCESSING,
+      effects: {
+        onTransition: [
+          (r) => {
+            e == null || e.track("Guides Contact Submitted", r);
+          }
+        ]
+      }
     }
-  }
+  }, a = {
+    onEntry: [async () => Y(t)]
+  };
   return {
-    defaultState: "default",
+    constants: s,
+    defaultState: s.STATES.DEFAULT,
     states: {
-      default: {
+      [s.STATES.DEFAULT]: {
         transitions: {
-          GET_STARTED: {
-            target: "modalGetStartedForm"
-          },
-          GET_DEMO: {
-            target: "modalGetDemoForm"
-          },
-          GET_GUIDES: {
-            target: "modalGuidesContactForm"
-          },
-          SHOW_INTERRUPTOR_POPUP: {
-            target: "modalInterruptorPopupForm",
+          [s.EVENTS.GET_STARTED.START]: {
+            target: s.STATES.GET_STARTED.PROPERTY_QUESTION,
             effects: {
               onTransition: [
-                () => {
-                  e.track("Interruptor Popup Shown");
+                (r) => {
+                  e.track("Get Started Clicked", r);
+                }
+              ]
+            }
+          },
+          [s.EVENTS.BOOK_INTRO.START]: {
+            target: s.STATES.BOOK_INTRO.FORM,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track(
+                    "Book Intro Call Clicked",
+                    r
+                  );
+                }
+              ]
+            }
+          },
+          [s.EVENTS.GET_GUIDES.START]: {
+            target: s.STATES.GET_GUIDES.FORM,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track("Get Guide Clicked", r);
                 }
               ]
             }
           }
         }
       },
-      getStartedComplete: {
+      [s.STATES.GET_STARTED.PROPERTY_QUESTION]: {
         transitions: {
-          GET_STARTED: {
-            target: "modalGetStartedComplete"
-          },
-          GET_DEMO: {
-            target: "modalGetDemoForm"
-          },
-          GET_GUIDES: {
-            target: "modalGuidesContactForm"
-          }
-        }
-      },
-      modalGetStartedForm: {
-        transitions: {
-          EXIT: {
-            target: "default"
-          }
-        }
-      },
-      modalGetStartedComplete: {
-        transitions: {
-          BOOK_INTRO: {
-            target: "modalBookIntroForm",
+          ...i,
+          [s.EVENTS.GET_STARTED.HAS_PROPERTY.YES]: {
+            target: s.STATES.GET_STARTED.ADDRESS_SEARCH,
             effects: {
               onTransition: [
-                () => {
-                  e.track("Book Intro Call Clicked");
+                (r) => {
+                  e.track(
+                    "Has Specific Property",
+                    r
+                  );
                 }
               ]
             }
           },
-          EXIT: {
-            target: "getStartedComplete"
-          }
-        }
-      },
-      modalBookIntroForm: {
-        transitions: {
-          EXIT: {
-            target: "getStartedComplete"
-          }
-        }
-      },
-      modalGetDemoForm: {
-        transitions: {
-          EXIT: {
-            target: "default"
-          }
-        }
-      },
-      modalGuidesContactForm: {
-        transitions: {
-          ...a,
-          EXIT: {
-            target: "default"
-          }
-        }
-      },
-      modalGuidesContactFormProcessing: {
-        transitions: {
-          SUCCESS: {
-            target: "modalGuidesContactFormSuccess",
+          [s.EVENTS.GET_STARTED.HAS_PROPERTY.NO]: {
+            target: s.STATES.GET_STARTED.TYPEFORM,
             effects: {
               onTransition: [
-                () => {
-                  e.track("Guides Contact Submission Succeeded");
+                (r) => {
+                  e.track("No Specific Property", r);
+                }
+              ]
+            }
+          }
+        }
+      },
+      [s.STATES.GET_STARTED.ADDRESS_SEARCH]: {
+        transitions: {
+          ...i
+        }
+      },
+      [s.STATES.GET_STARTED.TYPEFORM]: {
+        transitions: {
+          ...i
+        }
+      },
+      [s.STATES.GET_STARTED.COMPLETE.DEFAULT]: {
+        transitions: {
+          [s.EVENTS.GET_STARTED.START]: {
+            target: s.STATES.GET_STARTED.COMPLETE.MODAL,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track("Get Started Clicked", r);
                 }
               ]
             }
           },
-          ERROR: {
-            target: "modalGuidesContactFormError",
+          [s.EVENTS.BOOK_INTRO.START]: {
+            target: s.STATES.BOOK_INTRO.FORM,
             effects: {
               onTransition: [
-                () => {
+                (r) => {
+                  e.track(
+                    "Book Intro Call Clicked",
+                    r
+                  );
+                }
+              ]
+            }
+          },
+          [s.EVENTS.GET_GUIDES.START]: {
+            target: s.STATES.GET_GUIDES.FORM,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track("Get Guide Clicked", r);
+                }
+              ]
+            }
+          }
+        }
+      },
+      [s.STATES.GET_STARTED.COMPLETE.MODAL]: {
+        transitions: {
+          ...o,
+          [s.EVENTS.BOOK_INTRO.START]: {
+            target: s.STATES.BOOK_INTRO.FORM,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track(
+                    "Book Intro Call Clicked",
+                    r
+                  );
+                }
+              ]
+            }
+          }
+        }
+      },
+      [s.STATES.BOOK_INTRO.FORM]: {
+        transitions: {
+          ...i
+        }
+      },
+      [s.STATES.GET_GUIDES.FORM]: {
+        transitions: {
+          ...i,
+          ...n
+        }
+      },
+      [s.STATES.GET_GUIDES.PROCESSING]: {
+        transitions: {
+          ...i,
+          [s.EVENTS.SUBMIT_CONTACT.SUCCESS]: {
+            target: s.STATES.GET_GUIDES.SUCCESS,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track(
+                    "Guides Contact Submission Succeeded",
+                    r
+                  );
+                }
+              ]
+            }
+          },
+          [s.EVENTS.SUBMIT_CONTACT.ERROR]: {
+            target: s.STATES.GET_GUIDES.ERROR,
+            effects: {
+              onTransition: [
+                (r) => {
                   e.track("Guides Contact Submission Failed", {
+                    ...r,
                     error_str: t.thGuidesContactViewModel.errorMessage
                   });
                 }
               ]
             }
-          },
-          EXIT: {
-            target: "default"
           }
         },
-        effects: n
+        effects: a
       },
-      modalGuidesContactFormError: {
+      [s.STATES.GET_GUIDES.ERROR]: {
         transitions: {
-          ...a,
-          EXIT: {
-            target: "default"
-          }
+          ...i,
+          ...n
         },
         effects: {
           onExit: [
@@ -176,11 +271,9 @@ function I(t, e) {
           ]
         }
       },
-      modalGuidesContactFormSuccess: {
+      [s.STATES.GET_GUIDES.SUCCESS]: {
         transitions: {
-          EXIT: {
-            target: "default"
-          }
+          ...i
         },
         effects: {
           onEntry: [
@@ -189,96 +282,428 @@ function I(t, e) {
             }
           ]
         }
-      },
-      modalInterruptorPopupForm: {
-        transitions: {
-          ...r,
-          EXIT: {
-            target: "default"
-          }
-        }
-      },
-      modalInterruptorPopupFormProcessing: {
-        transitions: {
-          SUCCESS: {
-            target: "modalInterruptorPopupFormSuccess",
-            effects: {
-              onTransition: [
-                () => {
-                  e.track(
-                    "Interruptor Popup Submission Succeeded"
-                  );
-                }
-              ]
-            }
-          },
-          ERROR: {
-            target: "modalInterruptorPopupFormError",
-            effects: {
-              onTransition: [
-                () => {
-                  e.track("Interruptor Popup Submission Failed", {
-                    error_str: t.thGuidesContactViewModel.errorMessage
-                  });
-                }
-              ]
-            }
-          },
-          EXIT: {
-            target: "default"
-          }
-        },
-        effects: n
-      },
-      modalInterruptorPopupFormError: {
-        transitions: {
-          ...r,
-          EXIT: {
-            target: "default"
-          }
-        },
-        effects: {
-          onExit: [
-            () => {
-              t.thGuidesContactViewModel.errorMessage = "";
-            }
-          ]
-        }
-      },
-      modalInterruptorPopupFormSuccess: {
-        transitions: {
-          EXIT: {
-            target: "default"
-          }
-        }
       }
     }
   };
 }
-function M(t, e) {
+function K(t) {
   return {
     modal: {
       get isOpen() {
-        return t.flowState.value == "modalGetStartedForm" || t.flowState.value == "modalGetStartedComplete" || t.flowState.value == "modalBookIntroForm" || t.flowState.value == "modalGetDemoForm" || t.flowState.value == "modalGuidesContactForm" || t.flowState.value == "modalGuidesContactFormProcessing" || t.flowState.value == "modalGuidesContactFormError" || t.flowState.value == "modalGuidesContactFormSuccess" || t.flowState.value == "modalInterruptorPopupForm" || t.flowState.value == "modalInterruptorPopupFormProcessing" || t.flowState.value == "modalInterruptorPopupFormError" || t.flowState.value == "modalInterruptorPopupFormSuccess";
-      },
-      handleModalFlowStart(a = "GET_STARTED", r = null) {
-        t.flowState.transition(a);
-        const d = {
-          GET_STARTED: "Get Started Clicked",
-          GET_DEMO: "Get Demo Clicked"
-        }[a];
-        let c = {};
-        r && (c = {
-          cta_str: r
-        }), d && e.track(d, c);
-      },
-      handleModalClose(a) {
-        a.preventDefault(), a.stopPropagation(), t.flowState.transition("EXIT"), e.track("Modal Closed");
+        return [
+          s.STATES.GET_STARTED.PROPERTY_QUESTION,
+          s.STATES.GET_STARTED.ADDRESS_SEARCH,
+          s.STATES.GET_STARTED.TYPEFORM,
+          s.STATES.GET_STARTED.COMPLETE.MODAL,
+          s.STATES.BOOK_INTRO.FORM,
+          s.STATES.GET_GUIDES.FORM,
+          s.STATES.GET_GUIDES.PROCESSING,
+          s.STATES.GET_GUIDES.ERROR,
+          s.STATES.GET_GUIDES.SUCCESS
+        ].includes(t.flowState.value);
       }
     }
   };
 }
-function G(t, e) {
+async function Y(t) {
+  try {
+    let e = {
+      firstName: t.thGuidesContactViewModel.firstName.trim(),
+      lastName: t.thGuidesContactViewModel.lastName.trim(),
+      email: t.thGuidesContactViewModel.email.trim()
+    };
+    if (!B(e.email))
+      throw new Error("Please enter a valid email address, and try again.", {
+        cause: "INVALID_EMAIL"
+      });
+    const i = {
+      ...t.thGuidesContactViewModel.options,
+      contact: e
+    };
+    await Promise.all([v(i)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition(
+      s.EVENTS.SUBMIT_CONTACT.SUCCESS
+    );
+  } catch (e) {
+    console.log("Error submitting contact:", e), e && e.cause && e.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = e.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition(s.EVENTS.SUBMIT_CONTACT.ERROR);
+  }
+}
+function j(t, e, i, o) {
+  function n(a) {
+    return a instanceof i ? a : new i(function(l) {
+      l(a);
+    });
+  }
+  return new (i || (i = Promise))(function(a, l) {
+    function r(d) {
+      try {
+        u(o.next(d));
+      } catch (T) {
+        l(T);
+      }
+    }
+    function S(d) {
+      try {
+        u(o.throw(d));
+      } catch (T) {
+        l(T);
+      }
+    }
+    function u(d) {
+      d.done ? a(d.value) : n(d.value).then(r, S);
+    }
+    u((o = o.apply(t, e || [])).next());
+  });
+}
+function $(t) {
+  return t && t.__esModule && Object.prototype.hasOwnProperty.call(t, "default") ? t.default : t;
+}
+var J = function t(e, i) {
+  if (e === i)
+    return !0;
+  if (e && i && typeof e == "object" && typeof i == "object") {
+    if (e.constructor !== i.constructor)
+      return !1;
+    var o, n, a;
+    if (Array.isArray(e)) {
+      if (o = e.length, o != i.length)
+        return !1;
+      for (n = o; n-- !== 0; )
+        if (!t(e[n], i[n]))
+          return !1;
+      return !0;
+    }
+    if (e.constructor === RegExp)
+      return e.source === i.source && e.flags === i.flags;
+    if (e.valueOf !== Object.prototype.valueOf)
+      return e.valueOf() === i.valueOf();
+    if (e.toString !== Object.prototype.toString)
+      return e.toString() === i.toString();
+    if (a = Object.keys(e), o = a.length, o !== Object.keys(i).length)
+      return !1;
+    for (n = o; n-- !== 0; )
+      if (!Object.prototype.hasOwnProperty.call(i, a[n]))
+        return !1;
+    for (n = o; n-- !== 0; ) {
+      var l = a[n];
+      if (!t(e[l], i[l]))
+        return !1;
+    }
+    return !0;
+  }
+  return e !== e && i !== i;
+}, W = /* @__PURE__ */ $(J);
+const M = "__googleMapsScriptId";
+var f;
+(function(t) {
+  t[t.INITIALIZED = 0] = "INITIALIZED", t[t.LOADING = 1] = "LOADING", t[t.SUCCESS = 2] = "SUCCESS", t[t.FAILURE = 3] = "FAILURE";
+})(f || (f = {}));
+class E {
+  /**
+   * Creates an instance of Loader using [[LoaderOptions]]. No defaults are set
+   * using this library, instead the defaults are set by the Google Maps
+   * JavaScript API server.
+   *
+   * ```
+   * const loader = Loader({apiKey, version: 'weekly', libraries: ['places']});
+   * ```
+   */
+  constructor({ apiKey: e, authReferrerPolicy: i, channel: o, client: n, id: a = M, language: l, libraries: r = [], mapIds: S, nonce: u, region: d, retries: T = 3, url: g = "https://maps.googleapis.com/maps/api/js", version: m }) {
+    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = i, this.channel = o, this.client = n, this.id = a || M, this.language = l, this.libraries = r, this.mapIds = S, this.nonce = u, this.region = d, this.retries = T, this.url = g, this.version = m, E.instance) {
+      if (!W(this.options, E.instance.options))
+        throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(E.instance.options)}`);
+      return E.instance;
+    }
+    E.instance = this;
+  }
+  get options() {
+    return {
+      version: this.version,
+      apiKey: this.apiKey,
+      channel: this.channel,
+      client: this.client,
+      id: this.id,
+      libraries: this.libraries,
+      language: this.language,
+      region: this.region,
+      mapIds: this.mapIds,
+      nonce: this.nonce,
+      url: this.url,
+      authReferrerPolicy: this.authReferrerPolicy
+    };
+  }
+  get status() {
+    return this.errors.length ? f.FAILURE : this.done ? f.SUCCESS : this.loading ? f.LOADING : f.INITIALIZED;
+  }
+  get failed() {
+    return this.done && !this.loading && this.errors.length >= this.retries + 1;
+  }
+  /**
+   * CreateUrl returns the Google Maps JavaScript API script url given the [[LoaderOptions]].
+   *
+   * @ignore
+   * @deprecated
+   */
+  createUrl() {
+    let e = this.url;
+    return e += "?callback=__googleMapsCallback&loading=async", this.apiKey && (e += `&key=${this.apiKey}`), this.channel && (e += `&channel=${this.channel}`), this.client && (e += `&client=${this.client}`), this.libraries.length > 0 && (e += `&libraries=${this.libraries.join(",")}`), this.language && (e += `&language=${this.language}`), this.region && (e += `&region=${this.region}`), this.version && (e += `&v=${this.version}`), this.mapIds && (e += `&map_ids=${this.mapIds.join(",")}`), this.authReferrerPolicy && (e += `&auth_referrer_policy=${this.authReferrerPolicy}`), e;
+  }
+  deleteScript() {
+    const e = document.getElementById(this.id);
+    e && e.remove();
+  }
+  /**
+   * Load the Google Maps JavaScript API script and return a Promise.
+   * @deprecated, use importLibrary() instead.
+   */
+  load() {
+    return this.loadPromise();
+  }
+  /**
+   * Load the Google Maps JavaScript API script and return a Promise.
+   *
+   * @ignore
+   * @deprecated, use importLibrary() instead.
+   */
+  loadPromise() {
+    return new Promise((e, i) => {
+      this.loadCallback((o) => {
+        o ? i(o.error) : e(window.google);
+      });
+    });
+  }
+  importLibrary(e) {
+    return this.execute(), google.maps.importLibrary(e);
+  }
+  /**
+   * Load the Google Maps JavaScript API script with a callback.
+   * @deprecated, use importLibrary() instead.
+   */
+  loadCallback(e) {
+    this.callbacks.push(e), this.execute();
+  }
+  /**
+   * Set the script on document.
+   */
+  setScript() {
+    var e, i;
+    if (document.getElementById(this.id)) {
+      this.callback();
+      return;
+    }
+    const o = {
+      key: this.apiKey,
+      channel: this.channel,
+      client: this.client,
+      libraries: this.libraries.length && this.libraries,
+      v: this.version,
+      mapIds: this.mapIds,
+      language: this.language,
+      region: this.region,
+      authReferrerPolicy: this.authReferrerPolicy
+    };
+    Object.keys(o).forEach(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (a) => !o[a] && delete o[a]
+    ), !((i = (e = window == null ? void 0 : window.google) === null || e === void 0 ? void 0 : e.maps) === null || i === void 0) && i.importLibrary || ((a) => {
+      let l, r, S, u = "The Google Maps JavaScript API", d = "google", T = "importLibrary", g = "__ib__", m = document, p = window;
+      p = p[d] || (p[d] = {});
+      const A = p.maps || (p.maps = {}), G = /* @__PURE__ */ new Set(), R = new URLSearchParams(), U = () => (
+        // @ts-ignore
+        l || (l = new Promise((C, I) => j(this, void 0, void 0, function* () {
+          var y;
+          yield r = m.createElement("script"), r.id = this.id, R.set("libraries", [...G] + "");
+          for (S in a)
+            R.set(S.replace(/[A-Z]/g, (b) => "_" + b[0].toLowerCase()), a[S]);
+          R.set("callback", d + ".maps." + g), r.src = this.url + "?" + R, A[g] = C, r.onerror = () => l = I(Error(u + " could not load.")), r.nonce = this.nonce || ((y = m.querySelector("script[nonce]")) === null || y === void 0 ? void 0 : y.nonce) || "", m.head.append(r);
+        })))
+      );
+      A[T] ? console.warn(u + " only loads once. Ignoring:", a) : A[T] = (C, ...I) => G.add(C) && U().then(() => A[T](C, ...I));
+    })(o);
+    const n = this.libraries.map((a) => this.importLibrary(a));
+    n.length || n.push(this.importLibrary("core")), Promise.all(n).then(() => this.callback(), (a) => {
+      const l = new ErrorEvent("error", { error: a });
+      this.loadErrorCallback(l);
+    });
+  }
+  /**
+   * Reset the loader state.
+   */
+  reset() {
+    this.deleteScript(), this.done = !1, this.loading = !1, this.errors = [], this.onerrorEvent = null;
+  }
+  resetIfRetryingFailed() {
+    this.failed && this.reset();
+  }
+  loadErrorCallback(e) {
+    if (this.errors.push(e), this.errors.length <= this.retries) {
+      const i = this.errors.length * Math.pow(2, this.errors.length);
+      console.error(`Failed to load Google Maps script, retrying in ${i} ms.`), setTimeout(() => {
+        this.deleteScript(), this.setScript();
+      }, i);
+    } else
+      this.onerrorEvent = e, this.callback();
+  }
+  callback() {
+    this.done = !0, this.loading = !1, this.callbacks.forEach((e) => {
+      e(this.onerrorEvent);
+    }), this.callbacks = [];
+  }
+  execute() {
+    if (this.resetIfRetryingFailed(), !this.loading)
+      if (this.done)
+        this.callback();
+      else {
+        if (window.google && window.google.maps && window.google.maps.version) {
+          console.warn("Google Maps already loaded outside @googlemaps/js-api-loader. This may result in undesirable behavior as options and script parameters may not match."), this.callback();
+          return;
+        }
+        this.loading = !0, this.setScript();
+      }
+  }
+}
+const Q = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", q = new E({
+  apiKey: Q,
+  version: "weekly"
+});
+let O = null, P = null;
+async function X() {
+  try {
+    const t = await q.importLibrary("places");
+    O = t.AutocompleteSuggestion, P = t.AutocompleteSessionToken;
+  } catch (t) {
+    console.error("Error loading Google Maps Places library:", t);
+  }
+}
+function Z() {
+  if (P)
+    return new P();
+}
+async function z(t, e) {
+  if (O)
+    try {
+      const { suggestions: i } = await O.fetchAutocompleteSuggestions({
+        input: t,
+        language: "en-US",
+        region: "us",
+        sessionToken: e,
+        includedRegionCodes: ["us"],
+        includedPrimaryTypes: ["geocode"]
+      });
+      return i.map((o) => ({
+        placePrediction: o.placePrediction,
+        text: o.placePrediction.text.toString()
+      }));
+    } catch (i) {
+      throw console.error(
+        "Error fetching Google Places Autocomplete suggestions:",
+        i
+      ), new Error(
+        "There was an error finding your address. Please try again, or contact us for help."
+      );
+    }
+}
+function ee(t) {
+  return t.addressComponents && t.addressComponents.some(
+    (e) => e.types[0] === "street_number"
+  ) && t.addressComponents.some(
+    (e) => e.types[0] === "route"
+  ) && t.addressComponents.some(
+    (e) => e.types[0] === "locality"
+  ) && t.addressComponents.some(
+    (e) => e.types[0] === "administrative_area_level_1"
+  );
+}
+function te(t) {
+  return encodeURIComponent(t.formattedAddress);
+}
+const ie = "https://buyer.turbohome.com/onboard";
+function se(t) {
+  return {
+    // Instance properties
+    inputValue: "",
+    sessionToken: "",
+    suggestions: [],
+    keyboardNavIndex: -1,
+    selectedPlace: {},
+    isSubmitted: !1,
+    errorMessage: "",
+    /**
+     * Initializes the AddressViewModel instance properties.
+     * Run automatically by Alpine, but can also be called manually to reset the view model state.
+     * Need to call this manually on store creation if we stop using Alpine as our UI library.
+     * @returns {void}
+     */
+    async init() {
+      this.inputValue = "", this.suggestions = [], this.keyboardNavIndex = -1, this.selectedPlace = {}, this.isSubmitted = !1, this.errorMessage = "", await X(), this.refreshSessionToken();
+    },
+    refreshSessionToken() {
+      this.sessionToken = Z();
+    },
+    /**
+     * Whether or not an address match has been selected with the typeahead.
+     * @type {boolean}
+     */
+    get isSelected() {
+      return Object.keys(this.selectedPlace).length != 0;
+    },
+    get isSelectedValid() {
+      return ee(this.selectedPlace);
+    },
+    /**
+     * Handles input events from the address typeahead input field.
+     * Fetches and updates address suggestions based on the current input value.
+     * @returns {Promise.<void>} Promise that resolves when input handling is complete.
+     */
+    async handleInput() {
+      if (this.isSubmitted && (this.isSubmitted = !1), this.errorMessage && (this.errorMessage = ""), this.isSelected && (this.selectedPlace = {}), !this.inputValue) {
+        this.suggestions = [];
+        return;
+      }
+      try {
+        this.suggestions = await z(
+          this.inputValue,
+          this.sessionToken
+        );
+      } catch (e) {
+        this.errorMessage = e.message;
+      }
+    },
+    /**
+     * Handles keyboard events for the address typeahead input field.
+     * Navigates up or down the list of matches if ArrowUp or ArrowDown are pressed.
+     * Selects the address at the current keyboardNavIndex if Enter is pressed.
+     * @param {KeyboardEvent} event - Keyboard event object.
+     * @returns {void}
+     */
+    handleKeydown(e) {
+      e.key != "Enter" && e.key != "ArrowUp" && e.key != "ArrowDown" || this.isSelected || this.suggestions.length === 0 || (e.preventDefault(), e.stopPropagation(), e.key === "Enter" && this.keyboardNavIndex != -1 ? this.selectSuggestion(this.suggestions[this.keyboardNavIndex]) : e.key === "ArrowUp" ? this.keyboardNavIndex = this.keyboardNavIndex <= -1 ? this.suggestions.length - 1 : this.keyboardNavIndex - 1 : e.key === "ArrowDown" && (this.keyboardNavIndex = this.keyboardNavIndex >= this.suggestions.length - 1 ? -1 : this.keyboardNavIndex + 1));
+    },
+    async selectSuggestion(e) {
+      let i = e.placePrediction.toPlace();
+      await i.fetchFields({
+        fields: ["displayName", "formattedAddress", "addressComponents"]
+      }), this.selectedPlace = i, this.inputValue = i.formattedAddress, this.isSelectedValid || (this.errorMessage = "Please select a valid property address to continue, or contact us for help."), t.track("Address Selected"), this.refreshSessionToken(), this.suggestions = [], this.keyboardNavIndex = -1, this.isSelectedValid && this.redirectToReport();
+    },
+    handleSubmit(e) {
+      e.preventDefault(), e.stopPropagation();
+    },
+    redirectToReport() {
+      this.isSubmitted = !0;
+      const e = te(
+        this.selectedPlace
+      );
+      if (!this.isSelected || !this.isSelectedValid || !e) {
+        this.isSubmitted = !1;
+        return;
+      }
+      const i = new URL(ie);
+      i.searchParams.append("address", e), new URL(window.location.href).searchParams.forEach((n, a) => {
+        i.searchParams.append(a, n);
+      }), t.track("Redirected to Comps Report"), window.location.assign(i);
+    }
+  };
+}
+function re(t) {
   return {
     // Instance properties
     GUIDES: {
@@ -302,17 +727,20 @@ function G(t, e) {
      * @param {MouseEvent} event - Mouse event object.
      * @returns {void}
      */
-    handleDownloadClick(a, r) {
-      this.guide = r, this.downloadButtonElement = a.target;
-      const n = t.thGuidesContactViewModel.isSubmitted;
-      n || (a.preventDefault(), t.flowState.transition("GET_GUIDES")), e.track("Guide Download Clicked", {
-        guide_str: this.guide,
-        contact_submitted_str: n
-      });
+    handleDownloadClick(e, i) {
+      this.guide = i, this.downloadButtonElement = e.target;
+      const o = t.thGuidesContactViewModel.isSubmitted;
+      o || (e.preventDefault(), t.flowState.transition(
+        s.EVENTS.GET_GUIDES.START,
+        {
+          guide_str: this.guide,
+          contact_submitted_str: o
+        }
+      ));
     }
   };
 }
-function F(t) {
+function oe(t) {
   return {
     // Instance properties
     firstName: "",
@@ -343,18 +771,18 @@ function F(t) {
      * @param {object} options - Additional options for the submission.
      * @returns {void}
      */
-    handleSubmit(e, a = {}) {
-      e.preventDefault(), e.stopPropagation(), this.options = a, t.transition("SUBMIT_CONTACT");
+    handleSubmit(e, i = {}) {
+      e.preventDefault(), e.stopPropagation(), this.options = i, t.transition(s.EVENTS.SUBMIT_CONTACT.SUBMIT);
     }
   };
 }
-const L = 0.03, m = 1e6, D = 5e6, V = 2e5, R = 5e4;
-function y(t = {}) {
+const ae = 0.03, D = 15e5, ne = 5e6, le = 25e4, ce = 5e4;
+function de(t = {}) {
   return {
     listPrice: null,
-    commissionRate: L,
+    commissionRate: ae,
     init: function() {
-      this.listPrice = t.getContent("calcDefaultListPrice") || m;
+      this.listPrice = t.getContent("calcDefaultListPrice") || D;
     },
     /**
      * Computed property that returns the value of the calcDefaultlistPrice key in the personalizationViewModel
@@ -365,7 +793,7 @@ function y(t = {}) {
      * @type {number}
      */
     get defaultListPrice() {
-      return t.getContent("calcDefaultListPrice") || m;
+      return t.getContent("calcDefaultListPrice") || D;
     },
     /**
      * Computed property that returns the value of the calcMaxlistPrice key in the personalizationViewModel
@@ -376,7 +804,7 @@ function y(t = {}) {
      * @type {number}
      */
     get maxListPrice() {
-      return t.getContent("calcMaxListPrice") || D;
+      return t.getContent("calcMaxListPrice") || ne;
     },
     /**
      * Computed property that returns the value of the calcMinlistPrice key in the personalizationViewModel
@@ -387,7 +815,7 @@ function y(t = {}) {
      * @type {number}
      */
     get minListPrice() {
-      return t.getContent("calcMinListPrice") || V;
+      return t.getContent("calcMinListPrice") || le;
     },
     /**
      * Computed property that returns the value of the calcInputStep key in the personalizationViewModel
@@ -398,35 +826,37 @@ function y(t = {}) {
      * @type {number}
      */
     get inputStep() {
-      return t.getContent("calcInputStep") || R;
+      return t.getContent("calcInputStep") || ce;
     },
     get formattedListPrice() {
-      return p(this.listPrice);
+      return N(this.listPrice);
     },
     get turboHomeFee() {
-      return this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
+      return this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
     },
     get cashBack() {
-      return Math.round(this.listPrice * this.commissionRate);
+      return Math.round(
+        this.listPrice * this.commissionRate - this.turboHomeFee
+      );
     },
     get formattedCashBack() {
-      return p(this.cashBack);
+      return N(this.cashBack);
     }
   };
 }
-function p(t) {
+function N(t) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0
   }).format(t);
 }
-const _ = {
+const Te = {
   content: {
     phoneNumberText: "(415) 941-5285",
     phoneNumberLink: "tel:+14159415285"
   }
-}, N = {
+}, ue = {
   content: {
     phoneNumberText: "(213) 322-1360",
     phoneNumberLink: "tel:+12133221360"
@@ -462,14 +892,14 @@ const _ = {
     "Temecula",
     "Wildomar"
   ]
-}, A = {
+}, he = {
   content: {
     phoneNumberText: "(469) 564-1214",
     phoneNumberLink: "tel:+14695641214"
   },
   state: "Texas"
-}, B = {
-  DEFAULT: _,
+}, Se = {
+  DEFAULT: Te,
   "Los Angeles": {
     content: {
       phoneNumberText: "(213) 322-1360",
@@ -594,10 +1024,10 @@ const _ = {
       "Vista"
     ]
   },
-  Riverside: N,
-  Texas: A
+  Riverside: ue,
+  Texas: he
 };
-function x() {
+function Ee() {
   return {
     gclid: null,
     /**
@@ -617,71 +1047,59 @@ function x() {
      * @returns {void}
      */
     addGclid() {
-      const t = f("gclid");
+      const t = L("gclid");
       let e = null;
-      const a = f("gclsrc"), r = !a || a.indexOf("aw") !== -1;
-      t && r && (e = k(t), localStorage.setItem("gclid", JSON.stringify(e)));
+      const i = L("gclsrc"), o = !i || i.indexOf("aw") !== -1;
+      t && o && (e = fe(t), localStorage.setItem("gclid", JSON.stringify(e)));
       const n = e || JSON.parse(localStorage.getItem("gclid"));
       n && (/* @__PURE__ */ new Date()).getTime() < n.expiryDate && (this.gclid = n.value);
     }
   };
 }
-function f(t) {
+function L(t) {
   const e = RegExp("[?&]" + t + "=([^&]*)").exec(window.location.search);
   return e && decodeURIComponent(e[1].replace(/\+/g, " "));
 }
-function k(t) {
-  const a = (/* @__PURE__ */ new Date()).getTime() + 7776e6;
+function fe(t) {
+  const i = (/* @__PURE__ */ new Date()).getTime() + 7776e6;
   return {
     value: t,
-    expiryDate: a
+    expiryDate: i
   };
 }
-window.Alpine = u;
-const s = w(u), o = {}, l = S(window.FS, o);
-U();
-O();
-u.start();
-function U() {
-  const e = new URL(window.location.href).searchParams.get("get_started"), a = e && e === "complete" ? "modalGetStartedComplete" : "default";
-  o.flowState = s.createStore(
+window.Alpine = _;
+const h = V(_), c = {}, w = F(window.FS, c);
+me();
+_.start();
+function me() {
+  const e = new URL(window.location.href).searchParams.get("get_started"), i = e && e === "complete" ? s.STATES.GET_STARTED.COMPLETE.MODAL : s.STATES.DEFAULT;
+  c.flowState = h.createStore(
     "flowState",
-    h(
-      I(o, l),
-      l,
-      a
+    k(
+      H(c, w),
+      w,
+      i
     )
-  ), o.flowUIHelpers = s.createStore(
+  ), c.flowUIHelpers = h.createStore(
     "flowUIHelpers",
-    M(o, l)
-  ), o.personalizationViewModel = s.createStore(
+    K(c)
+  ), c.personalizationViewModel = h.createStore(
     "personalizationViewModel",
-    T(B)
-  ), o.experimentationViewModel = s.createStore(
-    "experimentationViewModel",
-    g()
-  ), o.adTrackingViewModel = s.createStore(
+    x(Se)
+  ), c.adTrackingViewModel = h.createStore(
     "adTrackingViewModel",
-    x()
-  ), o.thGuidesContactViewModel = s.createStore(
+    Ee()
+  ), c.addressViewModel = h.createStore(
+    "addressViewModel",
+    se(w)
+  ), c.thGuidesContactViewModel = h.createStore(
     "thGuidesContactViewModel",
-    F(o.flowState)
-  ), o.thGuidesDownloadViewModel = s.createStore(
+    oe(c.flowState)
+  ), c.thGuidesDownloadViewModel = h.createStore(
     "thGuidesDownloadViewModel",
-    G(o, l)
-  ), o.thCalculatorViewModel = s.createStore(
+    re(c)
+  ), c.thCalculatorViewModel = h.createStore(
     "thCalculatorViewModel",
-    y(o.personalizationViewModel)
+    de(c.personalizationViewModel)
   );
-}
-function O() {
-  if (o.flowState.value === "default") {
-    const e = "interruptor-popups-2024-11", a = ["none", "guides"], r = a[Math.floor(Math.random() * a.length)];
-    o.experimentationViewModel.setActiveExperimentVariation(
-      e,
-      r
-    ), l.track("Interruptor Popup Experiment Set"), r !== "none" && (setTimeout(() => {
-      o.flowState.transition("SHOW_INTERRUPTOR_POPUP");
-    }, 15e3), l.track("Interruptor Popup Scheduled"));
-  }
 }
