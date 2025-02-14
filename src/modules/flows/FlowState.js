@@ -31,11 +31,25 @@ function createFlowState(stateMachine, trackingService, initialValue) {
      * @returns {void}
      */
     transition(event, eventProperties = {}) {
-      // Get references to the current state, transition, and target state definitions from the state machine
+      // Get references to the current state and transition definitions from the state machine
       const currentState = this.value
       const currentStateDef = stateMachine?.states?.[currentState]
-      const transitionDef = currentStateDef?.transitions?.[event]
+
+      // Create a re-assignable variable to hold the transition definition
+      // Get the transition definition from the state machine, based on the current state and event
+      let transitionDef = currentStateDef?.transitions?.[event]
+
+      // If the transition def is a function, call it to get the resulting target transition definition
+      // This allows for dynamic transitions based on event properties or global context
+      if (typeof transitionDef === 'function') {
+        transitionDef = transitionDef(eventProperties)
+      }
+
+      // Get a reference to the transition target definition
       const transitionTarget = transitionDef?.target
+
+      // Get the target state definition from the state machine,
+      // based on the transition target state, if it exists
       const targetStateDef = stateMachine?.states?.[transitionTarget]
 
       // If any of the necessary definitions (current state, transition, or target state) do not exist,
