@@ -37,7 +37,6 @@ const flowConstants = {
   EVENTS: {
     GET_STARTED: {
       START: 'GET_STARTED_START',
-      OLD_TEST_START: 'GET_STARTED_OLD_TEST_START', // Old typeform start event for 2025 Address Typeahead experiment
       HAS_PROPERTY: {
         YES: 'HAS_PROPERTY_YES',
         NO: 'HAS_PROPERTY_NO',
@@ -117,26 +116,47 @@ function createFlowStateMachine(globalStore, trackingService) {
     states: {
       [flowConstants.STATES.DEFAULT]: {
         transitions: {
-          [flowConstants.EVENTS.GET_STARTED.START]: {
-            target: flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track('Get Started Clicked', eventProperties)
+          [flowConstants.EVENTS.GET_STARTED.START]: () => {
+            // If the 2025 Address Typeahead experiment is active, and the user is assigned to the old typeform variation
+            // Return a transition object that targets the old typeform state
+            if (
+              globalStore.experimentationViewModel &&
+              globalStore.experimentationViewModel.getActiveExperimentVariation(
+                'address-typeahead-2025-02',
+              ) &&
+              globalStore.experimentationViewModel.getActiveExperimentVariation(
+                'address-typeahead-2025-02',
+              ) === 'typeform-only-old-flow'
+            ) {
+              return {
+                target: flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
+                effects: {
+                  onTransition: [
+                    (eventProperties) => {
+                      trackingService.track(
+                        'Get Started Clicked',
+                        eventProperties,
+                      )
+                    },
+                  ],
                 },
-              ],
-            },
-          },
-          // Old typeform transition for 2025 Address Typeahead experiment
-          [flowConstants.EVENTS.GET_STARTED.OLD_TEST_START]: {
-            target: flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track('Get Started Clicked', eventProperties)
-                },
-              ],
-            },
+              }
+            }
+
+            // Otherwise, return the transition object for the new flow, that targets the property question state
+            return {
+              target: flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
+              effects: {
+                onTransition: [
+                  (eventProperties) => {
+                    trackingService.track(
+                      'Get Started Clicked',
+                      eventProperties,
+                    )
+                  },
+                ],
+              },
+            }
           },
           [flowConstants.EVENTS.BOOK_INTRO.START]: {
             target: flowConstants.STATES.BOOK_INTRO.FORM,
@@ -210,17 +230,6 @@ function createFlowStateMachine(globalStore, trackingService) {
       [flowConstants.STATES.GET_STARTED.COMPLETE.DEFAULT]: {
         transitions: {
           [flowConstants.EVENTS.GET_STARTED.START]: {
-            target: flowConstants.STATES.GET_STARTED.COMPLETE.MODAL,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track('Get Started Clicked', eventProperties)
-                },
-              ],
-            },
-          },
-          // Old typeform transition 2025 Address Typeahead experiment
-          [flowConstants.EVENTS.GET_STARTED.OLD_TEST_START]: {
             target: flowConstants.STATES.GET_STARTED.COMPLETE.MODAL,
             effects: {
               onTransition: [
