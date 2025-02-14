@@ -1907,7 +1907,10 @@ function Ci(e, t, r) {
      */
     transition(o, a = {}) {
       var f, _, g, x, w, O;
-      const c = this.value, u = (f = e == null ? void 0 : e.states) == null ? void 0 : f[c], l = (_ = u == null ? void 0 : u.transitions) == null ? void 0 : _[o], d = l == null ? void 0 : l.target, p = (g = e == null ? void 0 : e.states) == null ? void 0 : g[d];
+      const c = this.value, u = (f = e == null ? void 0 : e.states) == null ? void 0 : f[c];
+      let l = (_ = u == null ? void 0 : u.transitions) == null ? void 0 : _[o];
+      typeof l == "function" && (l = l(a));
+      const d = l == null ? void 0 : l.target, p = (g = e == null ? void 0 : e.states) == null ? void 0 : g[d];
       if (!u || !l || !d || !p) {
         t.track("Invalid State Transition", {
           ...a,
