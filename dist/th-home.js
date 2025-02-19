@@ -1,5 +1,5 @@
-import { m as _, c as k, a as V, b as F } from "./shared-lDivQ9uY.js";
-import { v as B, t as v, c as x } from "./shared-3ha5dRcd.js";
+import { m as P, c as b, a as F, b as k } from "./shared-dpXQ-LAr.js";
+import { v as B, t as x, c as v, d as H } from "./shared-Ke-5IP1j.js";
 const s = {
   STATES: {
     DEFAULT: "default",
@@ -7,6 +7,8 @@ const s = {
       PROPERTY_QUESTION: "modalGetStartedPropertyQuestion",
       ADDRESS_SEARCH: "modalGetStartedAddressSearch",
       TYPEFORM: "getStartedForm",
+      OLD_TEST_TYPEFORM: "getStartedFormOld",
+      // Old typeform state for 2025 Address Typeahead experiment
       COMPLETE: {
         DEFAULT: "getStartedComplete",
         MODAL: "modalGetStartedComplete"
@@ -14,6 +16,9 @@ const s = {
     },
     BOOK_INTRO: {
       FORM: "modalBookIntroForm"
+    },
+    GET_VALUATION_REPORT: {
+      FORM: "modalGetValuationReportForm"
     },
     GET_GUIDES: {
       FORM: "modalGuidesContactForm",
@@ -33,6 +38,9 @@ const s = {
     BOOK_INTRO: {
       START: "BOOK_INTRO_START"
     },
+    GET_VALUATION_REPORT: {
+      START: "GET_VALUATION_REPORT_START"
+    },
     GET_GUIDES: {
       START: "GET_GUIDES_START"
     },
@@ -44,7 +52,7 @@ const s = {
     EXIT: "EXIT"
   }
 };
-function H(t, e) {
+function K(t, e) {
   const i = {
     [s.EVENTS.EXIT]: {
       target: s.STATES.DEFAULT,
@@ -79,7 +87,7 @@ function H(t, e) {
       }
     }
   }, a = {
-    onEntry: [async () => Y(t)]
+    onEntry: [async () => j(t)]
   };
   return {
     constants: s,
@@ -87,12 +95,31 @@ function H(t, e) {
     states: {
       [s.STATES.DEFAULT]: {
         transitions: {
-          [s.EVENTS.GET_STARTED.START]: {
+          [s.EVENTS.GET_STARTED.START]: () => t.experimentationViewModel && t.experimentationViewModel.getActiveExperimentVariation(
+            "address-typeahead-2025-02"
+          ) && t.experimentationViewModel.getActiveExperimentVariation(
+            "address-typeahead-2025-02"
+          ) === "typeform-only-old-flow" ? {
+            target: s.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track(
+                    "Get Started Clicked",
+                    r
+                  );
+                }
+              ]
+            }
+          } : {
             target: s.STATES.GET_STARTED.PROPERTY_QUESTION,
             effects: {
               onTransition: [
                 (r) => {
-                  e.track("Get Started Clicked", r);
+                  e.track(
+                    "Get Started Clicked",
+                    r
+                  );
                 }
               ]
             }
@@ -104,6 +131,19 @@ function H(t, e) {
                 (r) => {
                   e.track(
                     "Book Intro Call Clicked",
+                    r
+                  );
+                }
+              ]
+            }
+          },
+          [s.EVENTS.GET_VALUATION_REPORT.START]: {
+            target: s.STATES.GET_VALUATION_REPORT.FORM,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track(
+                    "Get Valuation Report Clicked",
                     r
                   );
                 }
@@ -160,6 +200,12 @@ function H(t, e) {
           ...i
         }
       },
+      // Old typeform state for 2025 Address Typeahead experiment
+      [s.STATES.GET_STARTED.OLD_TEST_TYPEFORM]: {
+        transitions: {
+          ...i
+        }
+      },
       [s.STATES.GET_STARTED.COMPLETE.DEFAULT]: {
         transitions: {
           [s.EVENTS.GET_STARTED.START]: {
@@ -179,6 +225,19 @@ function H(t, e) {
                 (r) => {
                   e.track(
                     "Book Intro Call Clicked",
+                    r
+                  );
+                }
+              ]
+            }
+          },
+          [s.EVENTS.GET_VALUATION_REPORT.START]: {
+            target: s.STATES.GET_VALUATION_REPORT.FORM,
+            effects: {
+              onTransition: [
+                (r) => {
+                  e.track(
+                    "Get Valuation Report Clicked",
                     r
                   );
                 }
@@ -216,6 +275,11 @@ function H(t, e) {
         }
       },
       [s.STATES.BOOK_INTRO.FORM]: {
+        transitions: {
+          ...i
+        }
+      },
+      [s.STATES.GET_VALUATION_REPORT.FORM]: {
         transitions: {
           ...i
         }
@@ -286,7 +350,7 @@ function H(t, e) {
     }
   };
 }
-function K(t) {
+function Y(t) {
   return {
     modal: {
       get isOpen() {
@@ -294,7 +358,10 @@ function K(t) {
           s.STATES.GET_STARTED.PROPERTY_QUESTION,
           s.STATES.GET_STARTED.ADDRESS_SEARCH,
           s.STATES.GET_STARTED.TYPEFORM,
+          s.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
+          // Old typeform state for 2025 Address Typeahead experiment
           s.STATES.GET_STARTED.COMPLETE.MODAL,
+          s.STATES.GET_VALUATION_REPORT.FORM,
           s.STATES.BOOK_INTRO.FORM,
           s.STATES.GET_GUIDES.FORM,
           s.STATES.GET_GUIDES.PROCESSING,
@@ -305,7 +372,7 @@ function K(t) {
     }
   };
 }
-async function Y(t) {
+async function j(t) {
   try {
     let e = {
       firstName: t.thGuidesContactViewModel.firstName.trim(),
@@ -320,32 +387,32 @@ async function Y(t) {
       ...t.thGuidesContactViewModel.options,
       contact: e
     };
-    await Promise.all([v(i)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition(
+    await Promise.all([x(i)]), t.thGuidesContactViewModel.isSubmitted = !0, t.flowState.transition(
       s.EVENTS.SUBMIT_CONTACT.SUCCESS
     );
   } catch (e) {
     console.log("Error submitting contact:", e), e && e.cause && e.cause === "INVALID_EMAIL" ? t.thGuidesContactViewModel.errorMessage = e.message : t.thGuidesContactViewModel.errorMessage = "There was an error processing your info. Please try again, or contact us for help.", t.flowState.transition(s.EVENTS.SUBMIT_CONTACT.ERROR);
   }
 }
-function j(t, e, i, o) {
+function $(t, e, i, o) {
   function n(a) {
-    return a instanceof i ? a : new i(function(l) {
-      l(a);
+    return a instanceof i ? a : new i(function(c) {
+      c(a);
     });
   }
-  return new (i || (i = Promise))(function(a, l) {
+  return new (i || (i = Promise))(function(a, c) {
     function r(d) {
       try {
         u(o.next(d));
       } catch (T) {
-        l(T);
+        c(T);
       }
     }
     function S(d) {
       try {
         u(o.throw(d));
       } catch (T) {
-        l(T);
+        c(T);
       }
     }
     function u(d) {
@@ -354,10 +421,10 @@ function j(t, e, i, o) {
     u((o = o.apply(t, e || [])).next());
   });
 }
-function $(t) {
+function J(t) {
   return t && t.__esModule && Object.prototype.hasOwnProperty.call(t, "default") ? t.default : t;
 }
-var J = function t(e, i) {
+var W = function t(e, i) {
   if (e === i)
     return !0;
   if (e && i && typeof e == "object" && typeof i == "object") {
@@ -384,20 +451,20 @@ var J = function t(e, i) {
       if (!Object.prototype.hasOwnProperty.call(i, a[n]))
         return !1;
     for (n = o; n-- !== 0; ) {
-      var l = a[n];
-      if (!t(e[l], i[l]))
+      var c = a[n];
+      if (!t(e[c], i[c]))
         return !1;
     }
     return !0;
   }
   return e !== e && i !== i;
-}, W = /* @__PURE__ */ $(J);
-const M = "__googleMapsScriptId";
+}, Q = /* @__PURE__ */ J(W);
+const G = "__googleMapsScriptId";
 var f;
 (function(t) {
   t[t.INITIALIZED = 0] = "INITIALIZED", t[t.LOADING = 1] = "LOADING", t[t.SUCCESS = 2] = "SUCCESS", t[t.FAILURE = 3] = "FAILURE";
 })(f || (f = {}));
-class E {
+class h {
   /**
    * Creates an instance of Loader using [[LoaderOptions]]. No defaults are set
    * using this library, instead the defaults are set by the Google Maps
@@ -407,13 +474,13 @@ class E {
    * const loader = Loader({apiKey, version: 'weekly', libraries: ['places']});
    * ```
    */
-  constructor({ apiKey: e, authReferrerPolicy: i, channel: o, client: n, id: a = M, language: l, libraries: r = [], mapIds: S, nonce: u, region: d, retries: T = 3, url: g = "https://maps.googleapis.com/maps/api/js", version: m }) {
-    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = i, this.channel = o, this.client = n, this.id = a || M, this.language = l, this.libraries = r, this.mapIds = S, this.nonce = u, this.region = d, this.retries = T, this.url = g, this.version = m, E.instance) {
-      if (!W(this.options, E.instance.options))
-        throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(E.instance.options)}`);
-      return E.instance;
+  constructor({ apiKey: e, authReferrerPolicy: i, channel: o, client: n, id: a = G, language: c, libraries: r = [], mapIds: S, nonce: u, region: d, retries: T = 3, url: A = "https://maps.googleapis.com/maps/api/js", version: m }) {
+    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = i, this.channel = o, this.client = n, this.id = a || G, this.language = c, this.libraries = r, this.mapIds = S, this.nonce = u, this.region = d, this.retries = T, this.url = A, this.version = m, h.instance) {
+      if (!Q(this.options, h.instance.options))
+        throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(h.instance.options)}`);
+      return h.instance;
     }
-    E.instance = this;
+    h.instance = this;
   }
   get options() {
     return {
@@ -505,24 +572,24 @@ class E {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (a) => !o[a] && delete o[a]
     ), !((i = (e = window == null ? void 0 : window.google) === null || e === void 0 ? void 0 : e.maps) === null || i === void 0) && i.importLibrary || ((a) => {
-      let l, r, S, u = "The Google Maps JavaScript API", d = "google", T = "importLibrary", g = "__ib__", m = document, p = window;
+      let c, r, S, u = "The Google Maps JavaScript API", d = "google", T = "importLibrary", A = "__ib__", m = document, p = window;
       p = p[d] || (p[d] = {});
-      const A = p.maps || (p.maps = {}), G = /* @__PURE__ */ new Set(), R = new URLSearchParams(), U = () => (
+      const g = p.maps || (p.maps = {}), M = /* @__PURE__ */ new Set(), R = new URLSearchParams(), U = () => (
         // @ts-ignore
-        l || (l = new Promise((C, I) => j(this, void 0, void 0, function* () {
-          var y;
-          yield r = m.createElement("script"), r.id = this.id, R.set("libraries", [...G] + "");
+        c || (c = new Promise((C, _) => $(this, void 0, void 0, function* () {
+          var I;
+          yield r = m.createElement("script"), r.id = this.id, R.set("libraries", [...M] + "");
           for (S in a)
-            R.set(S.replace(/[A-Z]/g, (b) => "_" + b[0].toLowerCase()), a[S]);
-          R.set("callback", d + ".maps." + g), r.src = this.url + "?" + R, A[g] = C, r.onerror = () => l = I(Error(u + " could not load.")), r.nonce = this.nonce || ((y = m.querySelector("script[nonce]")) === null || y === void 0 ? void 0 : y.nonce) || "", m.head.append(r);
+            R.set(S.replace(/[A-Z]/g, (V) => "_" + V[0].toLowerCase()), a[S]);
+          R.set("callback", d + ".maps." + A), r.src = this.url + "?" + R, g[A] = C, r.onerror = () => c = _(Error(u + " could not load.")), r.nonce = this.nonce || ((I = m.querySelector("script[nonce]")) === null || I === void 0 ? void 0 : I.nonce) || "", m.head.append(r);
         })))
       );
-      A[T] ? console.warn(u + " only loads once. Ignoring:", a) : A[T] = (C, ...I) => G.add(C) && U().then(() => A[T](C, ...I));
+      g[T] ? console.warn(u + " only loads once. Ignoring:", a) : g[T] = (C, ..._) => M.add(C) && U().then(() => g[T](C, ..._));
     })(o);
     const n = this.libraries.map((a) => this.importLibrary(a));
     n.length || n.push(this.importLibrary("core")), Promise.all(n).then(() => this.callback(), (a) => {
-      const l = new ErrorEvent("error", { error: a });
-      this.loadErrorCallback(l);
+      const c = new ErrorEvent("error", { error: a });
+      this.loadErrorCallback(c);
     });
   }
   /**
@@ -561,27 +628,27 @@ class E {
       }
   }
 }
-const Q = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", q = new E({
-  apiKey: Q,
+const q = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", X = new h({
+  apiKey: q,
   version: "weekly"
 });
-let O = null, P = null;
-async function X() {
+let w = null, y = null;
+async function Z() {
   try {
-    const t = await q.importLibrary("places");
-    O = t.AutocompleteSuggestion, P = t.AutocompleteSessionToken;
+    const t = await X.importLibrary("places");
+    w = t.AutocompleteSuggestion, y = t.AutocompleteSessionToken;
   } catch (t) {
     console.error("Error loading Google Maps Places library:", t);
   }
 }
-function Z() {
-  if (P)
-    return new P();
+function z() {
+  if (y)
+    return new y();
 }
-async function z(t, e) {
-  if (O)
+async function ee(t, e) {
+  if (w)
     try {
-      const { suggestions: i } = await O.fetchAutocompleteSuggestions({
+      const { suggestions: i } = await w.fetchAutocompleteSuggestions({
         input: t,
         language: "en-US",
         region: "us",
@@ -602,7 +669,7 @@ async function z(t, e) {
       );
     }
 }
-function ee(t) {
+function te(t) {
   return t.addressComponents && t.addressComponents.some(
     (e) => e.types[0] === "street_number"
   ) && t.addressComponents.some(
@@ -613,11 +680,11 @@ function ee(t) {
     (e) => e.types[0] === "administrative_area_level_1"
   );
 }
-function te(t) {
+function ie(t) {
   return encodeURIComponent(t.formattedAddress);
 }
-const ie = "https://buyer.turbohome.com/onboard";
-function se(t) {
+const se = "https://buyer.turbohome.com/onboard";
+function re(t) {
   return {
     // Instance properties
     inputValue: "",
@@ -634,10 +701,10 @@ function se(t) {
      * @returns {void}
      */
     async init() {
-      this.inputValue = "", this.suggestions = [], this.keyboardNavIndex = -1, this.selectedPlace = {}, this.isSubmitted = !1, this.errorMessage = "", await X(), this.refreshSessionToken();
+      this.inputValue = "", this.suggestions = [], this.keyboardNavIndex = -1, this.selectedPlace = {}, this.isSubmitted = !1, this.errorMessage = "", await Z(), this.refreshSessionToken();
     },
     refreshSessionToken() {
-      this.sessionToken = Z();
+      this.sessionToken = z();
     },
     /**
      * Whether or not an address match has been selected with the typeahead.
@@ -647,7 +714,7 @@ function se(t) {
       return Object.keys(this.selectedPlace).length != 0;
     },
     get isSelectedValid() {
-      return ee(this.selectedPlace);
+      return te(this.selectedPlace);
     },
     /**
      * Handles input events from the address typeahead input field.
@@ -660,7 +727,7 @@ function se(t) {
         return;
       }
       try {
-        this.suggestions = await z(
+        this.suggestions = await ee(
           this.inputValue,
           this.sessionToken
         );
@@ -689,21 +756,21 @@ function se(t) {
     },
     redirectToReport() {
       this.isSubmitted = !0;
-      const e = te(
+      const e = ie(
         this.selectedPlace
       );
       if (!this.isSelected || !this.isSelectedValid || !e) {
         this.isSubmitted = !1;
         return;
       }
-      const i = new URL(ie);
+      const i = new URL(se);
       i.searchParams.append("address", e), new URL(window.location.href).searchParams.forEach((n, a) => {
         i.searchParams.append(a, n);
       }), t.track("Redirected to Comps Report"), window.location.assign(i);
     }
   };
 }
-function re(t) {
+function oe(t) {
   return {
     // Instance properties
     GUIDES: {
@@ -740,7 +807,7 @@ function re(t) {
     }
   };
 }
-function oe(t) {
+function ae(t) {
   return {
     // Instance properties
     firstName: "",
@@ -776,11 +843,11 @@ function oe(t) {
     }
   };
 }
-const ae = 0.03, D = 15e5, ne = 5e6, le = 25e4, ce = 5e4;
-function de(t = {}) {
+const ne = 0.03, D = 15e5, le = 5e6, ce = 25e4, de = 5e4;
+function Te(t = {}) {
   return {
     listPrice: null,
-    commissionRate: ae,
+    commissionRate: ne,
     init: function() {
       this.listPrice = t.getContent("calcDefaultListPrice") || D;
     },
@@ -804,7 +871,7 @@ function de(t = {}) {
      * @type {number}
      */
     get maxListPrice() {
-      return t.getContent("calcMaxListPrice") || ne;
+      return t.getContent("calcMaxListPrice") || le;
     },
     /**
      * Computed property that returns the value of the calcMinlistPrice key in the personalizationViewModel
@@ -815,7 +882,7 @@ function de(t = {}) {
      * @type {number}
      */
     get minListPrice() {
-      return t.getContent("calcMinListPrice") || le;
+      return t.getContent("calcMinListPrice") || ce;
     },
     /**
      * Computed property that returns the value of the calcInputStep key in the personalizationViewModel
@@ -826,7 +893,7 @@ function de(t = {}) {
      * @type {number}
      */
     get inputStep() {
-      return t.getContent("calcInputStep") || ce;
+      return t.getContent("calcInputStep") || de;
     },
     get formattedListPrice() {
       return N(this.listPrice);
@@ -851,7 +918,7 @@ function N(t) {
     maximumFractionDigits: 0
   }).format(t);
 }
-const Te = {
+const Ee = {
   content: {
     phoneNumberText: "(415) 941-5285",
     phoneNumberLink: "tel:+14159415285"
@@ -892,14 +959,14 @@ const Te = {
     "Temecula",
     "Wildomar"
   ]
-}, he = {
+}, Se = {
   content: {
     phoneNumberText: "(469) 564-1214",
     phoneNumberLink: "tel:+14695641214"
   },
   state: "Texas"
-}, Se = {
-  DEFAULT: Te,
+}, he = {
+  DEFAULT: Ee,
   "Los Angeles": {
     content: {
       phoneNumberText: "(213) 322-1360",
@@ -1025,9 +1092,9 @@ const Te = {
     ]
   },
   Riverside: ue,
-  Texas: he
+  Texas: Se
 };
-function Ee() {
+function fe() {
   return {
     gclid: null,
     /**
@@ -1050,7 +1117,7 @@ function Ee() {
       const t = L("gclid");
       let e = null;
       const i = L("gclsrc"), o = !i || i.indexOf("aw") !== -1;
-      t && o && (e = fe(t), localStorage.setItem("gclid", JSON.stringify(e)));
+      t && o && (e = me(t), localStorage.setItem("gclid", JSON.stringify(e)));
       const n = e || JSON.parse(localStorage.getItem("gclid"));
       n && (/* @__PURE__ */ new Date()).getTime() < n.expiryDate && (this.gclid = n.value);
     }
@@ -1060,46 +1127,62 @@ function L(t) {
   const e = RegExp("[?&]" + t + "=([^&]*)").exec(window.location.search);
   return e && decodeURIComponent(e[1].replace(/\+/g, " "));
 }
-function fe(t) {
+function me(t) {
   const i = (/* @__PURE__ */ new Date()).getTime() + 7776e6;
   return {
     value: t,
     expiryDate: i
   };
 }
-window.Alpine = _;
-const h = V(_), c = {}, w = F(window.FS, c);
-me();
-_.start();
-function me() {
+window.Alpine = P;
+const E = F(P), l = {}, O = k(window.FS, l);
+pe();
+Ae();
+P.start();
+function pe() {
   const e = new URL(window.location.href).searchParams.get("get_started"), i = e && e === "complete" ? s.STATES.GET_STARTED.COMPLETE.MODAL : s.STATES.DEFAULT;
-  c.flowState = h.createStore(
+  l.flowState = E.createStore(
     "flowState",
-    k(
-      H(c, w),
-      w,
+    b(
+      K(l, O),
+      O,
       i
     )
-  ), c.flowUIHelpers = h.createStore(
+  ), l.flowUIHelpers = E.createStore(
     "flowUIHelpers",
-    K(c)
-  ), c.personalizationViewModel = h.createStore(
+    Y(l)
+  ), l.personalizationViewModel = E.createStore(
     "personalizationViewModel",
-    x(Se)
-  ), c.adTrackingViewModel = h.createStore(
+    v(he)
+  ), l.experimentationViewModel = E.createStore(
+    "experimentationViewModel",
+    H()
+  ), l.adTrackingViewModel = E.createStore(
     "adTrackingViewModel",
-    Ee()
-  ), c.addressViewModel = h.createStore(
+    fe()
+  ), l.addressViewModel = E.createStore(
     "addressViewModel",
-    se(w)
-  ), c.thGuidesContactViewModel = h.createStore(
+    re(O)
+  ), l.thGuidesContactViewModel = E.createStore(
     "thGuidesContactViewModel",
-    oe(c.flowState)
-  ), c.thGuidesDownloadViewModel = h.createStore(
+    ae(l.flowState)
+  ), l.thGuidesDownloadViewModel = E.createStore(
     "thGuidesDownloadViewModel",
-    re(c)
-  ), c.thCalculatorViewModel = h.createStore(
+    oe(l)
+  ), l.thCalculatorViewModel = E.createStore(
     "thCalculatorViewModel",
-    de(c.personalizationViewModel)
+    Te(l.personalizationViewModel)
   );
+}
+function Ae() {
+  if (l.flowState.value === s.STATES.DEFAULT) {
+    const e = "address-typeahead-2025-02", i = [
+      "address-typeahead-new-flow",
+      "typeform-only-old-flow"
+    ], o = i[Math.floor(Math.random() * i.length)];
+    l.experimentationViewModel.setActiveExperimentVariation(
+      e,
+      o
+    ), O.track("2025 Address Typeahead Flow Experiment Set");
+  }
 }

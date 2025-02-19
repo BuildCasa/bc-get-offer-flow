@@ -18,6 +18,7 @@ const flowConstants = {
       PROPERTY_QUESTION: 'modalGetStartedPropertyQuestion',
       ADDRESS_SEARCH: 'modalGetStartedAddressSearch',
       TYPEFORM: 'getStartedForm',
+      OLD_TEST_TYPEFORM: 'getStartedFormOld', // Old typeform state for 2025 Address Typeahead experiment
       COMPLETE: {
         DEFAULT: 'getStartedComplete',
         MODAL: 'modalGetStartedComplete',
@@ -25,6 +26,9 @@ const flowConstants = {
     },
     BOOK_INTRO: {
       FORM: 'modalBookIntroForm',
+    },
+    GET_VALUATION_REPORT: {
+      FORM: 'modalGetValuationReportForm',
     },
     GET_GUIDES: {
       FORM: 'modalGuidesContactForm',
@@ -43,6 +47,9 @@ const flowConstants = {
     },
     BOOK_INTRO: {
       START: 'BOOK_INTRO_START',
+    },
+    GET_VALUATION_REPORT: {
+      START: 'GET_VALUATION_REPORT_START',
     },
     GET_GUIDES: {
       START: 'GET_GUIDES_START',
@@ -115,15 +122,47 @@ function createFlowStateMachine(globalStore, trackingService) {
     states: {
       [flowConstants.STATES.DEFAULT]: {
         transitions: {
-          [flowConstants.EVENTS.GET_STARTED.START]: {
-            target: flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track('Get Started Clicked', eventProperties)
+          [flowConstants.EVENTS.GET_STARTED.START]: () => {
+            // If the 2025 Address Typeahead experiment is active, and the user is assigned to the old typeform variation
+            // Return a transition object that targets the old typeform state
+            if (
+              globalStore.experimentationViewModel &&
+              globalStore.experimentationViewModel.getActiveExperimentVariation(
+                'address-typeahead-2025-02',
+              ) &&
+              globalStore.experimentationViewModel.getActiveExperimentVariation(
+                'address-typeahead-2025-02',
+              ) === 'typeform-only-old-flow'
+            ) {
+              return {
+                target: flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
+                effects: {
+                  onTransition: [
+                    (eventProperties) => {
+                      trackingService.track(
+                        'Get Started Clicked',
+                        eventProperties,
+                      )
+                    },
+                  ],
                 },
-              ],
-            },
+              }
+            }
+
+            // Otherwise, return the transition object for the new flow, that targets the property question state
+            return {
+              target: flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
+              effects: {
+                onTransition: [
+                  (eventProperties) => {
+                    trackingService.track(
+                      'Get Started Clicked',
+                      eventProperties,
+                    )
+                  },
+                ],
+              },
+            }
           },
           [flowConstants.EVENTS.BOOK_INTRO.START]: {
             target: flowConstants.STATES.BOOK_INTRO.FORM,
@@ -132,6 +171,19 @@ function createFlowStateMachine(globalStore, trackingService) {
                 (eventProperties) => {
                   trackingService.track(
                     'Book Intro Call Clicked',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
+          },
+          [flowConstants.EVENTS.GET_VALUATION_REPORT.START]: {
+            target: flowConstants.STATES.GET_VALUATION_REPORT.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Get Valuation Report Clicked',
                     eventProperties,
                   )
                 },
@@ -188,6 +240,12 @@ function createFlowStateMachine(globalStore, trackingService) {
           ...defaultExitTransition,
         },
       },
+      // Old typeform state for 2025 Address Typeahead experiment
+      [flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM]: {
+        transitions: {
+          ...defaultExitTransition,
+        },
+      },
       [flowConstants.STATES.GET_STARTED.COMPLETE.DEFAULT]: {
         transitions: {
           [flowConstants.EVENTS.GET_STARTED.START]: {
@@ -207,6 +265,19 @@ function createFlowStateMachine(globalStore, trackingService) {
                 (eventProperties) => {
                   trackingService.track(
                     'Book Intro Call Clicked',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
+          },
+          [flowConstants.EVENTS.GET_VALUATION_REPORT.START]: {
+            target: flowConstants.STATES.GET_VALUATION_REPORT.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Get Valuation Report Clicked',
                     eventProperties,
                   )
                 },
@@ -244,6 +315,11 @@ function createFlowStateMachine(globalStore, trackingService) {
         },
       },
       [flowConstants.STATES.BOOK_INTRO.FORM]: {
+        transitions: {
+          ...defaultExitTransition,
+        },
+      },
+      [flowConstants.STATES.GET_VALUATION_REPORT.FORM]: {
         transitions: {
           ...defaultExitTransition,
         },
@@ -327,7 +403,9 @@ function createFlowUIHelpers(globalStore) {
           flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
           flowConstants.STATES.GET_STARTED.ADDRESS_SEARCH,
           flowConstants.STATES.GET_STARTED.TYPEFORM,
+          flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM, // Old typeform state for 2025 Address Typeahead experiment
           flowConstants.STATES.GET_STARTED.COMPLETE.MODAL,
+          flowConstants.STATES.GET_VALUATION_REPORT.FORM,
           flowConstants.STATES.BOOK_INTRO.FORM,
           flowConstants.STATES.GET_GUIDES.FORM,
           flowConstants.STATES.GET_GUIDES.PROCESSING,
