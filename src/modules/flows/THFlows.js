@@ -27,6 +27,9 @@ const flowConstants = {
     BOOK_INTRO: {
       FORM: 'modalBookIntroForm',
     },
+    GET_VALUATION_REPORT: {
+      FORM: 'modalGetValuationReportForm',
+    },
     GET_GUIDES: {
       FORM: 'modalGuidesContactForm',
       PROCESSING: 'modalGuidesContactFormProcessing',
@@ -44,6 +47,9 @@ const flowConstants = {
     },
     BOOK_INTRO: {
       START: 'BOOK_INTRO_START',
+    },
+    GET_VALUATION_REPORT: {
+      START: 'GET_VALUATION_REPORT_START',
     },
     GET_GUIDES: {
       START: 'GET_GUIDES_START',
@@ -171,6 +177,19 @@ function createFlowStateMachine(globalStore, trackingService) {
               ],
             },
           },
+          [flowConstants.EVENTS.GET_VALUATION_REPORT.START]: {
+            target: flowConstants.STATES.GET_VALUATION_REPORT.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Get Valuation Report Clicked',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
+          },
           [flowConstants.EVENTS.GET_GUIDES.START]: {
             target: flowConstants.STATES.GET_GUIDES.FORM,
             effects: {
@@ -252,6 +271,19 @@ function createFlowStateMachine(globalStore, trackingService) {
               ],
             },
           },
+          [flowConstants.EVENTS.GET_VALUATION_REPORT.START]: {
+            target: flowConstants.STATES.GET_VALUATION_REPORT.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Get Valuation Report Clicked',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
+          },
           [flowConstants.EVENTS.GET_GUIDES.START]: {
             target: flowConstants.STATES.GET_GUIDES.FORM,
             effects: {
@@ -283,6 +315,11 @@ function createFlowStateMachine(globalStore, trackingService) {
         },
       },
       [flowConstants.STATES.BOOK_INTRO.FORM]: {
+        transitions: {
+          ...defaultExitTransition,
+        },
+      },
+      [flowConstants.STATES.GET_VALUATION_REPORT.FORM]: {
         transitions: {
           ...defaultExitTransition,
         },
@@ -368,6 +405,7 @@ function createFlowUIHelpers(globalStore) {
           flowConstants.STATES.GET_STARTED.TYPEFORM,
           flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM, // Old typeform state for 2025 Address Typeahead experiment
           flowConstants.STATES.GET_STARTED.COMPLETE.MODAL,
+          flowConstants.STATES.GET_VALUATION_REPORT.FORM,
           flowConstants.STATES.BOOK_INTRO.FORM,
           flowConstants.STATES.GET_GUIDES.FORM,
           flowConstants.STATES.GET_GUIDES.PROCESSING,
