@@ -1,4 +1,4 @@
-import { m as P, c as b, a as F, b as k } from "./shared-dpXQ-LAr.js";
+import { m as y, c as V, a as F, b as k } from "./shared-dpXQ-LAr.js";
 import { v as B, t as x, c as v, d as H } from "./shared-Ke-5IP1j.js";
 const s = {
   STATES: {
@@ -95,11 +95,7 @@ function K(t, e) {
     states: {
       [s.STATES.DEFAULT]: {
         transitions: {
-          [s.EVENTS.GET_STARTED.START]: () => t.experimentationViewModel && t.experimentationViewModel.getActiveExperimentVariation(
-            "address-typeahead-2025-02"
-          ) && t.experimentationViewModel.getActiveExperimentVariation(
-            "address-typeahead-2025-02"
-          ) === "typeform-only-old-flow" ? {
+          [s.EVENTS.GET_STARTED.START]: () => ({
             target: s.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
             effects: {
               onTransition: [
@@ -111,19 +107,7 @@ function K(t, e) {
                 }
               ]
             }
-          } : {
-            target: s.STATES.GET_STARTED.PROPERTY_QUESTION,
-            effects: {
-              onTransition: [
-                (r) => {
-                  e.track(
-                    "Get Started Clicked",
-                    r
-                  );
-                }
-              ]
-            }
-          },
+          }),
           [s.EVENTS.BOOK_INTRO.START]: {
             target: s.STATES.BOOK_INTRO.FORM,
             effects: {
@@ -396,29 +380,29 @@ async function j(t) {
 }
 function $(t, e, i, o) {
   function n(a) {
-    return a instanceof i ? a : new i(function(c) {
-      c(a);
+    return a instanceof i ? a : new i(function(l) {
+      l(a);
     });
   }
-  return new (i || (i = Promise))(function(a, c) {
+  return new (i || (i = Promise))(function(a, l) {
     function r(d) {
       try {
-        u(o.next(d));
+        E(o.next(d));
       } catch (T) {
-        c(T);
+        l(T);
       }
     }
     function S(d) {
       try {
-        u(o.throw(d));
+        E(o.throw(d));
       } catch (T) {
-        c(T);
+        l(T);
       }
     }
-    function u(d) {
+    function E(d) {
       d.done ? a(d.value) : n(d.value).then(r, S);
     }
-    u((o = o.apply(t, e || [])).next());
+    E((o = o.apply(t, e || [])).next());
   });
 }
 function J(t) {
@@ -451,15 +435,15 @@ var W = function t(e, i) {
       if (!Object.prototype.hasOwnProperty.call(i, a[n]))
         return !1;
     for (n = o; n-- !== 0; ) {
-      var c = a[n];
-      if (!t(e[c], i[c]))
+      var l = a[n];
+      if (!t(e[l], i[l]))
         return !1;
     }
     return !0;
   }
   return e !== e && i !== i;
-}, Q = /* @__PURE__ */ J(W);
-const G = "__googleMapsScriptId";
+}, q = /* @__PURE__ */ J(W);
+const M = "__googleMapsScriptId";
 var f;
 (function(t) {
   t[t.INITIALIZED = 0] = "INITIALIZED", t[t.LOADING = 1] = "LOADING", t[t.SUCCESS = 2] = "SUCCESS", t[t.FAILURE = 3] = "FAILURE";
@@ -474,9 +458,9 @@ class h {
    * const loader = Loader({apiKey, version: 'weekly', libraries: ['places']});
    * ```
    */
-  constructor({ apiKey: e, authReferrerPolicy: i, channel: o, client: n, id: a = G, language: c, libraries: r = [], mapIds: S, nonce: u, region: d, retries: T = 3, url: A = "https://maps.googleapis.com/maps/api/js", version: m }) {
-    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = i, this.channel = o, this.client = n, this.id = a || G, this.language = c, this.libraries = r, this.mapIds = S, this.nonce = u, this.region = d, this.retries = T, this.url = A, this.version = m, h.instance) {
-      if (!Q(this.options, h.instance.options))
+  constructor({ apiKey: e, authReferrerPolicy: i, channel: o, client: n, id: a = M, language: l, libraries: r = [], mapIds: S, nonce: E, region: d, retries: T = 3, url: g = "https://maps.googleapis.com/maps/api/js", version: m }) {
+    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = i, this.channel = o, this.client = n, this.id = a || M, this.language = l, this.libraries = r, this.mapIds = S, this.nonce = E, this.region = d, this.retries = T, this.url = g, this.version = m, h.instance) {
+      if (!q(this.options, h.instance.options))
         throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(h.instance.options)}`);
       return h.instance;
     }
@@ -572,24 +556,24 @@ class h {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (a) => !o[a] && delete o[a]
     ), !((i = (e = window == null ? void 0 : window.google) === null || e === void 0 ? void 0 : e.maps) === null || i === void 0) && i.importLibrary || ((a) => {
-      let c, r, S, u = "The Google Maps JavaScript API", d = "google", T = "importLibrary", A = "__ib__", m = document, p = window;
+      let l, r, S, E = "The Google Maps JavaScript API", d = "google", T = "importLibrary", g = "__ib__", m = document, p = window;
       p = p[d] || (p[d] = {});
-      const g = p.maps || (p.maps = {}), M = /* @__PURE__ */ new Set(), R = new URLSearchParams(), U = () => (
+      const A = p.maps || (p.maps = {}), G = /* @__PURE__ */ new Set(), R = new URLSearchParams(), U = () => (
         // @ts-ignore
-        c || (c = new Promise((C, _) => $(this, void 0, void 0, function* () {
-          var I;
-          yield r = m.createElement("script"), r.id = this.id, R.set("libraries", [...M] + "");
+        l || (l = new Promise((C, O) => $(this, void 0, void 0, function* () {
+          var _;
+          yield r = m.createElement("script"), r.id = this.id, R.set("libraries", [...G] + "");
           for (S in a)
-            R.set(S.replace(/[A-Z]/g, (V) => "_" + V[0].toLowerCase()), a[S]);
-          R.set("callback", d + ".maps." + A), r.src = this.url + "?" + R, g[A] = C, r.onerror = () => c = _(Error(u + " could not load.")), r.nonce = this.nonce || ((I = m.querySelector("script[nonce]")) === null || I === void 0 ? void 0 : I.nonce) || "", m.head.append(r);
+            R.set(S.replace(/[A-Z]/g, (b) => "_" + b[0].toLowerCase()), a[S]);
+          R.set("callback", d + ".maps." + g), r.src = this.url + "?" + R, A[g] = C, r.onerror = () => l = O(Error(E + " could not load.")), r.nonce = this.nonce || ((_ = m.querySelector("script[nonce]")) === null || _ === void 0 ? void 0 : _.nonce) || "", m.head.append(r);
         })))
       );
-      g[T] ? console.warn(u + " only loads once. Ignoring:", a) : g[T] = (C, ..._) => M.add(C) && U().then(() => g[T](C, ..._));
+      A[T] ? console.warn(E + " only loads once. Ignoring:", a) : A[T] = (C, ...O) => G.add(C) && U().then(() => A[T](C, ...O));
     })(o);
     const n = this.libraries.map((a) => this.importLibrary(a));
     n.length || n.push(this.importLibrary("core")), Promise.all(n).then(() => this.callback(), (a) => {
-      const c = new ErrorEvent("error", { error: a });
-      this.loadErrorCallback(c);
+      const l = new ErrorEvent("error", { error: a });
+      this.loadErrorCallback(l);
     });
   }
   /**
@@ -628,22 +612,22 @@ class h {
       }
   }
 }
-const q = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", X = new h({
-  apiKey: q,
+const Q = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", X = new h({
+  apiKey: Q,
   version: "weekly"
 });
-let w = null, y = null;
+let w = null, P = null;
 async function Z() {
   try {
     const t = await X.importLibrary("places");
-    w = t.AutocompleteSuggestion, y = t.AutocompleteSessionToken;
+    w = t.AutocompleteSuggestion, P = t.AutocompleteSessionToken;
   } catch (t) {
     console.error("Error loading Google Maps Places library:", t);
   }
 }
 function z() {
-  if (y)
-    return new y();
+  if (P)
+    return new P();
 }
 async function ee(t, e) {
   if (w)
@@ -918,12 +902,12 @@ function N(t) {
     maximumFractionDigits: 0
   }).format(t);
 }
-const Ee = {
+const ue = {
   content: {
     phoneNumberText: "(415) 941-5285",
     phoneNumberLink: "tel:+14159415285"
   }
-}, ue = {
+}, Ee = {
   content: {
     phoneNumberText: "(213) 322-1360",
     phoneNumberLink: "tel:+12133221360"
@@ -966,7 +950,7 @@ const Ee = {
   },
   state: "Texas"
 }, he = {
-  DEFAULT: Ee,
+  DEFAULT: ue,
   "Los Angeles": {
     content: {
       phoneNumberText: "(213) 322-1360",
@@ -1091,7 +1075,7 @@ const Ee = {
       "Vista"
     ]
   },
-  Riverside: ue,
+  Riverside: Ee,
   Texas: Se
 };
 function fe() {
@@ -1134,55 +1118,42 @@ function me(t) {
     expiryDate: i
   };
 }
-window.Alpine = P;
-const E = F(P), l = {}, O = k(window.FS, l);
+window.Alpine = y;
+const u = F(y), c = {}, I = k(window.FS, c);
 pe();
-Ae();
-P.start();
+y.start();
 function pe() {
   const e = new URL(window.location.href).searchParams.get("get_started"), i = e && e === "complete" ? s.STATES.GET_STARTED.COMPLETE.MODAL : s.STATES.DEFAULT;
-  l.flowState = E.createStore(
+  c.flowState = u.createStore(
     "flowState",
-    b(
-      K(l, O),
-      O,
+    V(
+      K(c, I),
+      I,
       i
     )
-  ), l.flowUIHelpers = E.createStore(
+  ), c.flowUIHelpers = u.createStore(
     "flowUIHelpers",
-    Y(l)
-  ), l.personalizationViewModel = E.createStore(
+    Y(c)
+  ), c.personalizationViewModel = u.createStore(
     "personalizationViewModel",
     v(he)
-  ), l.experimentationViewModel = E.createStore(
+  ), c.experimentationViewModel = u.createStore(
     "experimentationViewModel",
     H()
-  ), l.adTrackingViewModel = E.createStore(
+  ), c.adTrackingViewModel = u.createStore(
     "adTrackingViewModel",
     fe()
-  ), l.addressViewModel = E.createStore(
+  ), c.addressViewModel = u.createStore(
     "addressViewModel",
-    re(O)
-  ), l.thGuidesContactViewModel = E.createStore(
+    re(I)
+  ), c.thGuidesContactViewModel = u.createStore(
     "thGuidesContactViewModel",
-    ae(l.flowState)
-  ), l.thGuidesDownloadViewModel = E.createStore(
+    ae(c.flowState)
+  ), c.thGuidesDownloadViewModel = u.createStore(
     "thGuidesDownloadViewModel",
-    oe(l)
-  ), l.thCalculatorViewModel = E.createStore(
+    oe(c)
+  ), c.thCalculatorViewModel = u.createStore(
     "thCalculatorViewModel",
-    Te(l.personalizationViewModel)
+    Te(c.personalizationViewModel)
   );
-}
-function Ae() {
-  if (l.flowState.value === s.STATES.DEFAULT) {
-    const e = "address-typeahead-2025-02", i = [
-      "address-typeahead-new-flow",
-      "typeform-only-old-flow"
-    ], o = i[Math.floor(Math.random() * i.length)];
-    l.experimentationViewModel.setActiveExperimentVariation(
-      e,
-      o
-    ), O.track("2025 Address Typeahead Flow Experiment Set");
-  }
 }
