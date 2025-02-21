@@ -125,10 +125,13 @@ function initStores() {
 }
 
 function initExperiments() {
-  // Initialize an experiment to test the new (Feb 2025) address typeahead flow vs old typeform flow
-  // If the user has already completed the Get Started flow, then they should not see the experiment
-  const includeAddressTypeaheadExperiment =
-    $store.flowState.value === flowConstants.STATES.DEFAULT
+  // TEMPORARY: Disable the Address Typeahead experiment for now
+  // Will only display the old typeform flow (logic in THFlows.js)
+  const includeAddressTypeaheadExperiment = false
+
+  // // Initialize an experiment to test the new (Feb 2025) address typeahead flow vs old typeform flow
+  // // If the user has already completed the Get Started flow, then they should not see the experiment
+  // const includeAddressTypeaheadExperiment = $store.flowState.value === flowConstants.STATES.DEFAULT
 
   // If including in the Address Typeahead experiment
   if (includeAddressTypeaheadExperiment) {

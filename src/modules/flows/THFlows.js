@@ -123,35 +123,9 @@ function createFlowStateMachine(globalStore, trackingService) {
       [flowConstants.STATES.DEFAULT]: {
         transitions: {
           [flowConstants.EVENTS.GET_STARTED.START]: () => {
-            // If the 2025 Address Typeahead experiment is active, and the user is assigned to the old typeform variation
-            // Return a transition object that targets the old typeform state
-            if (
-              globalStore.experimentationViewModel &&
-              globalStore.experimentationViewModel.getActiveExperimentVariation(
-                'address-typeahead-2025-02',
-              ) &&
-              globalStore.experimentationViewModel.getActiveExperimentVariation(
-                'address-typeahead-2025-02',
-              ) === 'typeform-only-old-flow'
-            ) {
-              return {
-                target: flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
-                effects: {
-                  onTransition: [
-                    (eventProperties) => {
-                      trackingService.track(
-                        'Get Started Clicked',
-                        eventProperties,
-                      )
-                    },
-                  ],
-                },
-              }
-            }
-
-            // Otherwise, return the transition object for the new flow, that targets the property question state
+            // TEMPORARY: ONLY transition to the old typeform state for now
             return {
-              target: flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
+              target: flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
               effects: {
                 onTransition: [
                   (eventProperties) => {
