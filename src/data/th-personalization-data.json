@@ -2,7 +2,8 @@
   "DEFAULT": {
     "content": {
       "phoneNumberText": "(510) 391-5392",
-      "phoneNumberLink": "tel:+15103915392"
+      "phoneNumberLink": "tel:+15103915392",
+      "pricingModel": "Flat Fee"
     }
   },
   "Bay Area": {
@@ -526,7 +527,8 @@
   "Texas": {
     "content": {
       "phoneNumberText": "(469) 564-1214",
-      "phoneNumberLink": "tel:+14695641214"
+      "phoneNumberLink": "tel:+14695641214",
+      "pricingModel": "Split Commission"
     },
     "state": "Texas"
   }
