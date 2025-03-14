@@ -516,6 +516,13 @@
       "Wildomar"
     ]
   },
+  "California": {
+    "content": {
+      "phoneNumberText": "(510) 391-5392",
+      "phoneNumberLink": "tel:+15103915392"
+    },
+    "state": "California"
+  },
   "Texas": {
     "content": {
       "phoneNumberText": "(469) 564-1214",
