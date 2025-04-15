@@ -8,7 +8,7 @@ const BC_FETCH_ESTIMATE_API_URL =
 const BC_CREATE_LEAD_API_URL =
   'https://hook.us1.make.com/7pyo51sq4xxjbpz14t03uomufndj45ut'
 const TH_CREATE_LEAD_API_URL =
-  'https://hook.us1.make.com/l9dtc4vhy7k2wjfy690wjtpxs92ra6e8'
+  'https://hook.us1.make.com/7v5cthrabpbte91f7cijshu2n3jttp43'
 
 /*
  * ----------------------------------------------------------------

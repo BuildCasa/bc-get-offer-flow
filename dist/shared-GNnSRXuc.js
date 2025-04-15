@@ -1,4 +1,4 @@
-const r = "https://hook.us1.make.com/t9mrl5xiqcub1netw5sk7l1vjgoz3gt9", c = "https://hook.us1.make.com/7pyo51sq4xxjbpz14t03uomufndj45ut", u = "https://hook.us1.make.com/l9dtc4vhy7k2wjfy690wjtpxs92ra6e8";
+const r = "https://hook.us1.make.com/t9mrl5xiqcub1netw5sk7l1vjgoz3gt9", c = "https://hook.us1.make.com/7pyo51sq4xxjbpz14t03uomufndj45ut", u = "https://hook.us1.make.com/7v5cthrabpbte91f7cijshu2n3jttp43";
 async function l(t) {
   return await o(r, t, !0);
 }
@@ -8,18 +8,18 @@ async function p(t) {
 async function m(t) {
   await o(u, t, !1);
 }
-async function o(t, e, i = !1) {
+async function o(t, e, a = !1) {
   const n = new Request(t, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(e)
-  }), a = await fetch(n);
-  if (!a.ok)
+  }), i = await fetch(n);
+  if (!i.ok)
     throw new Error("Network response was not OK");
-  if (i)
-    return await a.json();
+  if (a)
+    return await i.json();
 }
 function E(t) {
   return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(t);
@@ -36,15 +36,15 @@ function C(t) {
       return e ? this.marketContentConfig[e] ?? this.defaultContentConfig[e] ?? "" : "";
     },
     get market() {
-      const { region: e, city: i } = this.userGeo;
-      if (!e || typeof e != "string" || !i || typeof i != "string")
+      const { region: e, city: a } = this.userGeo;
+      if (!e || typeof e != "string" || !a || typeof a != "string")
         return null;
       for (const n of Object.keys(this.personalizationData).filter(
-        (a) => a !== "DEFAULT"
+        (i) => i !== "DEFAULT"
       )) {
-        const a = this.personalizationData[n];
-        if (a.state.toLowerCase().trim() === e.toLowerCase().trim() && (!a.cities || a.cities.filter(
-          (s) => s.toLowerCase().trim() === i.toLowerCase().trim()
+        const i = this.personalizationData[n];
+        if (i.state.toLowerCase().trim() === e.toLowerCase().trim() && (!i.cities || i.cities.filter(
+          (s) => s.toLowerCase().trim() === a.toLowerCase().trim()
         ).length > 0))
           return n;
       }
