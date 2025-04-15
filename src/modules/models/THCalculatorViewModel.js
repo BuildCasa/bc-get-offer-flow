@@ -99,6 +99,15 @@ function createTHCalculatorViewModel(personalizationViewModel = {}) {
     },
 
     get turboHomeFee() {
+      // If the pricing model set for the session is 'Split Commission', then the Turbo Home Fee is half of the commission
+      if (
+        personalizationViewModel.getContent('pricingModel') ===
+        'Split Commission'
+      ) {
+        return (this.listPrice * this.commissionRate) / 2
+      }
+
+      // Otherwise, the Turbo Home Fee is a flat fee based on the list price
       if (this.listPrice <= 1000000) return 7500
       if (this.listPrice <= 2000000) return 10000
       return 15000
