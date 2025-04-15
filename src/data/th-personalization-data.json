@@ -531,5 +531,293 @@
       "pricingModel": "Split Commission"
     },
     "state": "Texas"
+  },
+  "Alaska": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Alaska"
+  },
+  "Alabama": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Alabama"
+  },
+  "Arkansas": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Arkansas"
+  },
+  "Arizona": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Arizona"
+  },
+  "Colorado": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Colorado"
+  },
+  "Delaware": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Delaware"
+  },
+  "Georgia": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Georgia"
+  },
+  "Idaho": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Idaho"
+  },
+  "Illinois": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Illinois"
+  },
+  "Indiana": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Indiana"
+  },
+  "Kansas": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Kansas"
+  },
+  "Kentucky": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Kentucky"
+  },
+  "Louisiana": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Louisiana"
+  },
+  "Michigan": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Michigan"
+  },
+  "Missouri": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Missouri"
+  },
+  "Mississippi": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Mississippi"
+  },
+  "North Carolina": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "North Carolina"
+  },
+  "New Mexico": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "New Mexico"
+  },
+  "Nevada": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Nevada"
+  },
+  "Ohio": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Ohio"
+  },
+  "Oregon": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Oregon"
+  },
+  "Rhode Island": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Rhode Island"
+  },
+  "South Carolina": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "South Carolina"
+  },
+  "South Dakota": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "South Dakota"
+  },
+  "Tennessee": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Tennessee"
+  },
+  "Vermont": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Vermont"
+  },
+  "Washington": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Washington"
+  },
+  "Wisconsin": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Wisconsin"
+  },
+  "Connecticut": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Connecticut"
+  },
+  "Florida": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Florida"
+  },
+  "Hawaii": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Hawaii"
+  },
+  "Iowa": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Iowa"
+  },
+  "Massachusetts": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Massachusetts"
+  },
+  "Maryland": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Maryland"
+  },
+  "Maine": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Maine"
+  },
+  "Minnesota": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Minnesota"
+  },
+  "Montana": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Montana"
+  },
+  "North Dakota": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "North Dakota"
+  },
+  "Nebraska": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Nebraska"
+  },
+  "New Hampshire": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "New Hampshire"
+  },
+  "New Jersey": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "New Jersey"
+  },
+  "New York": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "New York"
+  },
+  "Oklahoma": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Oklahoma"
+  },
+  "Pennsylvania": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Pennsylvania"
+  },
+  "Utah": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Utah"
+  },
+  "Virginia": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Virginia"
+  },
+  "West Virginia": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "West Virginia"
+  },
+  "Wyoming": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Wyoming"
   }
 }
