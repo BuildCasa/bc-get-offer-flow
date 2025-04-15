@@ -3,7 +3,12 @@
     "content": {
       "phoneNumberText": "(888) 516-6331",
       "phoneNumberLink": "tel:+18885166331",
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Flat Fee",
+      "calcCommissionRate": 0.03,
+      "calcDefaultListPrice": 1500000,
+      "calcMaxListPrice": 5000000,
+      "calcMinListPrice": 250000,
+      "calcInputStep": 50000
     }
   },
   "Bay Area": {
