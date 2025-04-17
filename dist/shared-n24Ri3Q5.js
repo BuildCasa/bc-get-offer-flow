@@ -1,5 +1,5 @@
 const r = "https://hook.us1.make.com/t9mrl5xiqcub1netw5sk7l1vjgoz3gt9", c = "https://hook.us1.make.com/7pyo51sq4xxjbpz14t03uomufndj45ut", u = "https://hook.us1.make.com/7v5cthrabpbte91f7cijshu2n3jttp43";
-async function l(t) {
+async function h(t) {
   return await o(r, t, !0);
 }
 async function p(t) {
@@ -8,45 +8,48 @@ async function p(t) {
 async function m(t) {
   await o(u, t, !1);
 }
-async function o(t, e, a = !1) {
-  const n = new Request(t, {
+async function o(t, e, n = !1) {
+  const a = new Request(t, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(e)
-  }), i = await fetch(n);
+  }), i = await fetch(a);
   if (!i.ok)
     throw new Error("Network response was not OK");
-  if (a)
+  if (n)
     return await i.json();
 }
-function E(t) {
+function g(t) {
   return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(t);
 }
-const f = "https://get.geojs.io/v1/ip/geo.json";
-async function h() {
-  return await (await fetch(f)).json();
+const l = "https://get.geojs.io/v1/ip/geo.json";
+async function f() {
+  return await (await fetch(l)).json();
 }
-function C(t) {
+function E(t) {
   return {
+    loading: !0,
     personalizationData: {},
     userGeo: {},
     getContent(e) {
-      return e ? this.marketContentConfig[e] ?? this.defaultContentConfig[e] ?? "" : "";
+      return this.loading || !e ? "" : this.marketContentConfig[e] ?? this.defaultContentConfig[e] ?? "";
     },
     get market() {
-      const { region: e, city: a } = this.userGeo;
-      if (!e || typeof e != "string" || !a || typeof a != "string")
+      if (this.loading)
         return null;
-      for (const n of Object.keys(this.personalizationData).filter(
+      const { region: e, city: n } = this.userGeo;
+      if (!e || typeof e != "string" || !n || typeof n != "string")
+        return null;
+      for (const a of Object.keys(this.personalizationData).filter(
         (i) => i !== "DEFAULT"
       )) {
-        const i = this.personalizationData[n];
+        const i = this.personalizationData[a];
         if (i.state.toLowerCase().trim() === e.toLowerCase().trim() && (!i.cities || i.cities.filter(
-          (s) => s.toLowerCase().trim() === a.toLowerCase().trim()
+          (s) => s.toLowerCase().trim() === n.toLowerCase().trim()
         ).length > 0))
-          return n;
+          return a;
       }
       return null;
     },
@@ -59,11 +62,11 @@ function C(t) {
       return this.personalizationData.DEFAULT && this.personalizationData.DEFAULT.content && (e = this.personalizationData.DEFAULT.content), e;
     },
     async init() {
-      this.personalizationData = t, this.userGeo = await h();
+      this.loading = !0, this.personalizationData = t, this.userGeo = await f(), this.loading = !1;
     }
   };
 }
-function g() {
+function C() {
   return {
     // Instance properties
     activeExperimentVariations: {},
@@ -105,9 +108,9 @@ function g() {
 }
 export {
   p as a,
-  l as b,
-  C as c,
-  g as d,
+  h as b,
+  E as c,
+  C as d,
   m as t,
-  E as v
+  g as v
 };

@@ -1,11 +1,385 @@
 {
   "DEFAULT": {
     "content": {
-      "phoneNumberText": "(510) 391-5392",
-      "phoneNumberLink": "tel:+15103915392"
+      "phoneNumberText": "(888) 516-6331",
+      "phoneNumberLink": "tel:+18885166331",
+      "pricingModel": "Flat Fee",
+      "calcCommissionRate": 0.03,
+      "calcDefaultListPrice": 1500000,
+      "calcMaxListPrice": 5000000,
+      "calcMinListPrice": 250000,
+      "calcInputStep": 50000
     }
   },
-  "Los Angeles": {
+  "Bay Area": {
+    "content": {
+      "phoneNumberText": "(510) 391-5392",
+      "phoneNumberLink": "tel:+15103915392"
+    },
+    "state": "California",
+    "cities": [
+      "Alameda",
+      "Albany",
+      "Ashland",
+      "Berkeley",
+      "Castro Valley",
+      "Cherryland",
+      "Dublin",
+      "Emeryville",
+      "Fairview",
+      "Fremont",
+      "Hayward",
+      "Livermore",
+      "Newark",
+      "Oakland",
+      "Piedmont",
+      "Pleasanton",
+      "San Leandro",
+      "San Lorenzo",
+      "Sunol",
+      "Union City",
+      "Acalanes Ridge",
+      "Alamo",
+      "Alhambra Valley",
+      "Antioch",
+      "Bay Point",
+      "Bayview",
+      "Bethel Island",
+      "Blackhawk",
+      "Brentwood",
+      "Byron",
+      "Camino Tassajara",
+      "Castle Hill",
+      "Clayton",
+      "Clyde",
+      "Concord",
+      "Contra Costa Centre",
+      "Crockett",
+      "Danville",
+      "Diablo",
+      "Discovery Bay",
+      "East Richmond Heights",
+      "El Cerrito",
+      "El Sobrante",
+      "Hercules",
+      "Kensington",
+      "Knightsen",
+      "Lafayette",
+      "Martinez",
+      "Montalvin Manor",
+      "Moraga",
+      "Mountain View",
+      "Norris Canyon",
+      "North Gate",
+      "North Richmond",
+      "Oakley",
+      "Orinda",
+      "Pacheco",
+      "Pinole",
+      "Pittsburg",
+      "Pleasant Hill",
+      "Port Costa",
+      "Reliez Valley",
+      "Richmond",
+      "Rodeo",
+      "Rollingwood",
+      "San Miguel",
+      "San Pablo",
+      "San Ramon",
+      "Saranap",
+      "Shell Ridge",
+      "Tara Hills",
+      "Vine Hill",
+      "Walnut Creek",
+      "Alto",
+      "Belvedere",
+      "Black Point-Green Point",
+      "Bolinas",
+      "Corte Madera",
+      "Dillon Beach",
+      "Fairfax",
+      "Inverness",
+      "Kentfield",
+      "Lagunitas-Forest Knolls",
+      "Larkspur",
+      "Lucas Valley-Marinwood",
+      "Marin City",
+      "Mill Valley",
+      "Muir Beach",
+      "Nicasio",
+      "Novato",
+      "Point Reyes Station",
+      "Ross",
+      "San Anselmo",
+      "San Geronimo",
+      "San Rafael",
+      "Santa Venetia",
+      "Sausalito",
+      "Sleepy Hollow",
+      "Stinson Beach",
+      "Strawberry",
+      "Tamalpais-Homestead Valley",
+      "Tiburon",
+      "Tomales",
+      "Woodacre",
+      "Atwater",
+      "Ballico",
+      "Bear Creek",
+      "Cressey",
+      "Delhi",
+      "Dos Palos",
+      "Dos Palos Y",
+      "El Nido",
+      "Franklin",
+      "Gustine",
+      "Hilmar-Irwin",
+      "Le Grand",
+      "Livingston",
+      "Los Banos",
+      "McSwain",
+      "Merced",
+      "Planada",
+      "Santa Nella",
+      "Snelling",
+      "South Dos Palos",
+      "Stevinson",
+      "Tuttle",
+      "Volta",
+      "Winton",
+      "Aromas",
+      "Boronda",
+      "Bradley",
+      "Carmel Valley Village",
+      "Carmel-by-the-Sea",
+      "Castroville",
+      "Chualar",
+      "Del Monte Forest",
+      "Del Rey Oaks",
+      "Elkhorn",
+      "Gonzales",
+      "Greenfield",
+      "King City",
+      "Las Lomas",
+      "Lockwood",
+      "Marina",
+      "Monterey",
+      "Moss Landing",
+      "Pacific Grove",
+      "Pajaro",
+      "Pine Canyon",
+      "Prunedale",
+      "Salinas",
+      "San Ardo",
+      "San Lucas",
+      "Sand City",
+      "Seaside",
+      "Soledad",
+      "Spreckels",
+      "American Canyon",
+      "Angwin",
+      "Calistoga",
+      "Deer Park",
+      "Napa",
+      "Silverado Resort",
+      "St. Helena",
+      "Vallejo",
+      "Yountville",
+      "August",
+      "Country Club",
+      "Dogtown",
+      "Escalon",
+      "Farmington",
+      "French Camp",
+      "Garden Acres",
+      "Kennedy",
+      "Lathrop",
+      "Linden",
+      "Lockeford",
+      "Lodi",
+      "Manteca",
+      "Mountain House",
+      "Peters",
+      "Ripon",
+      "Stockton",
+      "Taft Mosswood",
+      "Tracy",
+      "Woodbridge",
+      "Baywood Park",
+      "Belmont",
+      "Brisbane",
+      "Broadmoor",
+      "Burlingame",
+      "Colma",
+      "Daly City",
+      "El Granada",
+      "Highlands",
+      "Hillsborough",
+      "Millbrae",
+      "Montara",
+      "Moss Beach",
+      "Pacifica",
+      "San Bruno",
+      "San Mateo",
+      "South San Francisco",
+      "Alum Rock",
+      "Burbank",
+      "Cambrian Park",
+      "Campbell",
+      "Cupertino",
+      "East Foothills",
+      "Fremont",
+      "Fruitdale",
+      "Gilroy",
+      "Lexington Hills",
+      "Los Altos",
+      "Los Altos Hills",
+      "Los Gatos",
+      "Loyola",
+      "Milpitas",
+      "Monte Sereno",
+      "Morgan Hill",
+      "Mountain View",
+      "Palo Alto",
+      "Portola Valley",
+      "San Jose",
+      "San Martin",
+      "Santa Clara",
+      "Saratoga",
+      "Stanford",
+      "Sunnyvale",
+      "Allendale",
+      "Benicia",
+      "Dixon",
+      "Elmira",
+      "Fairfield",
+      "Green Valley",
+      "Hartley",
+      "Rio Vista",
+      "Suisun City",
+      "Vacaville",
+      "Vallejo",
+      "Bloomfield",
+      "Bodega",
+      "Bodega Bay",
+      "Boyes Hot Springs",
+      "Carmet",
+      "Cazadero",
+      "Cloverdale",
+      "Cotati",
+      "El Verano",
+      "Eldridge",
+      "Fetters Hot Springs-Agua Caliente",
+      "Forestville",
+      "Fulton",
+      "Geyserville",
+      "Glen Ellen",
+      "Graton",
+      "Guerneville",
+      "Healdsburg",
+      "Jenner",
+      "Kenwood",
+      "Larkfield-Wikiup",
+      "Monte Rio",
+      "Occidental",
+      "Penngrove",
+      "Petaluma",
+      "Rohnert Park",
+      "Salmon Creek",
+      "Santa Rosa",
+      "Sea Ranch",
+      "Sebastopol",
+      "Sereno del Mar",
+      "Sonoma",
+      "Temelec",
+      "Timber Cove",
+      "Valley Ford",
+      "Windsor"
+    ]
+  },
+  "Sacramento": {
+    "content": {
+      "phoneNumberText": "(510) 391-5392",
+      "phoneNumberLink": "tel:+15103915392"
+    },
+    "state": "California",
+    "cities": [
+      "Alta",
+      "Auburn",
+      "Carnelian Bay",
+      "Cedar Flat",
+      "Colfax",
+      "Dollar Point",
+      "Dutch Flat",
+      "Foresthill",
+      "Granite Bay",
+      "Kings Beach",
+      "Kingvale",
+      "Lincoln",
+      "Loomis",
+      "Meadow Vista",
+      "Newcastle",
+      "North Auburn",
+      "Penryn",
+      "Rocklin",
+      "Roseville",
+      "Sheridan",
+      "Sunnyside-Tahoe City",
+      "Tahoe Vista",
+      "Tahoma",
+      "Truckee",
+      "Antelope",
+      "Arden-Arcade",
+      "Carmichael",
+      "Citrus Heights",
+      "Clay",
+      "Courtland",
+      "Elk Grove",
+      "Elverta",
+      "Fair Oaks",
+      "Florin",
+      "Folsom",
+      "Foothill Farms",
+      "Franklin",
+      "Freeport",
+      "Fruitridge Pocket",
+      "Galt",
+      "Gold River",
+      "Herald",
+      "Hood",
+      "Isleton",
+      "La Riviera",
+      "Lemon Hill",
+      "Mather",
+      "McClellan Park",
+      "North Highlands",
+      "Orangevale",
+      "Parkway",
+      "Rancho Cordova",
+      "Rancho Murieta",
+      "Rio Linda",
+      "Rosemont",
+      "Sacramento",
+      "Vineyard",
+      "Walnut Grove",
+      "Wilton",
+      "Clarksburg",
+      "Davis",
+      "Dunnigan",
+      "El Macero",
+      "Esparto",
+      "Guinda",
+      "Knights Landing",
+      "Madison",
+      "Monument Hills",
+      "Rumsey",
+      "Tancred",
+      "West Sacramento",
+      "Winters",
+      "Woodland",
+      "Yolo"
+    ]
+  },
+  "Southern California": {
     "content": {
       "phoneNumberText": "(323) 310-3103",
       "phoneNumberLink": "tel:+13233103103"
@@ -99,16 +473,7 @@
       "West Covina",
       "West Hollywood",
       "Westlake Village",
-      "Whittier"
-    ]
-  },
-  "San Diego": {
-    "content": {
-      "phoneNumberText": "(323) 310-3103",
-      "phoneNumberLink": "tel:+13233103103"
-    },
-    "state": "California",
-    "cities": [
+      "Whittier",
       "Carlsbad",
       "Chula Vista",
       "Coronado",
@@ -126,16 +491,7 @@
       "San Marcos",
       "Santee",
       "Solana Beach",
-      "Vista"
-    ]
-  },
-  "Riverside": {
-    "content": {
-      "phoneNumberText": "(323) 310-3103",
-      "phoneNumberLink": "tel:+13233103103"
-    },
-    "state": "California",
-    "cities": [
+      "Vista",
       "Banning",
       "Beaumont",
       "Blythe",
@@ -166,11 +522,308 @@
       "Wildomar"
     ]
   },
+  "Alaska": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Alaska"
+  },
+  "Alabama": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Alabama"
+  },
+  "Arkansas": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Arkansas"
+  },
+  "Arizona": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Arizona"
+  },
+  "California": {
+    "content": {
+      "phoneNumberText": "(510) 391-5392",
+      "phoneNumberLink": "tel:+15103915392",
+      "pricingModel": "Flat Fee"
+    },
+    "state": "California"
+  },
+  "Colorado": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Colorado"
+  },
+  "Connecticut": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Connecticut"
+  },
+  "Delaware": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Delaware"
+  },
+  "Florida": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Florida"
+  },
+  "Georgia": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Georgia"
+  },
+  "Hawaii": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Hawaii"
+  },
+  "Idaho": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Idaho"
+  },
+  "Illinois": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Illinois"
+  },
+  "Indiana": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Indiana"
+  },
+  "Iowa": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Iowa"
+  },
+  "Kansas": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Kansas"
+  },
+  "Kentucky": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Kentucky"
+  },
+  "Louisiana": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Louisiana"
+  },
+  "Maine": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Maine"
+  },
+  "Maryland": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Maryland"
+  },
+  "Massachusetts": {
+    "content": {
+      "pricingModel": "Split Commission"
+    },
+    "state": "Massachusetts"
+  },
+  "Michigan": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Michigan"
+  },
+  "Minnesota": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Minnesota"
+  },
+  "Mississippi": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Mississippi"
+  },
+  "Missouri": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Missouri"
+  },
+  "Montana": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Montana"
+  },
+  "Nebraska": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Nebraska"
+  },
+  "Nevada": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Nevada"
+  },
+  "New Hampshire": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "New Hampshire"
+  },
+  "New Jersey": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "New Jersey"
+  },
+  "New Mexico": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "New Mexico"
+  },
+  "New York": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "New York"
+  },
+  "North Carolina": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "North Carolina"
+  },
+  "North Dakota": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "North Dakota"
+  },
+  "Ohio": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Ohio"
+  },
+  "Oklahoma": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Oklahoma"
+  },
+  "Oregon": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Oregon"
+  },
+  "Pennsylvania": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Pennsylvania"
+  },
+  "Rhode Island": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Rhode Island"
+  },
+  "South Carolina": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "South Carolina"
+  },
+  "South Dakota": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "South Dakota"
+  },
+  "Tennessee": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Tennessee"
+  },
   "Texas": {
     "content": {
-      "phoneNumberText": "(972) 860-1749",
-      "phoneNumberLink": "tel:+19728601749"
+      "phoneNumberText": "(469) 564-1214",
+      "phoneNumberLink": "tel:+14695641214",
+      "pricingModel": "Split Commission"
     },
     "state": "Texas"
+  },
+  "Utah": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Utah"
+  },
+  "Vermont": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Vermont"
+  },
+  "Virginia": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Virginia"
+  },
+  "Washington": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Washington"
+  },
+  "West Virginia": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "West Virginia"
+  },
+  "Wisconsin": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Wisconsin"
+  },
+  "Wyoming": {
+    "content": {
+      "pricingModel": "Flat Fee"
+    },
+    "state": "Wyoming"
   }
 }

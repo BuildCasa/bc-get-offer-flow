@@ -18,9 +18,13 @@ import { fetchUserGeo } from '../services/GeoJSGeolocationService'
  */
 function createPersonalizationViewModel(personalizationData) {
   return {
+    loading: true,
     personalizationData: {},
     userGeo: {},
     getContent(key) {
+      // If loading, early return an empty string
+      if (this.loading) return ''
+
       // If no key is provided, early return an empty string
       if (!key) return ''
 
@@ -31,6 +35,9 @@ function createPersonalizationViewModel(personalizationData) {
       )
     },
     get market() {
+      // If loading, early return null
+      if (this.loading) return null
+
       const { region: state, city } = this.userGeo
 
       // If there is no region or city in the userGeo data, early return null
@@ -104,8 +111,10 @@ function createPersonalizationViewModel(personalizationData) {
       return defaultContentConfig
     },
     async init() {
+      this.loading = true
       this.personalizationData = personalizationData
       this.userGeo = await fetchUserGeo()
+      this.loading = false
     },
   }
 }
