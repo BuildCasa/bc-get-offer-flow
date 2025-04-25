@@ -1193,7 +1193,7 @@ const ue = {
   state: "Virginia"
 }, Qe = {
   content: {
-    pricingModel: "Flat Fee"
+    pricingModel: "Split Commission"
   },
   state: "Washington"
 }, Xe = {
