@@ -890,7 +890,7 @@ function Te(t = {}) {
       return _(this.listPrice);
     },
     get turboHomeFee() {
-      return t.getContent("pricingModel") === "Split Commission" ? this.listPrice * this.commissionRate / 2 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
+      return t.getContent("pricingModel") === "Split Commission" ? this.listPrice * this.commissionRate / 2 : this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
     },
     get cashBack() {
       return Math.round(
@@ -1173,7 +1173,7 @@ const ue = {
   content: {
     phoneNumberText: "(469) 564-1214",
     phoneNumberLink: "tel:+14695641214",
-    pricingModel: "Split Commission"
+    pricingModel: "Flat Fee"
   },
   state: "Texas"
 }, Je = {
