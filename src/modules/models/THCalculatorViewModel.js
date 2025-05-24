@@ -108,6 +108,7 @@ function createTHCalculatorViewModel(personalizationViewModel = {}) {
       }
 
       // Otherwise, the Turbo Home Fee is a flat fee based on the list price
+      if (this.listPrice <= 500000) return 5000
       if (this.listPrice <= 1000000) return 7500
       if (this.listPrice <= 2000000) return 10000
       return 15000
