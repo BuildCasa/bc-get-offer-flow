@@ -562,7 +562,7 @@
   },
   "Connecticut": {
     "content": {
-      "pricingModel": "Split Commission"
+      "pricingModel": "Flat Fee"
     },
     "state": "Connecticut"
   },
