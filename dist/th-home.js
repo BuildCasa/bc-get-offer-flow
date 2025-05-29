@@ -1036,7 +1036,7 @@ const ue = {
   state: "Colorado"
 }, Me = {
   content: {
-    pricingModel: "Split Commission"
+    pricingModel: "Flat Fee"
   },
   state: "Connecticut"
 }, Ae = {
