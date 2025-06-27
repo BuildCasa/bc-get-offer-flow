@@ -26,6 +26,7 @@ import {
 } from './modules/flows/THFlows'
 
 import { createAddressViewModel } from './modules/models/THAddressViewModel'
+import { createInterestAreaViewModel } from './modules/models/THInterestAreaViewModel'
 import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
 import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
 import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
@@ -108,6 +109,11 @@ function initStores() {
   $store.addressViewModel = $storeFactory.createStore(
     'addressViewModel',
     createAddressViewModel($trackingService),
+  )
+
+  $store.interestAreaViewModel = $storeFactory.createStore(
+    'interestAreaViewModel',
+    createInterestAreaViewModel($trackingService),
   )
 
   $store.thGuidesContactViewModel = $storeFactory.createStore(
