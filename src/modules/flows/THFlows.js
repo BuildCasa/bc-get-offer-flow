@@ -15,10 +15,11 @@ const flowConstants = {
   STATES: {
     DEFAULT: 'default',
     GET_STARTED: {
-      PROPERTY_QUESTION: 'modalGetStartedPropertyQuestion',
-      ADDRESS_SEARCH: 'modalGetStartedAddressSearch',
-      TYPEFORM: 'getStartedForm',
-      OLD_TEST_TYPEFORM: 'getStartedFormOld', // Old typeform state for 2025 Address Typeahead experiment
+      DEFAULT_FILLOUT_FORM: 'getStartedDefaultFilloutForm', // Default Fillout Form
+      INTEREST_AREA_SEARCH: 'modalGetStartedInterestAreaSearch',
+      INTEREST_AREA_FILLOUT_FORM_A1: 'modalGetStartedInterestAreaFilloutFormA1',
+      INTEREST_AREA_FILLOUT_FORM_A2_ACTIONS:
+        'modalGetStartedInterestAreaFilloutFormA2Actions',
       COMPLETE: {
         DEFAULT: 'getStartedComplete',
         MODAL: 'modalGetStartedComplete',
@@ -40,10 +41,9 @@ const flowConstants = {
   EVENTS: {
     GET_STARTED: {
       START: 'GET_STARTED_START',
-      HAS_PROPERTY: {
-        YES: 'HAS_PROPERTY_YES',
-        NO: 'HAS_PROPERTY_NO',
-      },
+    },
+    INTEREST_AREA_SEARCH: {
+      SELECT: 'INTEREST_AREA_SEARCH_SELECT',
     },
     BOOK_INTRO: {
       START: 'BOOK_INTRO_START',
@@ -123,9 +123,30 @@ function createFlowStateMachine(globalStore, trackingService) {
       [flowConstants.STATES.DEFAULT]: {
         transitions: {
           [flowConstants.EVENTS.GET_STARTED.START]: () => {
-            // TEMPORARY: ONLY transition to the old typeform state for now
+            // Default transition target to the default fillout form state
+            let transitionTarget =
+              flowConstants.STATES.GET_STARTED.DEFAULT_FILLOUT_FORM
+
+            // If the 2025-06 Interest Area Typeahead experiment is active, and the session is in a non-default variation,
+            // Set the transition to target the Interest Area Search state
+            let interestAreaTypeaheadExperimentVariation =
+              globalStore.experimentationViewModel?.getActiveExperimentVariation(
+                'interest-area-typeahead-2025-06',
+              )
+
+            if (
+              interestAreaTypeaheadExperimentVariation &&
+              (interestAreaTypeaheadExperimentVariation ===
+                'interest-area-typeahead-fillout-form-a1' ||
+                interestAreaTypeaheadExperimentVariation ===
+                  'interest-area-typeahead-fillout-form-a2-actions')
+            ) {
+              transitionTarget =
+                flowConstants.STATES.GET_STARTED.INTEREST_AREA_SEARCH
+            }
+
             return {
-              target: flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM,
+              target: transitionTarget,
               effects: {
                 onTransition: [
                   (eventProperties) => {
@@ -137,6 +158,53 @@ function createFlowStateMachine(globalStore, trackingService) {
                 ],
               },
             }
+          },
+          [flowConstants.EVENTS.INTEREST_AREA_SEARCH.SELECT]: {
+            target: () => {
+              // Default transition target to the Interest Area Fillout Form A1 version
+              let transitionTarget =
+                flowConstants.STATES.GET_STARTED.INTEREST_AREA_FILLOUT_FORM_A1
+
+              // If the 2025-06 Interest Area Typeahead experiment is active, and the session is in the A2 Actions variation,
+              // Set the transition to target the Interest Area Fillout Form A2 Actions state
+              let interestAreaTypeaheadExperimentVariation =
+                globalStore.experimentationViewModel?.getActiveExperimentVariation(
+                  'interest-area-typeahead-2025-06',
+                )
+              if (
+                interestAreaTypeaheadExperimentVariation &&
+                interestAreaTypeaheadExperimentVariation ===
+                  'interest-area-typeahead-fillout-form-a2-actions'
+              ) {
+                transitionTarget =
+                  flowConstants.STATES.GET_STARTED
+                    .INTEREST_AREA_FILLOUT_FORM_A2_ACTIONS
+              }
+
+              return {
+                target: transitionTarget,
+                effects: {
+                  onTransition: [
+                    (eventProperties) => {
+                      trackingService.track(
+                        'Interest Area Selected',
+                        eventProperties,
+                      )
+                    },
+                  ],
+                },
+              }
+            },
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Interest Area Selected',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
           },
           [flowConstants.EVENTS.BOOK_INTRO.START]: {
             target: flowConstants.STATES.BOOK_INTRO.FORM,
@@ -176,50 +244,27 @@ function createFlowStateMachine(globalStore, trackingService) {
           },
         },
       },
-      [flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION]: {
+      [flowConstants.STATES.GET_STARTED.DEFAULT_FILLOUT_FORM]: {
         transitions: {
           ...defaultExitTransition,
-          [flowConstants.EVENTS.GET_STARTED.HAS_PROPERTY.YES]: {
-            target: flowConstants.STATES.GET_STARTED.ADDRESS_SEARCH,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track(
-                    'Has Specific Property',
-                    eventProperties,
-                  )
-                },
-              ],
-            },
-          },
-          [flowConstants.EVENTS.GET_STARTED.HAS_PROPERTY.NO]: {
-            target: flowConstants.STATES.GET_STARTED.TYPEFORM,
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track('No Specific Property', eventProperties)
-                },
-              ],
-            },
+        },
+      },
+      [flowConstants.STATES.GET_STARTED.INTEREST_AREA_SEARCH]: {
+        transitions: {
+          ...defaultExitTransition,
+        },
+      },
+      [flowConstants.STATES.GET_STARTED.INTEREST_AREA_FILLOUT_FORM_A1]: {
+        transitions: {
+          ...defaultExitTransition,
+        },
+      },
+      [flowConstants.STATES.GET_STARTED.INTEREST_AREA_FILLOUT_FORM_A2_ACTIONS]:
+        {
+          transitions: {
+            ...defaultExitTransition,
           },
         },
-      },
-      [flowConstants.STATES.GET_STARTED.ADDRESS_SEARCH]: {
-        transitions: {
-          ...defaultExitTransition,
-        },
-      },
-      [flowConstants.STATES.GET_STARTED.TYPEFORM]: {
-        transitions: {
-          ...defaultExitTransition,
-        },
-      },
-      // Old typeform state for 2025 Address Typeahead experiment
-      [flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM]: {
-        transitions: {
-          ...defaultExitTransition,
-        },
-      },
       [flowConstants.STATES.GET_STARTED.COMPLETE.DEFAULT]: {
         transitions: {
           [flowConstants.EVENTS.GET_STARTED.START]: {
@@ -374,10 +419,11 @@ function createFlowUIHelpers(globalStore) {
     modal: {
       get isOpen() {
         const modalStates = [
-          flowConstants.STATES.GET_STARTED.PROPERTY_QUESTION,
-          flowConstants.STATES.GET_STARTED.ADDRESS_SEARCH,
-          flowConstants.STATES.GET_STARTED.TYPEFORM,
-          flowConstants.STATES.GET_STARTED.OLD_TEST_TYPEFORM, // Old typeform state for 2025 Address Typeahead experiment
+          flowConstants.STATES.GET_STARTED.DEFAULT_FILLOUT_FORM,
+          flowConstants.STATES.GET_STARTED.INTEREST_AREA_SEARCH,
+          flowConstants.STATES.GET_STARTED.INTEREST_AREA_FILLOUT_FORM_A1,
+          flowConstants.STATES.GET_STARTED
+            .INTEREST_AREA_FILLOUT_FORM_A2_ACTIONS,
           flowConstants.STATES.GET_STARTED.COMPLETE.MODAL,
           flowConstants.STATES.GET_VALUATION_REPORT.FORM,
           flowConstants.STATES.BOOK_INTRO.FORM,

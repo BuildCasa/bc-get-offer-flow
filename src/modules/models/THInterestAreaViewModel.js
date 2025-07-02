@@ -11,6 +11,7 @@ import {
   fetchInterestAreaSuggestions,
   isPlaceTHInterestAreaValid,
 } from '../services/GoogleMapsAddressService.js'
+import { flowConstants } from '../flows/THFlows'
 
 /*
  * ----------------------------------------------------------------
@@ -26,10 +27,11 @@ import {
 
 /**
  * Factory function for creating a THInterestAreaViewModel instance.
+ * @param {unknown} flowState - Reference to the relevant FlowState object to be associated with this instance.
  * @param {object} trackingService - Reference to the desired TrackingService to use for event tracking.
  * @returns {InterestAreaViewModel} New InterestAreaViewModel instance.
  */
-function createInterestAreaViewModel(trackingService) {
+function createInterestAreaViewModel(flowState, trackingService) {
   return {
     // Instance properties
     inputValue: '',
@@ -64,7 +66,7 @@ function createInterestAreaViewModel(trackingService) {
     },
 
     /**
-     * Whether or not an address match has been selected with the typeahead.
+     * Whether or not an location match has been selected with the typeahead.
      * @type {boolean}
      */
     get isSelected() {
@@ -76,8 +78,8 @@ function createInterestAreaViewModel(trackingService) {
     },
 
     /**
-     * Handles input events from the address typeahead input field.
-     * Fetches and updates address suggestions based on the current input value.
+     * Handles input events from the location typeahead input field.
+     * Fetches and updates location suggestions based on the current input value.
      * @returns {Promise.<void>} Promise that resolves when input handling is complete.
      */
     async handleInput() {
@@ -98,7 +100,7 @@ function createInterestAreaViewModel(trackingService) {
         return
       }
 
-      // Fetch and update address matches (or handle errors)
+      // Fetch and update location matches (or handle errors)
       // Returns an array of place suggestions with `placePrediction` and `text` properties
       try {
         this.suggestions = await fetchInterestAreaSuggestions(
@@ -111,9 +113,9 @@ function createInterestAreaViewModel(trackingService) {
     },
 
     /**
-     * Handles keyboard events for the address typeahead input field.
+     * Handles keyboard events for the location typeahead input field.
      * Navigates up or down the list of matches if ArrowUp or ArrowDown are pressed.
-     * Selects the address at the current keyboardNavIndex if Enter is pressed.
+     * Selects the location at the current keyboardNavIndex if Enter is pressed.
      * @param {KeyboardEvent} event - Keyboard event object.
      * @returns {void}
      */
@@ -127,16 +129,16 @@ function createInterestAreaViewModel(trackingService) {
         return
       }
 
-      // Don't intercept keydown events if the address matches are not being displayed
+      // Don't intercept keydown events if the location matches are not being displayed
       if (this.isSelected || this.suggestions.length === 0) {
         return
       }
 
-      // If ArrowUp, ArrowDown, or Enter are pressed while address matches are being displayed, block default behavior
+      // If ArrowUp, ArrowDown, or Enter are pressed while location matches are being displayed, block default behavior
       event.preventDefault()
       event.stopPropagation()
 
-      // And apply special logic to navigate and select an address from the available matches
+      // And apply special logic to navigate and select an location from the available matches
       if (event.key === 'Enter' && this.keyboardNavIndex != -1) {
         // If Enter key is pressed, select the match at the current position
         this.selectSuggestion(this.suggestions[this.keyboardNavIndex])
@@ -164,19 +166,19 @@ function createInterestAreaViewModel(trackingService) {
         fields: ['displayName', 'formattedAddress', 'addressComponents'],
       })
 
-      // Set selected address
+      // Set selected location
       this.selectedPlace = place
 
       // Update input value
       this.inputValue = place.formattedAddress
 
-      // If selected suggestion is not a valid property address for TurboHome, display an error message
+      // If selected suggestion is not a valid property location for TurboHome, display an error message
       if (!this.isSelectedValid) {
         this.errorMessage =
           'Please select a valid US city, state, or postal code to continue, or contact us for help.'
       }
 
-      // Track address selection event
+      // Track location selection event
       trackingService.track('Interest Area Selected')
 
       // Re-initialize matches / keyboard nav
@@ -186,7 +188,7 @@ function createInterestAreaViewModel(trackingService) {
 
       // If selected suggestion is valid, redirect to the report page
       if (this.isSelectedValid) {
-        console.log('Selected place is valid!', this.selectedPlace)
+        flowState.transition(flowConstants.EVENTS.SELECT_INTEREST_AREA.SELECT)
       }
     },
 

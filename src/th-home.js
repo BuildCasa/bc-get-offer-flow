@@ -113,7 +113,7 @@ function initStores() {
 
   $store.interestAreaViewModel = $storeFactory.createStore(
     'interestAreaViewModel',
-    createInterestAreaViewModel($trackingService),
+    createInterestAreaViewModel($store.flowState, $trackingService),
   )
 
   $store.thGuidesContactViewModel = $storeFactory.createStore(
