@@ -131,24 +131,28 @@ function initStores() {
 }
 
 function initExperiments() {
-  // TEMPORARY: Disable the Address Typeahead experiment for now
-  // Will only display the old typeform flow (logic in THFlows.js)
-  const includeAddressTypeaheadExperiment = false
-
-  // // Initialize an experiment to test the new (Feb 2025) address typeahead flow vs old typeform flow
-  // // If the user has already completed the Get Started flow, then they should not see the experiment
-  // const includeAddressTypeaheadExperiment = $store.flowState.value === flowConstants.STATES.DEFAULT
+  // Initialize an experiment to test the new (Feb 2025) address typeahead flow vs old typeform flow
+  // If the user has already completed the Get Started flow, then they should not see the experiment
+  const includeAddressTypeaheadExperiment =
+    $store.flowState.value === flowConstants.STATES.DEFAULT
 
   // If including in the Address Typeahead experiment
   if (includeAddressTypeaheadExperiment) {
     // Create an experiment id slug, and determine the experiment variant
-    const experiment = 'address-typeahead-2025-02'
-    const possibleVariations = [
-      'address-typeahead-new-flow',
-      'typeform-only-old-flow',
-    ]
-    const variation =
-      possibleVariations[Math.floor(Math.random() * possibleVariations.length)] // Randomly select a variation with equal probability
+    const experiment = 'interest-area-typeahead-2025-06'
+
+    // Determine the variation for the experiment, with the following probabilities:
+    // 25% - interest-area-typeahead-fillout-form-a1
+    // 25% - interest-area-typeahead-fillout-form-a2-actions
+    // 50% - existing-button-cta-fillout-form
+    const randomValue = Math.random()
+
+    let variation = 'existing-button-cta-fillout-form' // Default variation
+    if (randomValue < 0.25) {
+      variation = 'interest-area-typeahead-fillout-form-a1'
+    } else if (randomValue < 0.5) {
+      variation = 'interest-area-typeahead-fillout-form-a2-actions'
+    }
 
     // Set the active experiment and variation in the experimentation view model
     $store.experimentationViewModel.setActiveExperimentVariation(
@@ -157,6 +161,8 @@ function initExperiments() {
     )
 
     // Track the experiment set event
-    $trackingService.track('2025 Address Typeahead Flow Experiment Set')
+    $trackingService.track(
+      '2025-06 Interest Area Typeahead Flow Experiment Set',
+    )
   }
 }
