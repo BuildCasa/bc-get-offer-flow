@@ -188,7 +188,7 @@ function createInterestAreaViewModel(flowState, trackingService) {
 
       // If selected suggestion is valid, redirect to the report page
       if (this.isSelectedValid) {
-        flowState.transition(flowConstants.EVENTS.SELECT_INTEREST_AREA.SELECT)
+        flowState.transition(flowConstants.EVENTS.INTEREST_AREA_SEARCH.SELECT)
       }
     },
 
