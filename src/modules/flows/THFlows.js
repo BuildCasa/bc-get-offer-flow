@@ -129,7 +129,7 @@ function createFlowStateMachine(globalStore, trackingService) {
 
             // If the 2025-06 Interest Area Typeahead experiment is active, and the session is in a non-default variation,
             // Set the transition to target the Interest Area Search state
-            let interestAreaTypeaheadExperimentVariation =
+            const interestAreaTypeaheadExperimentVariation =
               globalStore.experimentationViewModel?.getActiveExperimentVariation(
                 'interest-area-typeahead-2025-06',
               )
@@ -167,7 +167,7 @@ function createFlowStateMachine(globalStore, trackingService) {
 
               // If the 2025-06 Interest Area Typeahead experiment is active, and the session is in the A2 Actions variation,
               // Set the transition to target the Interest Area Fillout Form A2 Actions state
-              let interestAreaTypeaheadExperimentVariation =
+              const interestAreaTypeaheadExperimentVariation =
                 globalStore.experimentationViewModel?.getActiveExperimentVariation(
                   'interest-area-typeahead-2025-06',
                 )
@@ -194,16 +194,6 @@ function createFlowStateMachine(globalStore, trackingService) {
                   ],
                 },
               }
-            },
-            effects: {
-              onTransition: [
-                (eventProperties) => {
-                  trackingService.track(
-                    'Interest Area Selected',
-                    eventProperties,
-                  )
-                },
-              ],
             },
           },
           [flowConstants.EVENTS.BOOK_INTRO.START]: {
