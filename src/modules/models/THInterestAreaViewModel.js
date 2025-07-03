@@ -77,6 +77,36 @@ function createInterestAreaViewModel(flowState, trackingService) {
       return isPlaceTHInterestAreaValid(this.selectedPlace)
     },
 
+    get selectedCity() {
+      let city
+      if (this.isSelectedValid) {
+        city = this.selectedPlace.addressComponents.find((component) =>
+          component.types.includes('locality'),
+        )?.longText
+      }
+      return city
+    },
+
+    get selectedState() {
+      let state
+      if (this.isSelectedValid) {
+        state = this.selectedPlace.addressComponents.find((component) =>
+          component.types.includes('administrative_area_level_1'),
+        )?.shortText
+      }
+      return state
+    },
+
+    get selectedPostalCode() {
+      let postalCode
+      if (this.isSelectedValid) {
+        postalCode = this.selectedPlace.addressComponents.find((component) =>
+          component.types.includes('postal_code'),
+        )?.shortText
+      }
+      return postalCode
+    },
+
     /**
      * Handles input events from the location typeahead input field.
      * Fetches and updates location suggestions based on the current input value.
