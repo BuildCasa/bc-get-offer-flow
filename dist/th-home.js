@@ -726,7 +726,7 @@ function te(a, e) {
      * @returns {Promise.<void>} Promise that resolves when input handling is complete.
      */
     async handleInput() {
-      if (this.isSubmitted && (this.isSubmitted = !1), this.errorMessage && (this.errorMessage = ""), this.isSelected && (this.selectedPlace = {}), !this.inputValue) {
+      if (this.errorMessage && (this.errorMessage = ""), this.isSelected && (this.selectedPlace = {}), !this.inputValue) {
         this.suggestions = [];
         return;
       }
@@ -753,10 +753,10 @@ function te(a, e) {
       let n = t.placePrediction.toPlace();
       await n.fetchFields({
         fields: ["displayName", "formattedAddress", "addressComponents"]
-      }), this.selectedPlace = n, this.inputValue = n.formattedAddress, this.isSelectedValid || (this.errorMessage = "Please select a valid US city, state, or postal code to continue, or contact us for help."), e.track("Interest Area Selected"), this.refreshSessionToken(), this.suggestions = [], this.keyboardNavIndex = -1, this.isSelectedValid && a.transition(i.EVENTS.INTEREST_AREA_SEARCH.SELECT);
+      }), this.selectedPlace = n, this.inputValue = n.formattedAddress, this.isSelectedValid || (this.errorMessage = "Please select a valid US city, state, or postal code to continue, or contact us for help."), e.track("Interest Area Selected"), this.refreshSessionToken(), this.suggestions = [], this.keyboardNavIndex = -1;
     },
     handleSubmit(t) {
-      t.preventDefault(), t.stopPropagation();
+      t.preventDefault(), t.stopPropagation(), !this.isSubmitted && (this.isSubmitted = !0, this.isSelected && this.isSelectedValid && a.transition(i.EVENTS.INTEREST_AREA_SEARCH.SELECT), this.isSubmitted = !1);
     }
   };
 }
