@@ -113,10 +113,6 @@ function createInterestAreaViewModel(flowState, trackingService) {
      * @returns {Promise.<void>} Promise that resolves when input handling is complete.
      */
     async handleInput() {
-      if (this.isSubmitted) {
-        this.isSubmitted = false
-      }
-
       if (this.errorMessage) {
         this.errorMessage = ''
       }
@@ -215,17 +211,27 @@ function createInterestAreaViewModel(flowState, trackingService) {
       this.refreshSessionToken()
       this.suggestions = []
       this.keyboardNavIndex = -1
-
-      // If selected suggestion is valid, redirect to the report page
-      if (this.isSelectedValid) {
-        flowState.transition(flowConstants.EVENTS.INTEREST_AREA_SEARCH.SELECT)
-      }
     },
 
     handleSubmit(event) {
       // Block default form submission behavior
       event.preventDefault()
       event.stopPropagation()
+
+      // If the form has already been submitted, do not allow re-submission
+      if (this.isSubmitted) {
+        return
+      }
+
+      this.isSubmitted = true
+
+      // If selected suggestion is valid, redirect to the report page
+      if (this.isSelected && this.isSelectedValid) {
+        flowState.transition(flowConstants.EVENTS.INTEREST_AREA_SEARCH.SELECT)
+      }
+
+      // Reset form submission state in case user closes out of Fillout Form and starts again
+      this.isSubmitted = false
     },
   }
 }
