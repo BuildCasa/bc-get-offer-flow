@@ -100,6 +100,56 @@ function isPlaceTHAddressValid(place) {
   )
 }
 
+async function fetchInterestAreaSuggestions(query, token) {
+  if (!AutocompleteSuggestion) return
+
+  try {
+    const { suggestions } =
+      await AutocompleteSuggestion.fetchAutocompleteSuggestions({
+        input: query,
+        language: 'en-US',
+        region: 'us',
+        sessionToken: token,
+        includedRegionCodes: ['us'],
+        includedPrimaryTypes: [
+          'administrative_area_level_1',
+          'locality',
+          'postal_code',
+        ],
+      })
+
+    return suggestions.map((suggestion) => {
+      return {
+        placePrediction: suggestion.placePrediction,
+        text: suggestion.placePrediction.text.toString(),
+      }
+    })
+  } catch (error) {
+    console.error(
+      'Error fetching Google Places Autocomplete suggestions:',
+      error,
+    )
+    throw new Error(
+      'There was an error finding your address. Please try again, or contact us for help.',
+    )
+  }
+}
+
+function isPlaceTHInterestAreaValid(place) {
+  return (
+    place.addressComponents &&
+    (place.addressComponents.some(
+      (component) => component.types[0] === 'locality',
+    ) ||
+      place.addressComponents.some(
+        (component) => component.types[0] === 'administrative_area_level_1',
+      ) ||
+      place.addressComponents.some(
+        (component) => component.types[0] === 'postal_code',
+      ))
+  )
+}
+
 function getTHAddressEncodedURIComponentForPlace(place) {
   return encodeURIComponent(place.formattedAddress)
 }
@@ -115,4 +165,6 @@ export {
   fetchAddressSuggestions,
   isPlaceTHAddressValid,
   getTHAddressEncodedURIComponentForPlace,
+  fetchInterestAreaSuggestions,
+  isPlaceTHInterestAreaValid,
 }
