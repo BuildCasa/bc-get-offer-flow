@@ -113,6 +113,11 @@ function createInterestAreaViewModel(flowState, trackingService) {
      * @returns {Promise.<void>} Promise that resolves when input handling is complete.
      */
     async handleInput() {
+      // If the form was already submitted, reset submission status, error message, and selected place with new input
+      if (this.isSubmitted) {
+        this.isSubmitted = false
+      }
+
       if (this.errorMessage) {
         this.errorMessage = ''
       }
@@ -121,6 +126,7 @@ function createInterestAreaViewModel(flowState, trackingService) {
         this.selectedPlace = {}
       }
 
+      // If the input value is empty, reset suggestions and return early
       if (!this.inputValue) {
         this.suggestions = []
         return
@@ -211,10 +217,22 @@ function createInterestAreaViewModel(flowState, trackingService) {
       this.refreshSessionToken()
       this.suggestions = []
       this.keyboardNavIndex = -1
+
+      // If selected suggestion is valid, transition to the next step in the flow
+      if (this.isSelectedValid) {
+        // Set submission state to true
+        this.isSubmitted = true
+
+        // Transition to the next step in the flow
+        flowState.transition(flowConstants.EVENTS.INTEREST_AREA_SEARCH.SELECT)
+
+        // Reset form submission state in case user closes out of Fillout Form and starts again
+        this.isSubmitted = false
+      }
     },
 
     handleSubmit(event) {
-      // Block default form submission behavior
+      // Block default form submission behavior, since form is submitted immediately on a valid location selection
       event.preventDefault()
       event.stopPropagation()
 
@@ -223,9 +241,10 @@ function createInterestAreaViewModel(flowState, trackingService) {
         return
       }
 
+      // Set submission state to true
       this.isSubmitted = true
 
-      // If selected suggestion is valid, redirect to the report page
+      // If selected suggestion is valid, transition to the next step in the flow
       if (this.isSelected && this.isSelectedValid) {
         flowState.transition(flowConstants.EVENTS.INTEREST_AREA_SEARCH.SELECT)
       }
