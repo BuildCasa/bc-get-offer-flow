@@ -1,7 +1,7 @@
 {
   "name": "bc-web-scripts",
   "private": true,
-  "version": "18.0.1",
+  "version": "19.0.0-beta.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
