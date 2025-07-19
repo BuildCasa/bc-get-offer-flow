@@ -113,7 +113,15 @@ function createPersonalizationViewModel(personalizationData) {
     async init() {
       this.loading = true
       this.personalizationData = personalizationData
-      this.userGeo = await fetchUserGeo()
+
+      try {
+        // Fetch user geolocation data
+        this.userGeo = await fetchUserGeo()
+      } catch (error) {
+        console.error('Error fetching user geolocation:', error)
+        this.userGeo = {}
+      }
+
       this.loading = false
     },
   }
