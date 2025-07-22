@@ -1,4 +1,4 @@
-import { m as R, c as o, a as P, b as n } from "./shared-dpXQ-LAr.js";
+import { m as A, c as o, a as r, b as n } from "./shared-dpXQ-LAr.js";
 const T = {
   STATES: {
     DEFAULT: "default",
@@ -7,13 +7,16 @@ const T = {
       IFRAME: "buyPropertyIFrame"
     },
     SPLIT_PROPERTY: {
-      TYPEFORM: "splitPropertyTypeform"
+      FILLOUT: "splitPropertyFillout"
     },
     INVEST: {
-      TYPEFORM: "investTypeform"
+      FILLOUT: "investFillout"
+    },
+    FINANCE: {
+      TYPEFORM: "financeTypeform"
     },
     SOMETHING_ELSE: {
-      TYPEFORM: "somethingElseTypeform"
+      FILLOUT: "somethingElseFillout"
     }
   },
   EVENTS: {
@@ -27,13 +30,16 @@ const T = {
     INVEST: {
       START: "INVEST_START"
     },
+    FINANCE: {
+      START: "FINANCE_START"
+    },
     SOMETHING_ELSE: {
       START: "SOMETHING_ELSE_START"
     },
     EXIT: "EXIT"
   }
 };
-function A(E) {
+function I(E) {
   const S = {
     [T.EVENTS.EXIT]: {
       target: T.STATES.DEFAULT
@@ -52,10 +58,13 @@ function A(E) {
             target: T.STATES.BUY_PROPERTY.IFRAME
           },
           [T.EVENTS.SPLIT_PROPERTY.START]: {
-            target: T.STATES.SPLIT_PROPERTY.TYPEFORM
+            target: T.STATES.SPLIT_PROPERTY.FILLOUT
           },
           [T.EVENTS.INVEST.START]: {
-            target: T.STATES.INVEST.TYPEFORM
+            target: T.STATES.INVEST.FILLOUT
+          },
+          [T.EVENTS.FINANCE.START]: {
+            target: T.STATES.FINANCE.TYPEFORM
           }
         }
       },
@@ -66,13 +75,16 @@ function A(E) {
             target: T.STATES.BUY_PROPERTY.IFRAME
           },
           [T.EVENTS.SPLIT_PROPERTY.START]: {
-            target: T.STATES.SPLIT_PROPERTY.TYPEFORM
+            target: T.STATES.SPLIT_PROPERTY.FILLOUT
           },
           [T.EVENTS.INVEST.START]: {
-            target: T.STATES.INVEST.TYPEFORM
+            target: T.STATES.INVEST.FILLOUT
+          },
+          [T.EVENTS.FINANCE.START]: {
+            target: T.STATES.FINANCE.TYPEFORM
           },
           [T.EVENTS.SOMETHING_ELSE.START]: {
-            target: T.STATES.SOMETHING_ELSE.TYPEFORM
+            target: T.STATES.SOMETHING_ELSE.FILLOUT
           }
         },
         effects: {
@@ -98,7 +110,7 @@ function A(E) {
           ]
         }
       },
-      [T.STATES.SPLIT_PROPERTY.TYPEFORM]: {
+      [T.STATES.SPLIT_PROPERTY.FILLOUT]: {
         transitions: {
           ...S
         },
@@ -113,7 +125,7 @@ function A(E) {
           ]
         }
       },
-      [T.STATES.INVEST.TYPEFORM]: {
+      [T.STATES.INVEST.FILLOUT]: {
         transitions: {
           ...S
         },
@@ -125,7 +137,19 @@ function A(E) {
           ]
         }
       },
-      [T.STATES.SOMETHING_ELSE.TYPEFORM]: {
+      [T.STATES.FINANCE.TYPEFORM]: {
+        transitions: {
+          ...S
+        },
+        effects: {
+          onEntry: [
+            (t) => {
+              E.track("Finance Flow Started", t);
+            }
+          ]
+        }
+      },
+      [T.STATES.SOMETHING_ELSE.FILLOUT]: {
         transitions: {
           ...S
         },
@@ -150,23 +174,24 @@ function s(E) {
         return [
           T.STATES.GET_STARTED_MODAL,
           T.STATES.BUY_PROPERTY.IFRAME,
-          T.STATES.SPLIT_PROPERTY.TYPEFORM,
-          T.STATES.INVEST.TYPEFORM,
-          T.STATES.SOMETHING_ELSE.TYPEFORM
-        ].includes(E.state.value);
+          T.STATES.SPLIT_PROPERTY.FILLOUT,
+          T.STATES.INVEST.FILLOUT,
+          T.STATES.FINANCE.TYPEFORM,
+          T.STATES.SOMETHING_ELSE.FILLOUT
+        ].includes(E.flowState.value);
       }
     }
   };
 }
-window.Alpine = R;
-const r = P(R), e = {}, a = n(window.FS, e);
-O();
-R.start();
-function O() {
-  e.flowState = r.createStore(
+window.Alpine = A;
+const a = r(A), e = {}, R = n(window.FS, e);
+P();
+A.start();
+function P() {
+  e.flowState = a.createStore(
     "flowState",
-    o(A(a), a)
-  ), e.flowUIHelpers = r.createStore(
+    o(I(R), R)
+  ), e.flowUIHelpers = a.createStore(
     "flowUIHelpers",
     s(e)
   );

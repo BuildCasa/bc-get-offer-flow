@@ -17,13 +17,16 @@ const flowConstants = {
       IFRAME: 'buyPropertyIFrame',
     },
     SPLIT_PROPERTY: {
-      TYPEFORM: 'splitPropertyTypeform',
+      FILLOUT: 'splitPropertyFillout',
     },
     INVEST: {
-      TYPEFORM: 'investTypeform',
+      FILLOUT: 'investFillout',
+    },
+    FINANCE: {
+      TYPEFORM: 'financeTypeform',
     },
     SOMETHING_ELSE: {
-      TYPEFORM: 'somethingElseTypeform',
+      FILLOUT: 'somethingElseFillout',
     },
   },
   EVENTS: {
@@ -36,6 +39,9 @@ const flowConstants = {
     },
     INVEST: {
       START: 'INVEST_START',
+    },
+    FINANCE: {
+      START: 'FINANCE_START',
     },
     SOMETHING_ELSE: {
       START: 'SOMETHING_ELSE_START',
@@ -72,10 +78,13 @@ function createFlowStateMachine(trackingService) {
             target: flowConstants.STATES.BUY_PROPERTY.IFRAME,
           },
           [flowConstants.EVENTS.SPLIT_PROPERTY.START]: {
-            target: flowConstants.STATES.SPLIT_PROPERTY.TYPEFORM,
+            target: flowConstants.STATES.SPLIT_PROPERTY.FILLOUT,
           },
           [flowConstants.EVENTS.INVEST.START]: {
-            target: flowConstants.STATES.INVEST.TYPEFORM,
+            target: flowConstants.STATES.INVEST.FILLOUT,
+          },
+          [flowConstants.EVENTS.FINANCE.START]: {
+            target: flowConstants.STATES.FINANCE.TYPEFORM,
           },
         },
       },
@@ -86,13 +95,16 @@ function createFlowStateMachine(trackingService) {
             target: flowConstants.STATES.BUY_PROPERTY.IFRAME,
           },
           [flowConstants.EVENTS.SPLIT_PROPERTY.START]: {
-            target: flowConstants.STATES.SPLIT_PROPERTY.TYPEFORM,
+            target: flowConstants.STATES.SPLIT_PROPERTY.FILLOUT,
           },
           [flowConstants.EVENTS.INVEST.START]: {
-            target: flowConstants.STATES.INVEST.TYPEFORM,
+            target: flowConstants.STATES.INVEST.FILLOUT,
+          },
+          [flowConstants.EVENTS.FINANCE.START]: {
+            target: flowConstants.STATES.FINANCE.TYPEFORM,
           },
           [flowConstants.EVENTS.SOMETHING_ELSE.START]: {
-            target: flowConstants.STATES.SOMETHING_ELSE.TYPEFORM,
+            target: flowConstants.STATES.SOMETHING_ELSE.FILLOUT,
           },
         },
         effects: {
@@ -118,7 +130,7 @@ function createFlowStateMachine(trackingService) {
           ],
         },
       },
-      [flowConstants.STATES.SPLIT_PROPERTY.TYPEFORM]: {
+      [flowConstants.STATES.SPLIT_PROPERTY.FILLOUT]: {
         transitions: {
           ...sharedExitTransition,
         },
@@ -133,7 +145,7 @@ function createFlowStateMachine(trackingService) {
           ],
         },
       },
-      [flowConstants.STATES.INVEST.TYPEFORM]: {
+      [flowConstants.STATES.INVEST.FILLOUT]: {
         transitions: {
           ...sharedExitTransition,
         },
@@ -145,7 +157,19 @@ function createFlowStateMachine(trackingService) {
           ],
         },
       },
-      [flowConstants.STATES.SOMETHING_ELSE.TYPEFORM]: {
+      [flowConstants.STATES.FINANCE.TYPEFORM]: {
+        transitions: {
+          ...sharedExitTransition,
+        },
+        effects: {
+          onEntry: [
+            (eventProperties) => {
+              trackingService.track('Finance Flow Started', eventProperties)
+            },
+          ],
+        },
+      },
+      [flowConstants.STATES.SOMETHING_ELSE.FILLOUT]: {
         transitions: {
           ...sharedExitTransition,
         },
@@ -173,12 +197,13 @@ function createFlowUIHelpers(globalStore) {
         const modalStates = [
           flowConstants.STATES.GET_STARTED_MODAL,
           flowConstants.STATES.BUY_PROPERTY.IFRAME,
-          flowConstants.STATES.SPLIT_PROPERTY.TYPEFORM,
-          flowConstants.STATES.INVEST.TYPEFORM,
-          flowConstants.STATES.SOMETHING_ELSE.TYPEFORM,
+          flowConstants.STATES.SPLIT_PROPERTY.FILLOUT,
+          flowConstants.STATES.INVEST.FILLOUT,
+          flowConstants.STATES.FINANCE.TYPEFORM,
+          flowConstants.STATES.SOMETHING_ELSE.FILLOUT,
         ]
 
-        return modalStates.includes(globalStore.state.value)
+        return modalStates.includes(globalStore.flowState.value)
       },
     },
   }
