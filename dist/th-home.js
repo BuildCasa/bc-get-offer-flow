@@ -14,6 +14,9 @@ const i = {
         MODAL: "modalGetStartedComplete"
       }
     },
+    BUYER_PROFILE: {
+      FORM: "modalBuyerProfileForm"
+    },
     BOOK_INTRO: {
       FORM: "modalBookIntroForm"
     },
@@ -33,6 +36,9 @@ const i = {
     },
     INTEREST_AREA_SEARCH: {
       SELECT: "INTEREST_AREA_SEARCH_SELECT"
+    },
+    BUYER_PROFILE: {
+      START: "BUYER_PROFILE_START"
     },
     BOOK_INTRO: {
       START: "BOOK_INTRO_START"
@@ -245,6 +251,19 @@ function H(a, e) {
       [i.STATES.GET_STARTED.COMPLETE.MODAL]: {
         transitions: {
           ...n,
+          [i.EVENTS.BUYER_PROFILE.START]: {
+            target: i.STATES.BUYER_PROFILE.FORM,
+            effects: {
+              onTransition: [
+                (o) => {
+                  e.track(
+                    "Fill Out Buyer Profile Clicked",
+                    o
+                  );
+                }
+              ]
+            }
+          },
           [i.EVENTS.BOOK_INTRO.START]: {
             target: i.STATES.BOOK_INTRO.FORM,
             effects: {
@@ -258,6 +277,11 @@ function H(a, e) {
               ]
             }
           }
+        }
+      },
+      [i.STATES.BUYER_PROFILE.FORM]: {
+        transitions: {
+          ...n
         }
       },
       [i.STATES.BOOK_INTRO.FORM]: {
@@ -346,6 +370,7 @@ function K(a) {
           i.STATES.GET_STARTED.INTEREST_AREA_FILLOUT_FORM_A1,
           i.STATES.GET_STARTED.INTEREST_AREA_FILLOUT_FORM_A2_ACTIONS,
           i.STATES.GET_STARTED.COMPLETE.MODAL,
+          i.STATES.BUYER_PROFILE.FORM,
           i.STATES.GET_VALUATION_REPORT.FORM,
           i.STATES.BOOK_INTRO.FORM,
           i.STATES.GET_GUIDES.FORM,
@@ -406,10 +431,10 @@ function j(a, e, t, n) {
     T((n = n.apply(a, e || [])).next());
   });
 }
-function $(a) {
+function Y(a) {
   return a && a.__esModule && Object.prototype.hasOwnProperty.call(a, "default") ? a.default : a;
 }
-var J = function a(e, t) {
+var $ = function a(e, t) {
   if (e === t)
     return !0;
   if (e && t && typeof e == "object" && typeof t == "object") {
@@ -443,7 +468,7 @@ var J = function a(e, t) {
     return !0;
   }
   return e !== e && t !== t;
-}, z = /* @__PURE__ */ $(J);
+}, J = /* @__PURE__ */ Y($);
 const L = "__googleMapsScriptId";
 var m;
 (function(a) {
@@ -461,7 +486,7 @@ class E {
    */
   constructor({ apiKey: e, authReferrerPolicy: t, channel: n, client: s, id: r = L, language: d, libraries: h = [], mapIds: o, nonce: T, region: l, retries: u = 3, url: A = "https://maps.googleapis.com/maps/api/js", version: g }) {
     if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = t, this.channel = n, this.client = s, this.id = r || L, this.language = d, this.libraries = h, this.mapIds = o, this.nonce = T, this.region = l, this.retries = u, this.url = A, this.version = g, E.instance) {
-      if (!z(this.options, E.instance.options))
+      if (!J(this.options, E.instance.options))
         throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(E.instance.options)}`);
       return E.instance;
     }
@@ -559,17 +584,17 @@ class E {
     ), !((t = (e = window == null ? void 0 : window.google) === null || e === void 0 ? void 0 : e.maps) === null || t === void 0) && t.importLibrary || ((r) => {
       let d, h, o, T = "The Google Maps JavaScript API", l = "google", u = "importLibrary", A = "__ib__", g = document, p = window;
       p = p[l] || (p[l] = {});
-      const f = p.maps || (p.maps = {}), O = /* @__PURE__ */ new Set(), C = new URLSearchParams(), P = () => (
+      const f = p.maps || (p.maps = {}), O = /* @__PURE__ */ new Set(), C = new URLSearchParams(), N = () => (
         // @ts-ignore
-        d || (d = new Promise((M, y) => j(this, void 0, void 0, function* () {
-          var F;
+        d || (d = new Promise((M, F) => j(this, void 0, void 0, function* () {
+          var y;
           yield h = g.createElement("script"), h.id = this.id, C.set("libraries", [...O] + "");
           for (o in r)
             C.set(o.replace(/[A-Z]/g, (D) => "_" + D[0].toLowerCase()), r[o]);
-          C.set("callback", l + ".maps." + A), h.src = this.url + "?" + C, f[A] = M, h.onerror = () => d = y(Error(T + " could not load.")), h.nonce = this.nonce || ((F = g.querySelector("script[nonce]")) === null || F === void 0 ? void 0 : F.nonce) || "", g.head.append(h);
+          C.set("callback", l + ".maps." + A), h.src = this.url + "?" + C, f[A] = M, h.onerror = () => d = F(Error(T + " could not load.")), h.nonce = this.nonce || ((y = g.querySelector("script[nonce]")) === null || y === void 0 ? void 0 : y.nonce) || "", g.head.append(h);
         })))
       );
-      f[u] ? console.warn(T + " only loads once. Ignoring:", r) : f[u] = (M, ...y) => O.add(M) && P().then(() => f[u](M, ...y));
+      f[u] ? console.warn(T + " only loads once. Ignoring:", r) : f[u] = (M, ...F) => O.add(M) && N().then(() => f[u](M, ...F));
     })(n);
     const s = this.libraries.map((r) => this.importLibrary(r));
     s.length || s.push(this.importLibrary("core")), Promise.all(s).then(() => this.callback(), (r) => {
@@ -613,8 +638,8 @@ class E {
       }
   }
 }
-const Y = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", q = new E({
-  apiKey: Y,
+const z = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", q = new E({
+  apiKey: z,
   version: "weekly"
 });
 let _ = null, I = null;
@@ -763,6 +788,7 @@ function te(a, e) {
 function ae(a) {
   return {
     // Instance properties
+    loading: !0,
     email: "",
     phone: "",
     /**
@@ -772,7 +798,7 @@ function ae(a) {
      * @returns {void}
      */
     init() {
-      this.email = (a == null ? void 0 : a.email) || "", this.phone = (a == null ? void 0 : a.phone) || "";
+      this.loading = !0, this.email = (a == null ? void 0 : a.email) || "", this.phone = (a == null ? void 0 : a.phone) || "", this.loading = !1;
     }
   };
 }
@@ -909,7 +935,7 @@ function de(a = {}) {
       return a.getContent("calcInputStep") || ce;
     },
     get formattedListPrice() {
-      return G(this.listPrice);
+      return P(this.listPrice);
     },
     get turboHomeFee() {
       return a.getContent("pricingModel") === "Split Commission" ? this.listPrice * this.commissionRate / 2 : this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
@@ -920,11 +946,11 @@ function de(a = {}) {
       );
     },
     get formattedCashBack() {
-      return G(this.cashBack);
+      return P(this.cashBack);
     }
   };
 }
-function G(a) {
+function P(a) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -1081,12 +1107,12 @@ const Te = {
     pricingModel: "Flat Fee"
   },
   state: "Hawaii"
-}, ye = {
+}, Fe = {
   content: {
     pricingModel: "Flat Fee"
   },
   state: "Idaho"
-}, Fe = {
+}, ye = {
   content: {
     pricingModel: "Flat Fee"
   },
@@ -1116,17 +1142,17 @@ const Te = {
     pricingModel: "Flat Fee"
   },
   state: "Louisiana"
-}, Ge = {
+}, Pe = {
   content: {
     pricingModel: "Flat Fee"
   },
   state: "Maine"
-}, Ne = {
+}, Ge = {
   content: {
     pricingModel: "Flat Fee"
   },
   state: "Maryland"
-}, Pe = {
+}, Ne = {
   content: {
     pricingModel: "Split Commission"
   },
@@ -1191,24 +1217,24 @@ const Te = {
     pricingModel: "Flat Fee"
   },
   state: "Tennessee"
-}, $e = {
+}, Ye = {
   content: {
     phoneNumberText: "(469) 564-1214",
     phoneNumberLink: "tel:+14695641214",
     pricingModel: "Flat Fee"
   },
   state: "Texas"
-}, Je = {
+}, $e = {
   content: {
     pricingModel: "Flat Fee"
   },
   state: "Utah"
-}, ze = {
+}, Je = {
   content: {
     pricingModel: "Flat Fee"
   },
   state: "Vermont"
-}, Ye = {
+}, ze = {
   content: {
     pricingModel: "Flat Fee"
   },
@@ -1670,16 +1696,16 @@ const Te = {
   Florida: Ce,
   Georgia: Me,
   Hawaii: Re,
-  Idaho: ye,
-  Illinois: Fe,
+  Idaho: Fe,
+  Illinois: ye,
   Indiana: _e,
   Iowa: Ie,
   Kansas: we,
   Kentucky: Oe,
   Louisiana: Le,
-  Maine: Ge,
-  Maryland: Ne,
-  Massachusetts: Pe,
+  Maine: Pe,
+  Maryland: Ge,
+  Massachusetts: Ne,
   Michigan: De,
   Minnesota: Ve,
   Mississippi: ke,
@@ -1746,10 +1772,10 @@ const Te = {
     state: "South Dakota"
   },
   Tennessee: je,
-  Texas: $e,
-  Utah: Je,
-  Vermont: ze,
-  Virginia: Ye,
+  Texas: Ye,
+  Utah: $e,
+  Vermont: Je,
+  Virginia: ze,
   Washington: qe,
   "West Virginia": {
     content: {
@@ -1780,16 +1806,16 @@ function et() {
      * @returns {void}
      */
     addGclid() {
-      const a = N("gclid");
+      const a = G("gclid");
       let e = null;
-      const t = N("gclsrc"), n = !t || t.indexOf("aw") !== -1;
+      const t = G("gclsrc"), n = !t || t.indexOf("aw") !== -1;
       a && n && (e = tt(a), localStorage.setItem("gclid", JSON.stringify(e)));
       const s = e || JSON.parse(localStorage.getItem("gclid"));
       s && (/* @__PURE__ */ new Date()).getTime() < s.expiryDate && (this.gclid = s.value);
     }
   };
 }
-function N(a) {
+function G(a) {
   const e = RegExp("[?&]" + a + "=([^&]*)").exec(window.location.search);
   return e && decodeURIComponent(e[1].replace(/\+/g, " "));
 }
