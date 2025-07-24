@@ -26,6 +26,7 @@ import {
 } from './modules/flows/THFlows'
 
 import { createInterestAreaViewModel } from './modules/models/THInterestAreaViewModel'
+import { createTHConvertedContactViewModel } from './modules/models/THConvertedContactViewModel'
 import { createTHGuidesDownloadViewModel } from './modules/models/THGuidesDownloadViewModel'
 import { createTHGuidesContactViewModel } from './modules/models/THGuidesContactViewModel'
 import { createTHCalculatorViewModel } from './modules/models/THCalculatorViewModel'
@@ -69,13 +70,35 @@ Alpine.start()
  * ----------------------------------------------------------------
  */
 function initStores() {
-  // Get the session URL and extract the flow_state query parameter
+  // Get the session URL to extract the query parameters associated with converted users
   const sessionURL = new URL(window.location.href)
+
+  // Determine the initial flow state based on the 'get_started' URL parameter
+  // If the user has completed the Get Started flow, set the initial state to the complete state
+  // Otherwise, set it to the default state
   const getStartedURLParam = sessionURL.searchParams.get('get_started')
-  const getStartedFlowState =
+  const getStartedParamComplete =
     getStartedURLParam && getStartedURLParam === 'complete'
-      ? flowConstants.STATES.GET_STARTED.COMPLETE.MODAL
-      : flowConstants.STATES.DEFAULT
+  const getStartedFlowState = getStartedParamComplete
+    ? flowConstants.STATES.GET_STARTED.COMPLETE.MODAL
+    : flowConstants.STATES.DEFAULT
+
+  // Check for converted user contact information in the 'user_email' and 'user_phone' URL parameters
+  const userEmail = sessionURL.searchParams.get('user_email')
+  const userPhone = sessionURL.searchParams.get('user_phone')
+
+  // If the user has completed the Get Started flow, and there is an email or phone number,
+  // Push that information to the Google Tag Manager data layer
+  if (getStartedParamComplete && (userEmail || userPhone)) {
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({
+      event: 'ec_form_submit',
+      user_data: {
+        email: userEmail || '',
+        phone_number: userPhone || '',
+      },
+    })
+  }
 
   // Create flow state and UI helpers stores
   $store.flowState = $storeFactory.createStore(
@@ -104,12 +127,17 @@ function initStores() {
     'adTrackingViewModel',
     createAdTrackingViewModel(),
   )
-
   $store.interestAreaViewModel = $storeFactory.createStore(
     'interestAreaViewModel',
     createInterestAreaViewModel($store.flowState, $trackingService),
   )
-
+  $store.thConvertedContactViewModel = $storeFactory.createStore(
+    'thConvertedContactViewModel',
+    createTHConvertedContactViewModel({
+      email: userEmail || '',
+      phone: userPhone || '',
+    }),
+  )
   $store.thGuidesContactViewModel = $storeFactory.createStore(
     'thGuidesContactViewModel',
     createTHGuidesContactViewModel($store.flowState),

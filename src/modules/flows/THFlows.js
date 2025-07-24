@@ -25,6 +25,9 @@ const flowConstants = {
         MODAL: 'modalGetStartedComplete',
       },
     },
+    BUYER_PROFILE: {
+      FORM: 'modalBuyerProfileForm',
+    },
     BOOK_INTRO: {
       FORM: 'modalBookIntroForm',
     },
@@ -44,6 +47,9 @@ const flowConstants = {
     },
     INTEREST_AREA_SEARCH: {
       SELECT: 'INTEREST_AREA_SEARCH_SELECT',
+    },
+    BUYER_PROFILE: {
+      START: 'BUYER_PROFILE_START',
     },
     BOOK_INTRO: {
       START: 'BOOK_INTRO_START',
@@ -307,6 +313,19 @@ function createFlowStateMachine(globalStore, trackingService) {
       [flowConstants.STATES.GET_STARTED.COMPLETE.MODAL]: {
         transitions: {
           ...getStartedCompleteExitTransition,
+          [flowConstants.EVENTS.BUYER_PROFILE.START]: {
+            target: flowConstants.STATES.BUYER_PROFILE.FORM,
+            effects: {
+              onTransition: [
+                (eventProperties) => {
+                  trackingService.track(
+                    'Fill Out Buyer Profile Clicked',
+                    eventProperties,
+                  )
+                },
+              ],
+            },
+          },
           [flowConstants.EVENTS.BOOK_INTRO.START]: {
             target: flowConstants.STATES.BOOK_INTRO.FORM,
             effects: {
@@ -320,6 +339,11 @@ function createFlowStateMachine(globalStore, trackingService) {
               ],
             },
           },
+        },
+      },
+      [flowConstants.STATES.BUYER_PROFILE.FORM]: {
+        transitions: {
+          ...getStartedCompleteExitTransition,
         },
       },
       [flowConstants.STATES.BOOK_INTRO.FORM]: {
@@ -414,6 +438,7 @@ function createFlowUIHelpers(globalStore) {
           flowConstants.STATES.GET_STARTED
             .INTEREST_AREA_FILLOUT_FORM_A2_ACTIONS,
           flowConstants.STATES.GET_STARTED.COMPLETE.MODAL,
+          flowConstants.STATES.BUYER_PROFILE.FORM,
           flowConstants.STATES.GET_VALUATION_REPORT.FORM,
           flowConstants.STATES.BOOK_INTRO.FORM,
           flowConstants.STATES.GET_GUIDES.FORM,

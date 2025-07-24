@@ -1,4 +1,4 @@
-import { m as w, c as k, a as V, b } from "./shared-dpXQ-LAr.js";
+import { m as w, c as V, a as k, b } from "./shared-dpXQ-LAr.js";
 import { v as U, t as B, c as v, d as x } from "./shared-nA7yK6XY.js";
 const i = {
   STATES: {
@@ -13,6 +13,9 @@ const i = {
         DEFAULT: "getStartedComplete",
         MODAL: "modalGetStartedComplete"
       }
+    },
+    BUYER_PROFILE: {
+      FORM: "modalBuyerProfileForm"
     },
     BOOK_INTRO: {
       FORM: "modalBookIntroForm"
@@ -33,6 +36,9 @@ const i = {
     },
     INTEREST_AREA_SEARCH: {
       SELECT: "INTEREST_AREA_SEARCH_SELECT"
+    },
+    BUYER_PROFILE: {
+      START: "BUYER_PROFILE_START"
     },
     BOOK_INTRO: {
       START: "BOOK_INTRO_START"
@@ -245,6 +251,19 @@ function H(a, e) {
       [i.STATES.GET_STARTED.COMPLETE.MODAL]: {
         transitions: {
           ...n,
+          [i.EVENTS.BUYER_PROFILE.START]: {
+            target: i.STATES.BUYER_PROFILE.FORM,
+            effects: {
+              onTransition: [
+                (o) => {
+                  e.track(
+                    "Fill Out Buyer Profile Clicked",
+                    o
+                  );
+                }
+              ]
+            }
+          },
           [i.EVENTS.BOOK_INTRO.START]: {
             target: i.STATES.BOOK_INTRO.FORM,
             effects: {
@@ -258,6 +277,11 @@ function H(a, e) {
               ]
             }
           }
+        }
+      },
+      [i.STATES.BUYER_PROFILE.FORM]: {
+        transitions: {
+          ...n
         }
       },
       [i.STATES.BOOK_INTRO.FORM]: {
@@ -346,6 +370,7 @@ function K(a) {
           i.STATES.GET_STARTED.INTEREST_AREA_FILLOUT_FORM_A1,
           i.STATES.GET_STARTED.INTEREST_AREA_FILLOUT_FORM_A2_ACTIONS,
           i.STATES.GET_STARTED.COMPLETE.MODAL,
+          i.STATES.BUYER_PROFILE.FORM,
           i.STATES.GET_VALUATION_REPORT.FORM,
           i.STATES.BOOK_INTRO.FORM,
           i.STATES.GET_GUIDES.FORM,
@@ -386,7 +411,7 @@ function j(a, e, t, n) {
     });
   }
   return new (t || (t = Promise))(function(r, d) {
-    function S(l) {
+    function h(l) {
       try {
         T(n.next(l));
       } catch (u) {
@@ -401,15 +426,15 @@ function j(a, e, t, n) {
       }
     }
     function T(l) {
-      l.done ? r(l.value) : s(l.value).then(S, o);
+      l.done ? r(l.value) : s(l.value).then(h, o);
     }
     T((n = n.apply(a, e || [])).next());
   });
 }
-function $(a) {
+function Y(a) {
   return a && a.__esModule && Object.prototype.hasOwnProperty.call(a, "default") ? a.default : a;
 }
-var J = function a(e, t) {
+var $ = function a(e, t) {
   if (e === t)
     return !0;
   if (e && t && typeof e == "object" && typeof t == "object") {
@@ -443,12 +468,12 @@ var J = function a(e, t) {
     return !0;
   }
   return e !== e && t !== t;
-}, z = /* @__PURE__ */ $(J);
+}, J = /* @__PURE__ */ Y($);
 const L = "__googleMapsScriptId";
-var g;
+var m;
 (function(a) {
   a[a.INITIALIZED = 0] = "INITIALIZED", a[a.LOADING = 1] = "LOADING", a[a.SUCCESS = 2] = "SUCCESS", a[a.FAILURE = 3] = "FAILURE";
-})(g || (g = {}));
+})(m || (m = {}));
 class E {
   /**
    * Creates an instance of Loader using [[LoaderOptions]]. No defaults are set
@@ -459,9 +484,9 @@ class E {
    * const loader = Loader({apiKey, version: 'weekly', libraries: ['places']});
    * ```
    */
-  constructor({ apiKey: e, authReferrerPolicy: t, channel: n, client: s, id: r = L, language: d, libraries: S = [], mapIds: o, nonce: T, region: l, retries: u = 3, url: A = "https://maps.googleapis.com/maps/api/js", version: m }) {
-    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = t, this.channel = n, this.client = s, this.id = r || L, this.language = d, this.libraries = S, this.mapIds = o, this.nonce = T, this.region = l, this.retries = u, this.url = A, this.version = m, E.instance) {
-      if (!z(this.options, E.instance.options))
+  constructor({ apiKey: e, authReferrerPolicy: t, channel: n, client: s, id: r = L, language: d, libraries: h = [], mapIds: o, nonce: T, region: l, retries: u = 3, url: A = "https://maps.googleapis.com/maps/api/js", version: g }) {
+    if (this.callbacks = [], this.done = !1, this.loading = !1, this.errors = [], this.apiKey = e, this.authReferrerPolicy = t, this.channel = n, this.client = s, this.id = r || L, this.language = d, this.libraries = h, this.mapIds = o, this.nonce = T, this.region = l, this.retries = u, this.url = A, this.version = g, E.instance) {
+      if (!J(this.options, E.instance.options))
         throw new Error(`Loader must not be called again with different options. ${JSON.stringify(this.options)} !== ${JSON.stringify(E.instance.options)}`);
       return E.instance;
     }
@@ -484,7 +509,7 @@ class E {
     };
   }
   get status() {
-    return this.errors.length ? g.FAILURE : this.done ? g.SUCCESS : this.loading ? g.LOADING : g.INITIALIZED;
+    return this.errors.length ? m.FAILURE : this.done ? m.SUCCESS : this.loading ? m.LOADING : m.INITIALIZED;
   }
   get failed() {
     return this.done && !this.loading && this.errors.length >= this.retries + 1;
@@ -557,19 +582,19 @@ class E {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r) => !n[r] && delete n[r]
     ), !((t = (e = window == null ? void 0 : window.google) === null || e === void 0 ? void 0 : e.maps) === null || t === void 0) && t.importLibrary || ((r) => {
-      let d, S, o, T = "The Google Maps JavaScript API", l = "google", u = "importLibrary", A = "__ib__", m = document, p = window;
+      let d, h, o, T = "The Google Maps JavaScript API", l = "google", u = "importLibrary", A = "__ib__", g = document, p = window;
       p = p[l] || (p[l] = {});
-      const f = p.maps || (p.maps = {}), O = /* @__PURE__ */ new Set(), C = new URLSearchParams(), P = () => (
+      const f = p.maps || (p.maps = {}), O = /* @__PURE__ */ new Set(), C = new URLSearchParams(), N = () => (
         // @ts-ignore
-        d || (d = new Promise((M, y) => j(this, void 0, void 0, function* () {
-          var F;
-          yield S = m.createElement("script"), S.id = this.id, C.set("libraries", [...O] + "");
+        d || (d = new Promise((M, F) => j(this, void 0, void 0, function* () {
+          var y;
+          yield h = g.createElement("script"), h.id = this.id, C.set("libraries", [...O] + "");
           for (o in r)
             C.set(o.replace(/[A-Z]/g, (D) => "_" + D[0].toLowerCase()), r[o]);
-          C.set("callback", l + ".maps." + A), S.src = this.url + "?" + C, f[A] = M, S.onerror = () => d = y(Error(T + " could not load.")), S.nonce = this.nonce || ((F = m.querySelector("script[nonce]")) === null || F === void 0 ? void 0 : F.nonce) || "", m.head.append(S);
+          C.set("callback", l + ".maps." + A), h.src = this.url + "?" + C, f[A] = M, h.onerror = () => d = F(Error(T + " could not load.")), h.nonce = this.nonce || ((y = g.querySelector("script[nonce]")) === null || y === void 0 ? void 0 : y.nonce) || "", g.head.append(h);
         })))
       );
-      f[u] ? console.warn(T + " only loads once. Ignoring:", r) : f[u] = (M, ...y) => O.add(M) && P().then(() => f[u](M, ...y));
+      f[u] ? console.warn(T + " only loads once. Ignoring:", r) : f[u] = (M, ...F) => O.add(M) && N().then(() => f[u](M, ...F));
     })(n);
     const s = this.libraries.map((r) => this.importLibrary(r));
     s.length || s.push(this.importLibrary("core")), Promise.all(s).then(() => this.callback(), (r) => {
@@ -613,27 +638,27 @@ class E {
       }
   }
 }
-const Y = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", q = new E({
-  apiKey: Y,
+const z = "AIzaSyCOAucx7oi5vgR0w5CUfLj6G67YZINBSMc", q = new E({
+  apiKey: z,
   version: "weekly"
 });
-let I = null, _ = null;
+let _ = null, I = null;
 async function X() {
   try {
     const a = await q.importLibrary("places");
-    I = a.AutocompleteSuggestion, _ = a.AutocompleteSessionToken;
+    _ = a.AutocompleteSuggestion, I = a.AutocompleteSessionToken;
   } catch (a) {
     console.error("Error loading Google Maps Places library:", a);
   }
 }
 function Z() {
-  if (_)
-    return new _();
+  if (I)
+    return new I();
 }
 async function Q(a, e) {
-  if (I)
+  if (_)
     try {
-      const { suggestions: t } = await I.fetchAutocompleteSuggestions({
+      const { suggestions: t } = await _.fetchAutocompleteSuggestions({
         input: a,
         language: "en-US",
         region: "us",
@@ -763,6 +788,23 @@ function te(a, e) {
 function ae(a) {
   return {
     // Instance properties
+    loading: !0,
+    email: "",
+    phone: "",
+    /**
+     * Initializes the THConvertedContactViewModel instance properties.
+     * Run automatically by Alpine, but can also be called manually to reset the view model state.
+     * Need to call this manually on store creation if we stop using Alpine as our UI library.
+     * @returns {void}
+     */
+    init() {
+      this.loading = !0, this.email = (a == null ? void 0 : a.email) || "", this.phone = (a == null ? void 0 : a.phone) || "", this.loading = !1;
+    }
+  };
+}
+function ie(a) {
+  return {
+    // Instance properties
     GUIDES: {
       HOMEBUYING: "homebuying",
       OFFERS: "offers",
@@ -797,7 +839,7 @@ function ae(a) {
     }
   };
 }
-function ie(a) {
+function ne(a) {
   return {
     // Instance properties
     firstName: "",
@@ -833,8 +875,8 @@ function ie(a) {
     }
   };
 }
-const ne = 0.03, oe = 15e5, se = 5e6, re = 25e4, le = 5e4;
-function ce(a = {}) {
+const oe = 0.03, se = 15e5, re = 5e6, le = 25e4, ce = 5e4;
+function de(a = {}) {
   return {
     listPrice: null,
     init: function() {
@@ -846,7 +888,7 @@ function ce(a = {}) {
      * @type {number}
      */
     get commissionRate() {
-      return a.getContent("calcCommissionRate") || ne;
+      return a.getContent("calcCommissionRate") || oe;
     },
     /**
      * Computed property that returns the value of the calcDefaultlistPrice key in the personalizationViewModel
@@ -857,7 +899,7 @@ function ce(a = {}) {
      * @type {number}
      */
     get defaultListPrice() {
-      return a.getContent("calcDefaultListPrice") || oe;
+      return a.getContent("calcDefaultListPrice") || se;
     },
     /**
      * Computed property that returns the value of the calcMaxlistPrice key in the personalizationViewModel
@@ -868,7 +910,7 @@ function ce(a = {}) {
      * @type {number}
      */
     get maxListPrice() {
-      return a.getContent("calcMaxListPrice") || se;
+      return a.getContent("calcMaxListPrice") || re;
     },
     /**
      * Computed property that returns the value of the calcMinlistPrice key in the personalizationViewModel
@@ -879,7 +921,7 @@ function ce(a = {}) {
      * @type {number}
      */
     get minListPrice() {
-      return a.getContent("calcMinListPrice") || re;
+      return a.getContent("calcMinListPrice") || le;
     },
     /**
      * Computed property that returns the value of the calcInputStep key in the personalizationViewModel
@@ -890,10 +932,10 @@ function ce(a = {}) {
      * @type {number}
      */
     get inputStep() {
-      return a.getContent("calcInputStep") || le;
+      return a.getContent("calcInputStep") || ce;
     },
     get formattedListPrice() {
-      return G(this.listPrice);
+      return P(this.listPrice);
     },
     get turboHomeFee() {
       return a.getContent("pricingModel") === "Split Commission" ? this.listPrice * this.commissionRate / 2 : this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
@@ -904,18 +946,18 @@ function ce(a = {}) {
       );
     },
     get formattedCashBack() {
-      return G(this.cashBack);
+      return P(this.cashBack);
     }
   };
 }
-function G(a) {
+function P(a) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0
   }).format(a);
 }
-const de = {
+const Te = {
   content: {
     phoneNumberText: "(888) 516-6331",
     phoneNumberLink: "tel:+18885166331",
@@ -926,7 +968,7 @@ const de = {
     calcMinListPrice: 25e4,
     calcInputStep: 5e4
   }
-}, Te = {
+}, ue = {
   content: {
     phoneNumberText: "(510) 391-5392",
     phoneNumberLink: "tel:+15103915392"
@@ -1008,7 +1050,7 @@ const de = {
     "Woodland",
     "Yolo"
   ]
-}, ue = {
+}, he = {
   content: {
     pricingModel: "Flat Fee"
   },
@@ -1018,12 +1060,12 @@ const de = {
     pricingModel: "Flat Fee"
   },
   state: "Alabama"
-}, he = {
+}, Ee = {
   content: {
     pricingModel: "Flat Fee"
   },
   state: "Arkansas"
-}, Ee = {
+}, me = {
   content: {
     pricingModel: "Flat Fee"
   },
@@ -1035,37 +1077,37 @@ const de = {
     pricingModel: "Flat Fee"
   },
   state: "California"
-}, me = {
-  content: {
-    pricingModel: "Flat Fee"
-  },
-  state: "Colorado"
 }, pe = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Connecticut"
+  state: "Colorado"
 }, Ae = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Delaware"
+  state: "Connecticut"
 }, fe = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Florida"
+  state: "Delaware"
 }, Ce = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Georgia"
+  state: "Florida"
 }, Me = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Hawaii"
+  state: "Georgia"
 }, Re = {
+  content: {
+    pricingModel: "Flat Fee"
+  },
+  state: "Hawaii"
+}, Fe = {
   content: {
     pricingModel: "Flat Fee"
   },
@@ -1075,7 +1117,7 @@ const de = {
     pricingModel: "Flat Fee"
   },
   state: "Illinois"
-}, Fe = {
+}, _e = {
   content: {
     pricingModel: "Flat Fee"
   },
@@ -1085,22 +1127,22 @@ const de = {
     pricingModel: "Flat Fee"
   },
   state: "Iowa"
-}, _e = {
-  content: {
-    pricingModel: "Flat Fee"
-  },
-  state: "Kansas"
 }, we = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Kentucky"
+  state: "Kansas"
 }, Oe = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Louisiana"
+  state: "Kentucky"
 }, Le = {
+  content: {
+    pricingModel: "Flat Fee"
+  },
+  state: "Louisiana"
+}, Pe = {
   content: {
     pricingModel: "Flat Fee"
   },
@@ -1115,12 +1157,12 @@ const de = {
     pricingModel: "Split Commission"
   },
   state: "Massachusetts"
-}, Pe = {
+}, De = {
   content: {
     pricingModel: "Flat Fee"
   },
   state: "Michigan"
-}, De = {
+}, Ve = {
   content: {
     pricingModel: "Flat Fee"
   },
@@ -1130,52 +1172,52 @@ const de = {
     pricingModel: "Flat Fee"
   },
   state: "Mississippi"
-}, Ve = {
-  content: {
-    pricingModel: "Flat Fee"
-  },
-  state: "Missouri"
 }, be = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Montana"
+  state: "Missouri"
 }, Ue = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Nebraska"
+  state: "Montana"
 }, Be = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Nevada"
+  state: "Nebraska"
 }, ve = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Ohio"
+  state: "Nevada"
 }, xe = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Oklahoma"
+  state: "Ohio"
 }, He = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Oregon"
+  state: "Oklahoma"
 }, Ke = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Pennsylvania"
+  state: "Oregon"
 }, We = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Tennessee"
+  state: "Pennsylvania"
 }, je = {
+  content: {
+    pricingModel: "Flat Fee"
+  },
+  state: "Tennessee"
+}, Ye = {
   content: {
     phoneNumberText: "(469) 564-1214",
     phoneNumberLink: "tel:+14695641214",
@@ -1197,23 +1239,23 @@ const de = {
     pricingModel: "Flat Fee"
   },
   state: "Virginia"
-}, Ye = {
+}, qe = {
   content: {
     pricingModel: "Split Commission"
   },
   state: "Washington"
-}, qe = {
-  content: {
-    pricingModel: "Flat Fee"
-  },
-  state: "Wisconsin"
 }, Xe = {
   content: {
     pricingModel: "Flat Fee"
   },
-  state: "Wyoming"
+  state: "Wisconsin"
 }, Ze = {
-  DEFAULT: de,
+  content: {
+    pricingModel: "Flat Fee"
+  },
+  state: "Wyoming"
+}, Qe = {
+  DEFAULT: Te,
   "Bay Area": {
     content: {
       phoneNumberText: "(510) 391-5392",
@@ -1499,7 +1541,7 @@ const de = {
       "Windsor"
     ]
   },
-  Sacramento: Te,
+  Sacramento: ue,
   "Southern California": {
     content: {
       phoneNumberText: "(323) 310-3103",
@@ -1643,34 +1685,34 @@ const de = {
       "Wildomar"
     ]
   },
-  Alaska: ue,
+  Alaska: he,
   Alabama: Se,
-  Arkansas: he,
-  Arizona: Ee,
+  Arkansas: Ee,
+  Arizona: me,
   California: ge,
-  Colorado: me,
-  Connecticut: pe,
-  Delaware: Ae,
-  Florida: fe,
-  Georgia: Ce,
-  Hawaii: Me,
-  Idaho: Re,
+  Colorado: pe,
+  Connecticut: Ae,
+  Delaware: fe,
+  Florida: Ce,
+  Georgia: Me,
+  Hawaii: Re,
+  Idaho: Fe,
   Illinois: ye,
-  Indiana: Fe,
+  Indiana: _e,
   Iowa: Ie,
-  Kansas: _e,
-  Kentucky: we,
-  Louisiana: Oe,
-  Maine: Le,
+  Kansas: we,
+  Kentucky: Oe,
+  Louisiana: Le,
+  Maine: Pe,
   Maryland: Ge,
   Massachusetts: Ne,
-  Michigan: Pe,
-  Minnesota: De,
+  Michigan: De,
+  Minnesota: Ve,
   Mississippi: ke,
-  Missouri: Ve,
-  Montana: be,
-  Nebraska: Ue,
-  Nevada: Be,
+  Missouri: be,
+  Montana: Ue,
+  Nebraska: Be,
+  Nevada: ve,
   "New Hampshire": {
     content: {
       pricingModel: "Flat Fee"
@@ -1707,10 +1749,10 @@ const de = {
     },
     state: "North Dakota"
   },
-  Ohio: ve,
-  Oklahoma: xe,
-  Oregon: He,
-  Pennsylvania: Ke,
+  Ohio: xe,
+  Oklahoma: He,
+  Oregon: Ke,
+  Pennsylvania: We,
   "Rhode Island": {
     content: {
       pricingModel: "Flat Fee"
@@ -1729,22 +1771,22 @@ const de = {
     },
     state: "South Dakota"
   },
-  Tennessee: We,
-  Texas: je,
+  Tennessee: je,
+  Texas: Ye,
   Utah: $e,
   Vermont: Je,
   Virginia: ze,
-  Washington: Ye,
+  Washington: qe,
   "West Virginia": {
     content: {
       pricingModel: "Flat Fee"
     },
     state: "West Virginia"
   },
-  Wisconsin: qe,
-  Wyoming: Xe
+  Wisconsin: Xe,
+  Wyoming: Ze
 };
-function Qe() {
+function et() {
   return {
     gclid: null,
     /**
@@ -1764,20 +1806,20 @@ function Qe() {
      * @returns {void}
      */
     addGclid() {
-      const a = N("gclid");
+      const a = G("gclid");
       let e = null;
-      const t = N("gclsrc"), n = !t || t.indexOf("aw") !== -1;
-      a && n && (e = et(a), localStorage.setItem("gclid", JSON.stringify(e)));
+      const t = G("gclsrc"), n = !t || t.indexOf("aw") !== -1;
+      a && n && (e = tt(a), localStorage.setItem("gclid", JSON.stringify(e)));
       const s = e || JSON.parse(localStorage.getItem("gclid"));
       s && (/* @__PURE__ */ new Date()).getTime() < s.expiryDate && (this.gclid = s.value);
     }
   };
 }
-function N(a) {
+function G(a) {
   const e = RegExp("[?&]" + a + "=([^&]*)").exec(window.location.search);
   return e && decodeURIComponent(e[1].replace(/\+/g, " "));
 }
-function et(a) {
+function tt(a) {
   const t = (/* @__PURE__ */ new Date()).getTime() + 7776e6;
   return {
     value: a,
@@ -1785,46 +1827,58 @@ function et(a) {
   };
 }
 window.Alpine = w;
-const h = V(w), c = {}, R = b(window.FS, c);
-tt();
+const S = k(w), c = {}, R = b(window.FS, c);
 at();
+it();
 w.start();
-function tt() {
-  const e = new URL(window.location.href).searchParams.get("get_started"), t = e && e === "complete" ? i.STATES.GET_STARTED.COMPLETE.MODAL : i.STATES.DEFAULT;
-  c.flowState = h.createStore(
+function at() {
+  const a = new URL(window.location.href), e = a.searchParams.get("get_started"), t = e && e === "complete", n = t ? i.STATES.GET_STARTED.COMPLETE.MODAL : i.STATES.DEFAULT, s = a.searchParams.get("user_email"), r = a.searchParams.get("user_phone");
+  t && (s || r) && (window.dataLayer = window.dataLayer || [], window.dataLayer.push({
+    event: "ec_form_submit",
+    user_data: {
+      email: s || "",
+      phone_number: r || ""
+    }
+  })), c.flowState = S.createStore(
     "flowState",
-    k(
+    V(
       H(c, R),
       R,
-      t
+      n
     )
-  ), c.flowUIHelpers = h.createStore(
+  ), c.flowUIHelpers = S.createStore(
     "flowUIHelpers",
     K(c)
-  ), c.personalizationViewModel = h.createStore(
+  ), c.personalizationViewModel = S.createStore(
     "personalizationViewModel",
-    v(Ze)
-  ), c.experimentationViewModel = h.createStore(
+    v(Qe)
+  ), c.experimentationViewModel = S.createStore(
     "experimentationViewModel",
     x()
-  ), c.adTrackingViewModel = h.createStore(
+  ), c.adTrackingViewModel = S.createStore(
     "adTrackingViewModel",
-    Qe()
-  ), c.interestAreaViewModel = h.createStore(
+    et()
+  ), c.interestAreaViewModel = S.createStore(
     "interestAreaViewModel",
     te(c.flowState, R)
-  ), c.thGuidesContactViewModel = h.createStore(
+  ), c.thConvertedContactViewModel = S.createStore(
+    "thConvertedContactViewModel",
+    ae({
+      email: s || "",
+      phone: r || ""
+    })
+  ), c.thGuidesContactViewModel = S.createStore(
     "thGuidesContactViewModel",
-    ie(c.flowState)
-  ), c.thGuidesDownloadViewModel = h.createStore(
+    ne(c.flowState)
+  ), c.thGuidesDownloadViewModel = S.createStore(
     "thGuidesDownloadViewModel",
-    ae(c)
-  ), c.thCalculatorViewModel = h.createStore(
+    ie(c)
+  ), c.thCalculatorViewModel = S.createStore(
     "thCalculatorViewModel",
-    ce(c.personalizationViewModel)
+    de(c.personalizationViewModel)
   );
 }
-function at() {
+function it() {
   if (c.flowState.value === i.STATES.DEFAULT) {
     const e = "interest-area-typeahead-2025-06", t = Math.random();
     let n = "existing-button-cta-fillout-form";
