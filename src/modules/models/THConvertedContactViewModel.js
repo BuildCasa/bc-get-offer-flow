@@ -18,6 +18,7 @@
 function createTHConvertedContactViewModel(contactInfo) {
   return {
     // Instance properties
+    loading: true,
     email: '',
     phone: '',
 
@@ -28,8 +29,10 @@ function createTHConvertedContactViewModel(contactInfo) {
      * @returns {void}
      */
     init() {
+      this.loading = true
       this.email = contactInfo?.email || ''
       this.phone = contactInfo?.phone || ''
+      this.loading = false
     },
   }
 }
