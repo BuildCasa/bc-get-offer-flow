@@ -5,6 +5,7 @@
       "phoneNumberLink": "tel:+18885166331",
       "pricingModel": "Split Commission",
       "calcCommissionRate": 0.03,
+      "calcSplitCommissionRate": 0.01,
       "calcDefaultListPrice": 1500000,
       "calcMaxListPrice": 5000000,
       "calcMinListPrice": 250000,
@@ -14,7 +15,8 @@
   "Bay Area": {
     "content": {
       "phoneNumberText": "(510) 391-5392",
-      "phoneNumberLink": "tel:+15103915392"
+      "phoneNumberLink": "tel:+15103915392",
+      "pricingModel": "Flat Fee"
     },
     "state": "California",
     "cities": [
@@ -299,7 +301,8 @@
   "Sacramento": {
     "content": {
       "phoneNumberText": "(510) 391-5392",
-      "phoneNumberLink": "tel:+15103915392"
+      "phoneNumberLink": "tel:+15103915392",
+      "pricingModel": "Flat Fee"
     },
     "state": "California",
     "cities": [
@@ -382,7 +385,8 @@
   "Southern California": {
     "content": {
       "phoneNumberText": "(323) 310-3103",
-      "phoneNumberLink": "tel:+13233103103"
+      "phoneNumberLink": "tel:+13233103103",
+      "pricingModel": "Flat Fee"
     },
     "state": "California",
     "cities": [
