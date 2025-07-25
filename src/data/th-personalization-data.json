@@ -3,8 +3,9 @@
     "content": {
       "phoneNumberText": "(888) 516-6331",
       "phoneNumberLink": "tel:+18885166331",
-      "pricingModel": "Flat Fee",
+      "pricingModel": "Split Commission",
       "calcCommissionRate": 0.03,
+      "calcSplitCommissionRate": 0.01,
       "calcDefaultListPrice": 1500000,
       "calcMaxListPrice": 5000000,
       "calcMinListPrice": 250000,
@@ -14,7 +15,8 @@
   "Bay Area": {
     "content": {
       "phoneNumberText": "(510) 391-5392",
-      "phoneNumberLink": "tel:+15103915392"
+      "phoneNumberLink": "tel:+15103915392",
+      "pricingModel": "Flat Fee"
     },
     "state": "California",
     "cities": [
@@ -299,7 +301,8 @@
   "Sacramento": {
     "content": {
       "phoneNumberText": "(510) 391-5392",
-      "phoneNumberLink": "tel:+15103915392"
+      "phoneNumberLink": "tel:+15103915392",
+      "pricingModel": "Flat Fee"
     },
     "state": "California",
     "cities": [
@@ -382,7 +385,8 @@
   "Southern California": {
     "content": {
       "phoneNumberText": "(323) 310-3103",
-      "phoneNumberLink": "tel:+13233103103"
+      "phoneNumberLink": "tel:+13233103103",
+      "pricingModel": "Flat Fee"
     },
     "state": "California",
     "cities": [
@@ -524,25 +528,25 @@
   },
   "Alaska": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Alaska"
   },
   "Alabama": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Alabama"
   },
   "Arkansas": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Arkansas"
   },
   "Arizona": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Arizona"
   },
@@ -556,91 +560,91 @@
   },
   "Colorado": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Colorado"
   },
   "Connecticut": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Connecticut"
   },
   "Delaware": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Delaware"
   },
   "Florida": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Florida"
   },
   "Georgia": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Georgia"
   },
   "Hawaii": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Hawaii"
   },
   "Idaho": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Idaho"
   },
   "Illinois": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Illinois"
   },
   "Indiana": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Indiana"
   },
   "Iowa": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Iowa"
   },
   "Kansas": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Kansas"
   },
   "Kentucky": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Kentucky"
   },
   "Louisiana": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Louisiana"
   },
   "Maine": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Maine"
   },
   "Maryland": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Maryland"
   },
@@ -652,61 +656,61 @@
   },
   "Michigan": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Michigan"
   },
   "Minnesota": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Minnesota"
   },
   "Mississippi": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Mississippi"
   },
   "Missouri": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Missouri"
   },
   "Montana": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Montana"
   },
   "Nebraska": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Nebraska"
   },
   "Nevada": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Nevada"
   },
   "New Hampshire": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "New Hampshire"
   },
   "New Jersey": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "New Jersey"
   },
   "New Mexico": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "New Mexico"
   },
@@ -718,61 +722,61 @@
   },
   "North Carolina": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "North Carolina"
   },
   "North Dakota": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "North Dakota"
   },
   "Ohio": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Ohio"
   },
   "Oklahoma": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Oklahoma"
   },
   "Oregon": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Oregon"
   },
   "Pennsylvania": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Pennsylvania"
   },
   "Rhode Island": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Rhode Island"
   },
   "South Carolina": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "South Carolina"
   },
   "South Dakota": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "South Dakota"
   },
   "Tennessee": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Tennessee"
   },
@@ -786,19 +790,19 @@
   },
   "Utah": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Utah"
   },
   "Vermont": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Vermont"
   },
   "Virginia": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Virginia"
   },
@@ -810,19 +814,19 @@
   },
   "West Virginia": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "West Virginia"
   },
   "Wisconsin": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Wisconsin"
   },
   "Wyoming": {
     "content": {
-      "pricingModel": "Flat Fee"
+      "pricingModel": "Split Commission"
     },
     "state": "Wyoming"
   }

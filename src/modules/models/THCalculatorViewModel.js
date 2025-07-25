@@ -4,6 +4,7 @@
  * ----------------------------------------------------------------
  */
 const FALLBACK_COMMISSION_RATE = 0.03
+const FALLBACK_SPLIT_COMMISSION_RATE = 0.01
 const FALLBACK_DEFAULT_LIST_PRICE = 1500000
 const FALLBACK_MAX_LIST_PRICE = 5000000
 const FALLBACK_MIN_LIST_PRICE = 250000
@@ -31,6 +32,18 @@ function createTHCalculatorViewModel(personalizationViewModel = {}) {
       return (
         personalizationViewModel.getContent('calcCommissionRate') ||
         FALLBACK_COMMISSION_RATE
+      )
+    },
+
+    /**
+     * Computed property that returns the value of the calcSplitCommissionRate key in the personalizationViewModel
+     *
+     * @type {number}
+     */
+    get splitCommissionRate() {
+      return (
+        personalizationViewModel.getContent('calcSplitCommissionRate') ||
+        FALLBACK_SPLIT_COMMISSION_RATE
       )
     },
 
@@ -104,7 +117,7 @@ function createTHCalculatorViewModel(personalizationViewModel = {}) {
         personalizationViewModel.getContent('pricingModel') ===
         'Split Commission'
       ) {
-        return (this.listPrice * this.commissionRate) / 2
+        return this.listPrice * (this.commissionRate - this.splitCommissionRate)
       }
 
       // Otherwise, the Turbo Home Fee is a flat fee based on the list price
