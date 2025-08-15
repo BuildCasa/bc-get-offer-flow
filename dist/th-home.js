@@ -875,7 +875,7 @@ function oe(i) {
     }
   };
 }
-const ne = 0.03, se = 0.01, re = 15e5, le = 5e6, ce = 25e4, de = 5e4;
+const ne = 0.03, se = 0.01, re = 15e5, le = 75e5, ce = 25e4, de = 5e4;
 function Se(i = {}) {
   return {
     listPrice: null,
@@ -946,7 +946,7 @@ function Se(i = {}) {
       return G(this.listPrice);
     },
     get turboHomeFee() {
-      return i.getContent("pricingModel") === "Split Commission" ? this.listPrice * (this.commissionRate - this.splitCommissionRate) : this.listPrice <= 5e5 ? 5e3 : this.listPrice <= 1e6 ? 7500 : this.listPrice <= 2e6 ? 1e4 : 15e3;
+      return i.getContent("pricingModel") === "Split Commission" ? this.listPrice * (this.commissionRate - this.splitCommissionRate) : this.listPrice <= 5e5 ? 6e3 : this.listPrice <= 1e6 ? 9e3 : this.listPrice <= 2e6 ? 12e3 : this.listPrice <= 3e6 ? 15e3 : this.listPrice <= 5e6 ? 2e4 : 3e4;
     },
     get cashBack() {
       return Math.round(
@@ -973,7 +973,7 @@ const Te = {
     calcCommissionRate: 0.03,
     calcSplitCommissionRate: 0.01,
     calcDefaultListPrice: 15e5,
-    calcMaxListPrice: 5e6,
+    calcMaxListPrice: 75e5,
     calcMinListPrice: 25e4,
     calcInputStep: 5e4
   }
