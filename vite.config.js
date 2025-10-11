@@ -15,6 +15,10 @@ const ENTRY_FILES = [
     inputPath: './src/th-home.js',
     outputName: 'th-home',
   },
+  {
+    inputPath: './src/th-sell.js',
+    outputName: 'th-sell',
+  },
 ]
 
 export default defineConfig({
