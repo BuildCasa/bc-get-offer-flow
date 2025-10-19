@@ -241,7 +241,7 @@ const w = {
     calcCommissionRate: 0.03,
     calcSplitCommissionRate: 0.01,
     calcDefaultListPrice: 5e5,
-    calcMaxListPrice: 5e6,
+    calcMaxListPrice: 3e6,
     calcMinListPrice: 1e5,
     calcInputStep: 5e4
   }
