@@ -145,11 +145,12 @@ function initStores() {
 function initExperiments() {
   // Initialize an experiment to test the new (Feb 2025) address typeahead flow vs old typeform flow
   // If the user has already completed the Get Started flow, then they should not see the experiment
-  const includeAddressTypeaheadExperiment =
-    $store.flowState.value === flowConstants.STATES.DEFAULT
+  const includeSellFilloutFormsExperiment =
+    // $store.flowState.value === flowConstants.STATES.DEFAULT
+    false // Temporarily disable the experiment
 
   // If including in the Address Typeahead experiment
-  if (includeAddressTypeaheadExperiment) {
+  if (includeSellFilloutFormsExperiment) {
     // Create an experiment id slug, and determine the experiment variant
     const experiment = 'sell-launch-fillout-forms-2025-10'
 
