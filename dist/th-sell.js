@@ -1,7 +1,7 @@
-import { m as s, c as O, a as c, b as _ } from "./shared-dpXQ-LAr.js";
-import { a as d, b as L, d as F, e as M } from "./shared-vuDP1x0y.js";
+import { m as l, c as A, a as _, b as c } from "./shared-dpXQ-LAr.js";
+import { a as L, b as d, d as F, e as M } from "./shared-vuDP1x0y.js";
 import { c as m, d as f } from "./shared-nA7yK6XY.js";
-const e = {
+const t = {
   STATES: {
     DEFAULT: "default",
     GET_STARTED: {
@@ -40,77 +40,77 @@ const e = {
     EXIT: "EXIT"
   }
 };
-function u(a, T) {
+function I(E, T) {
   const n = {
-    [e.EVENTS.EXIT]: {
-      target: e.STATES.DEFAULT,
+    [t.EVENTS.EXIT]: {
+      target: t.STATES.DEFAULT,
       effects: {
         onTransition: [
-          (t) => {
-            T == null || T.track("Modal Closed", t);
+          (e) => {
+            T == null || T.track("Modal Closed", e);
           }
         ]
       }
     }
   }, r = {
-    [e.EVENTS.EXIT]: {
-      target: e.STATES.GET_STARTED.COMPLETE.DEFAULT,
+    [t.EVENTS.EXIT]: {
+      target: t.STATES.GET_STARTED.COMPLETE.DEFAULT,
       effects: {
         onTransition: [
-          (t) => {
-            T == null || T.track("Modal Closed", t);
+          (e) => {
+            T == null || T.track("Modal Closed", e);
           }
         ]
       }
     }
   };
   return {
-    constants: e,
-    defaultState: e.STATES.DEFAULT,
+    constants: t,
+    defaultState: t.STATES.DEFAULT,
     states: {
-      [e.STATES.DEFAULT]: {
+      [t.STATES.DEFAULT]: {
         transitions: {
-          [e.EVENTS.GET_STARTED.START]: () => {
-            var A;
-            let t = e.STATES.GET_STARTED.SELL_FILLOUT_FORM_1;
-            const S = (A = a.experimentationViewModel) == null ? void 0 : A.getActiveExperimentVariation(
+          [t.EVENTS.GET_STARTED.START]: () => {
+            var R;
+            let e = t.STATES.GET_STARTED.SELL_FILLOUT_FORM_1;
+            const s = (R = E.experimentationViewModel) == null ? void 0 : R.getActiveExperimentVariation(
               "sell-launch-fillout-forms-2025-10"
             );
-            return S && S === "sell-fillout-form-2" && (t = e.STATES.GET_STARTED.SELL_FILLOUT_FORM_2), {
-              target: t,
+            return s && s === "sell-fillout-form-2" && (e = t.STATES.GET_STARTED.SELL_FILLOUT_FORM_2), {
+              target: e,
               effects: {
                 onTransition: [
-                  (R) => {
+                  (O) => {
                     T.track(
                       "Get Started Clicked",
-                      R
+                      O
                     );
                   }
                 ]
               }
             };
           },
-          [e.EVENTS.BOOK_INTRO.START]: {
-            target: e.STATES.BOOK_INTRO.FORM,
+          [t.EVENTS.BOOK_INTRO.START]: {
+            target: t.STATES.BOOK_INTRO.FORM,
             effects: {
               onTransition: [
-                (t) => {
+                (e) => {
                   T.track(
                     "Book Intro Call Clicked",
-                    t
+                    e
                   );
                 }
               ]
             }
           },
-          [e.EVENTS.GET_VALUATION_REPORT.START]: {
-            target: e.STATES.GET_VALUATION_REPORT.FORM,
+          [t.EVENTS.GET_VALUATION_REPORT.START]: {
+            target: t.STATES.GET_VALUATION_REPORT.FORM,
             effects: {
               onTransition: [
-                (t) => {
+                (e) => {
                   T.track(
                     "Get Valuation Report Clicked",
-                    t
+                    e
                   );
                 }
               ]
@@ -118,49 +118,49 @@ function u(a, T) {
           }
         }
       },
-      [e.STATES.GET_STARTED.SELL_FILLOUT_FORM_1]: {
+      [t.STATES.GET_STARTED.SELL_FILLOUT_FORM_1]: {
         transitions: {
           ...n
         }
       },
-      [e.STATES.GET_STARTED.SELL_FILLOUT_FORM_2]: {
+      [t.STATES.GET_STARTED.SELL_FILLOUT_FORM_2]: {
         transitions: {
           ...n
         }
       },
-      [e.STATES.GET_STARTED.COMPLETE.DEFAULT]: {
+      [t.STATES.GET_STARTED.COMPLETE.DEFAULT]: {
         transitions: {
-          [e.EVENTS.GET_STARTED.START]: {
-            target: e.STATES.GET_STARTED.COMPLETE.MODAL,
+          [t.EVENTS.GET_STARTED.START]: {
+            target: t.STATES.GET_STARTED.COMPLETE.MODAL,
             effects: {
               onTransition: [
-                (t) => {
-                  T.track("Get Started Clicked", t);
+                (e) => {
+                  T.track("Get Started Clicked", e);
                 }
               ]
             }
           },
-          [e.EVENTS.BOOK_INTRO.START]: {
-            target: e.STATES.BOOK_INTRO.FORM,
+          [t.EVENTS.BOOK_INTRO.START]: {
+            target: t.STATES.BOOK_INTRO.FORM,
             effects: {
               onTransition: [
-                (t) => {
+                (e) => {
                   T.track(
                     "Book Intro Call Clicked",
-                    t
+                    e
                   );
                 }
               ]
             }
           },
-          [e.EVENTS.GET_VALUATION_REPORT.START]: {
-            target: e.STATES.GET_VALUATION_REPORT.FORM,
+          [t.EVENTS.GET_VALUATION_REPORT.START]: {
+            target: t.STATES.GET_VALUATION_REPORT.FORM,
             effects: {
               onTransition: [
-                (t) => {
+                (e) => {
                   T.track(
                     "Get Valuation Report Clicked",
-                    t
+                    e
                   );
                 }
               ]
@@ -168,30 +168,30 @@ function u(a, T) {
           }
         }
       },
-      [e.STATES.GET_STARTED.COMPLETE.MODAL]: {
+      [t.STATES.GET_STARTED.COMPLETE.MODAL]: {
         transitions: {
           ...r,
-          [e.EVENTS.BUYER_PROFILE.START]: {
-            target: e.STATES.BUYER_PROFILE.FORM,
+          [t.EVENTS.BUYER_PROFILE.START]: {
+            target: t.STATES.BUYER_PROFILE.FORM,
             effects: {
               onTransition: [
-                (t) => {
+                (e) => {
                   T.track(
                     "Fill Out Buyer Profile Clicked",
-                    t
+                    e
                   );
                 }
               ]
             }
           },
-          [e.EVENTS.BOOK_INTRO.START]: {
-            target: e.STATES.BOOK_INTRO.FORM,
+          [t.EVENTS.BOOK_INTRO.START]: {
+            target: t.STATES.BOOK_INTRO.FORM,
             effects: {
               onTransition: [
-                (t) => {
+                (e) => {
                   T.track(
                     "Book Intro Call Clicked",
-                    t
+                    e
                   );
                 }
               ]
@@ -199,17 +199,17 @@ function u(a, T) {
           }
         }
       },
-      [e.STATES.BUYER_PROFILE.FORM]: {
+      [t.STATES.BUYER_PROFILE.FORM]: {
         transitions: {
           ...r
         }
       },
-      [e.STATES.BOOK_INTRO.FORM]: {
+      [t.STATES.BOOK_INTRO.FORM]: {
         transitions: {
           ...n
         }
       },
-      [e.STATES.GET_VALUATION_REPORT.FORM]: {
+      [t.STATES.GET_VALUATION_REPORT.FORM]: {
         transitions: {
           ...n
         }
@@ -217,86 +217,79 @@ function u(a, T) {
     }
   };
 }
-function I(a) {
+function V(E) {
   return {
     modal: {
       get isOpen() {
         return [
-          e.STATES.GET_STARTED.SELL_FILLOUT_FORM_1,
-          e.STATES.GET_STARTED.SELL_FILLOUT_FORM_2,
-          e.STATES.GET_STARTED.COMPLETE.MODAL,
-          e.STATES.BUYER_PROFILE.FORM,
-          e.STATES.GET_VALUATION_REPORT.FORM,
-          e.STATES.BOOK_INTRO.FORM
-        ].includes(a.flowState.value);
+          t.STATES.GET_STARTED.SELL_FILLOUT_FORM_1,
+          t.STATES.GET_STARTED.SELL_FILLOUT_FORM_2,
+          t.STATES.GET_STARTED.COMPLETE.MODAL,
+          t.STATES.BUYER_PROFILE.FORM,
+          t.STATES.GET_VALUATION_REPORT.FORM,
+          t.STATES.BOOK_INTRO.FORM
+        ].includes(E.flowState.value);
       }
     }
   };
 }
-const p = {
+const w = {
   content: {
     phoneNumberText: "(469) 564-1214",
     phoneNumberLink: "tel:+14695641214",
     pricingModel: "Flat Fee",
     calcCommissionRate: 0.03,
     calcSplitCommissionRate: 0.01,
-    calcDefaultListPrice: 15e5,
-    calcMaxListPrice: 75e5,
-    calcMinListPrice: 25e4,
+    calcDefaultListPrice: 5e5,
+    calcMaxListPrice: 5e6,
+    calcMinListPrice: 1e5,
     calcInputStep: 5e4
   }
-}, V = {
-  DEFAULT: p
+}, u = {
+  DEFAULT: w
 };
-window.Alpine = s;
-const E = c(s), o = {}, l = _(window.FS, o);
-w();
+window.Alpine = l;
+const a = _(l), o = {}, S = c(window.FS, o);
 U();
-s.start();
-function w() {
-  const a = new URL(window.location.href), T = a.searchParams.get("get_started"), n = T && T === "complete", r = n ? e.STATES.GET_STARTED.COMPLETE.MODAL : e.STATES.DEFAULT, i = a.searchParams.get("user_email"), t = a.searchParams.get("user_phone");
-  n && (i || t) && (window.dataLayer = window.dataLayer || [], window.dataLayer.push({
+l.start();
+function U() {
+  const E = new URL(window.location.href), T = E.searchParams.get("get_started"), n = T && T === "complete", r = n ? t.STATES.GET_STARTED.COMPLETE.MODAL : t.STATES.DEFAULT, i = E.searchParams.get("user_email"), e = E.searchParams.get("user_phone");
+  n && (i || e) && (window.dataLayer = window.dataLayer || [], window.dataLayer.push({
     event: "ec_form_submit",
     user_data: {
       email: i || "",
-      phone_number: t || ""
+      phone_number: e || ""
     }
-  })), o.flowState = E.createStore(
+  })), o.flowState = a.createStore(
     "flowState",
-    O(
-      u(o, l),
-      l,
+    A(
+      I(o, S),
+      S,
       r
     )
-  ), o.flowUIHelpers = E.createStore(
+  ), o.flowUIHelpers = a.createStore(
     "flowUIHelpers",
-    I(o)
-  ), o.personalizationViewModel = E.createStore(
+    V(o)
+  ), o.personalizationViewModel = a.createStore(
     "personalizationViewModel",
-    m(V)
-  ), o.experimentationViewModel = E.createStore(
+    m(u)
+  ), o.experimentationViewModel = a.createStore(
     "experimentationViewModel",
     f()
-  ), o.adTrackingViewModel = E.createStore(
+  ), o.adTrackingViewModel = a.createStore(
     "adTrackingViewModel",
-    d()
-  ), o.interestAreaViewModel = E.createStore(
+    L()
+  ), o.interestAreaViewModel = a.createStore(
     "interestAreaViewModel",
-    L(o.flowState, l)
-  ), o.thConvertedContactViewModel = E.createStore(
+    d(o.flowState, S)
+  ), o.thConvertedContactViewModel = a.createStore(
     "thConvertedContactViewModel",
     F({
       email: i || "",
-      phone: t || ""
+      phone: e || ""
     })
-  ), o.thCalculatorViewModel = E.createStore(
+  ), o.thCalculatorViewModel = a.createStore(
     "thCalculatorViewModel",
     M(o.personalizationViewModel)
   );
-}
-function U() {
-  o.flowState.value === e.STATES.DEFAULT && (o.experimentationViewModel.setActiveExperimentVariation(
-    "sell-launch-fillout-forms-2025-10",
-    "sell-fillout-form-1"
-  ), l.track("2025-10 Sell Launch Fillout Forms Experiment Set"));
 }
