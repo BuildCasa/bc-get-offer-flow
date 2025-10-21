@@ -8,7 +8,7 @@
       "calcSplitCommissionRate": 0.01,
       "calcDefaultListPrice": 500000,
       "calcMaxListPrice": 3000000,
-      "calcMinListPrice": 100000,
+      "calcMinListPrice": 250000,
       "calcInputStep": 50000
     }
   }
