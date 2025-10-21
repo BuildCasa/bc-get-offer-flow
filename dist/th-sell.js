@@ -242,7 +242,7 @@ const w = {
     calcSplitCommissionRate: 0.01,
     calcDefaultListPrice: 5e5,
     calcMaxListPrice: 3e6,
-    calcMinListPrice: 1e5,
+    calcMinListPrice: 25e4,
     calcInputStep: 5e4
   }
 }, u = {
