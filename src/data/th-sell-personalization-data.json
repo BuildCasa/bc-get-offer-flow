@@ -1,0 +1,15 @@
+{
+  "DEFAULT": {
+    "content": {
+      "phoneNumberText": "(469) 564-1214",
+      "phoneNumberLink": "tel:+14695641214",
+      "pricingModel": "Flat Fee",
+      "calcCommissionRate": 0.03,
+      "calcSplitCommissionRate": 0.01,
+      "calcDefaultListPrice": 500000,
+      "calcMaxListPrice": 3000000,
+      "calcMinListPrice": 250000,
+      "calcInputStep": 50000
+    }
+  }
+}
