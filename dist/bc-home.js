@@ -1,8 +1,11 @@
-import { m as A, c as o, a as r, b as n } from "./shared-dpXQ-LAr.js";
+import { m as R, c as r, a as o, b as F } from "./shared-dpXQ-LAr.js";
 const T = {
   STATES: {
     DEFAULT: "default",
     GET_STARTED_MODAL: "getStartedModal",
+    GET_OFFER: {
+      FILLOUT: "getOfferFillout"
+    },
     BUY_PROPERTY: {
       IFRAME: "buyPropertyIFrame"
     },
@@ -21,6 +24,9 @@ const T = {
   },
   EVENTS: {
     START: "START",
+    GET_OFFER: {
+      START: "GET_OFFER_START"
+    },
     BUY_PROPERTY: {
       START: "BUY_PROPERTY_START"
     },
@@ -39,7 +45,7 @@ const T = {
     EXIT: "EXIT"
   }
 };
-function I(E) {
+function n(t) {
   const S = {
     [T.EVENTS.EXIT]: {
       target: T.STATES.DEFAULT
@@ -53,6 +59,9 @@ function I(E) {
         transitions: {
           [T.EVENTS.START]: {
             target: T.STATES.GET_STARTED_MODAL
+          },
+          [T.EVENTS.GET_OFFER.START]: {
+            target: T.STATES.GET_OFFER.FILLOUT
           },
           [T.EVENTS.BUY_PROPERTY.START]: {
             target: T.STATES.BUY_PROPERTY.IFRAME
@@ -89,8 +98,20 @@ function I(E) {
         },
         effects: {
           onEntry: [
-            (t) => {
-              E.track("Get Started Modal Opened", t);
+            (E) => {
+              t.track("Get Started Modal Opened", E);
+            }
+          ]
+        }
+      },
+      [T.STATES.GET_OFFER.FILLOUT]: {
+        transitions: {
+          ...S
+        },
+        effects: {
+          onEntry: [
+            (E) => {
+              t.track("Get Offer Flow Started", E);
             }
           ]
         }
@@ -101,10 +122,10 @@ function I(E) {
         },
         effects: {
           onEntry: [
-            (t) => {
-              E.track(
+            (E) => {
+              t.track(
                 "Buy Property Flow Started",
-                t
+                E
               );
             }
           ]
@@ -116,10 +137,10 @@ function I(E) {
         },
         effects: {
           onEntry: [
-            (t) => {
-              E.track(
+            (E) => {
+              t.track(
                 "Split Property Flow Started",
-                t
+                E
               );
             }
           ]
@@ -131,8 +152,8 @@ function I(E) {
         },
         effects: {
           onEntry: [
-            (t) => {
-              E.track("Invest Flow Started", t);
+            (E) => {
+              t.track("Invest Flow Started", E);
             }
           ]
         }
@@ -143,8 +164,8 @@ function I(E) {
         },
         effects: {
           onEntry: [
-            (t) => {
-              E.track("Finance Flow Started", t);
+            (E) => {
+              t.track("Finance Flow Started", E);
             }
           ]
         }
@@ -155,10 +176,10 @@ function I(E) {
         },
         effects: {
           onEntry: [
-            (t) => {
-              E.track(
+            (E) => {
+              t.track(
                 "Something Else Flow Started",
-                t
+                E
               );
             }
           ]
@@ -167,32 +188,33 @@ function I(E) {
     }
   };
 }
-function s(E) {
+function I(t) {
   return {
     modal: {
       get isOpen() {
         return [
           T.STATES.GET_STARTED_MODAL,
+          T.STATES.GET_OFFER.FILLOUT,
           T.STATES.BUY_PROPERTY.IFRAME,
           T.STATES.SPLIT_PROPERTY.FILLOUT,
           T.STATES.INVEST.FILLOUT,
           T.STATES.FINANCE.TYPEFORM,
           T.STATES.SOMETHING_ELSE.FILLOUT
-        ].includes(E.flowState.value);
+        ].includes(t.flowState.value);
       }
     }
   };
 }
-window.Alpine = A;
-const a = r(A), e = {}, R = n(window.FS, e);
-P();
-A.start();
-function P() {
-  e.flowState = a.createStore(
+window.Alpine = R;
+const A = o(R), e = {}, a = F(window.FS, e);
+O();
+R.start();
+function O() {
+  e.flowState = A.createStore(
     "flowState",
-    o(I(R), R)
-  ), e.flowUIHelpers = a.createStore(
+    r(n(a), a)
+  ), e.flowUIHelpers = A.createStore(
     "flowUIHelpers",
-    s(e)
+    I(e)
   );
 }
