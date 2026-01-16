@@ -13,6 +13,9 @@ const flowConstants = {
   STATES: {
     DEFAULT: 'default',
     GET_STARTED_MODAL: 'getStartedModal',
+    GET_OFFER: {
+      FILLOUT: 'getOfferFillout',
+    },
     BUY_PROPERTY: {
       IFRAME: 'buyPropertyIFrame',
     },
@@ -31,6 +34,9 @@ const flowConstants = {
   },
   EVENTS: {
     START: 'START',
+    GET_OFFER: {
+      START: 'GET_OFFER_START',
+    },
     BUY_PROPERTY: {
       START: 'BUY_PROPERTY_START',
     },
@@ -74,6 +80,9 @@ function createFlowStateMachine(trackingService) {
           [flowConstants.EVENTS.START]: {
             target: flowConstants.STATES.GET_STARTED_MODAL,
           },
+          [flowConstants.EVENTS.GET_OFFER.START]: {
+            target: flowConstants.STATES.GET_OFFER.FILLOUT,
+          },
           [flowConstants.EVENTS.BUY_PROPERTY.START]: {
             target: flowConstants.STATES.BUY_PROPERTY.IFRAME,
           },
@@ -111,6 +120,18 @@ function createFlowStateMachine(trackingService) {
           onEntry: [
             (eventProperties) => {
               trackingService.track('Get Started Modal Opened', eventProperties)
+            },
+          ],
+        },
+      },
+      [flowConstants.STATES.GET_OFFER.FILLOUT]: {
+        transitions: {
+          ...sharedExitTransition,
+        },
+        effects: {
+          onEntry: [
+            (eventProperties) => {
+              trackingService.track('Get Offer Flow Started', eventProperties)
             },
           ],
         },
@@ -196,6 +217,7 @@ function createFlowUIHelpers(globalStore) {
       get isOpen() {
         const modalStates = [
           flowConstants.STATES.GET_STARTED_MODAL,
+          flowConstants.STATES.GET_OFFER.FILLOUT,
           flowConstants.STATES.BUY_PROPERTY.IFRAME,
           flowConstants.STATES.SPLIT_PROPERTY.FILLOUT,
           flowConstants.STATES.INVEST.FILLOUT,
